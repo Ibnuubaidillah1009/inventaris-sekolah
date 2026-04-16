@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Kerusakan extends Model
+{
+    protected $table = 'kerusakan';
+    protected $primaryKey = 'id_kerusakan';
+    public $timestamps = false;
+
+    protected $fillable = [
+        'id_aset',
+        'tanggal_kerusakan',
+        'jenis_kerusakan',
+        'deskripsi',
+        'id_pelapor',
+        'status_kerusakan',
+        'keterangan',
+    ];
+
+    /**
+     * Cast atribut.
+     */
+    protected function casts(): array
+    {
+        return [
+            'tanggal_kerusakan' => 'date',
+        ];
+    }
+
+    // =========================================================================
+    // RELASI
+    // =========================================================================
+
+    /**
+     * Relasi: Kerusakan belongsTo Aset.
+     */
+    public function aset()
+    {
+        return $this->belongsTo(Aset::class, 'id_aset', 'id_aset');
+    }
+
+    /**
+     * Relasi: Kerusakan belongsTo Pengguna sebagai pelapor.
+     */
+    public function pelapor()
+    {
+        return $this->belongsTo(Pengguna::class, 'id_pelapor', 'id_pengguna');
+    }
+
+    /**
+     * Relasi: Kerusakan hasMany Perbaikan.
+     */
+    public function perbaikan()
+    {
+        return $this->hasMany(Perbaikan::class, 'id_kerusakan', 'id_kerusakan');
+    }
+}

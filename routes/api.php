@@ -6,12 +6,16 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\KerusakanController;
 use App\Http\Controllers\LokasiController;
 use App\Http\Controllers\MapelController;
 use App\Http\Controllers\MasterBarangController;
 use App\Http\Controllers\MerekController;
+use App\Http\Controllers\MutasiController;
 use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\PenghapusanAsetController;
 use App\Http\Controllers\PenggunaController;
+use App\Http\Controllers\PerbaikanController;
 use App\Http\Controllers\PeranController;
 use App\Http\Controllers\PermintaanController;
 use App\Http\Controllers\RombelController;
@@ -316,6 +320,58 @@ Route::middleware('auth:sanctum')->group(function () {
         // Endpoint persetujuan/penolakan
         Route::put('/{permintaan}/keputusan', [PermintaanController::class, 'keputusan'])
             ->middleware('cek.hak.akses:permintaan,hak_ubah');
+    });
+
+    // =================================================================
+    // MODUL: PEMELIHARAAN & AKHIR SIKLUS ASET (Tahap 5)
+    // =================================================================
+
+    // Mutasi Aset
+    Route::prefix('mutasi')->group(function () {
+        Route::get('/', [MutasiController::class, 'index'])
+            ->middleware('cek.hak.akses:mutasi,hak_baca');
+        Route::post('/', [MutasiController::class, 'store'])
+            ->middleware('cek.hak.akses:mutasi,hak_buat');
+        Route::get('/{mutasi}', [MutasiController::class, 'show'])
+            ->middleware('cek.hak.akses:mutasi,hak_baca');
+        Route::delete('/{mutasi}', [MutasiController::class, 'destroy'])
+            ->middleware('cek.hak.akses:mutasi,hak_hapus');
+    });
+
+    // Kerusakan
+    Route::prefix('kerusakan')->group(function () {
+        Route::get('/', [KerusakanController::class, 'index'])
+            ->middleware('cek.hak.akses:kerusakan,hak_baca');
+        Route::post('/', [KerusakanController::class, 'store'])
+            ->middleware('cek.hak.akses:kerusakan,hak_buat');
+        Route::get('/{kerusakan}', [KerusakanController::class, 'show'])
+            ->middleware('cek.hak.akses:kerusakan,hak_baca');
+        Route::delete('/{kerusakan}', [KerusakanController::class, 'destroy'])
+            ->middleware('cek.hak.akses:kerusakan,hak_hapus');
+    });
+
+    // Perbaikan
+    Route::prefix('perbaikan')->group(function () {
+        Route::get('/', [PerbaikanController::class, 'index'])
+            ->middleware('cek.hak.akses:perbaikan,hak_baca');
+        Route::post('/', [PerbaikanController::class, 'store'])
+            ->middleware('cek.hak.akses:perbaikan,hak_buat');
+        Route::get('/{perbaikan}', [PerbaikanController::class, 'show'])
+            ->middleware('cek.hak.akses:perbaikan,hak_baca');
+        Route::delete('/{perbaikan}', [PerbaikanController::class, 'destroy'])
+            ->middleware('cek.hak.akses:perbaikan,hak_hapus');
+    });
+
+    // Penghapusan Aset
+    Route::prefix('penghapusan-aset')->group(function () {
+        Route::get('/', [PenghapusanAsetController::class, 'index'])
+            ->middleware('cek.hak.akses:penghapusan_aset,hak_baca');
+        Route::post('/', [PenghapusanAsetController::class, 'store'])
+            ->middleware('cek.hak.akses:penghapusan_aset,hak_buat');
+        Route::get('/{penghapusanAset}', [PenghapusanAsetController::class, 'show'])
+            ->middleware('cek.hak.akses:penghapusan_aset,hak_baca');
+        Route::delete('/{penghapusanAset}', [PenghapusanAsetController::class, 'destroy'])
+            ->middleware('cek.hak.akses:penghapusan_aset,hak_hapus');
     });
 });
 

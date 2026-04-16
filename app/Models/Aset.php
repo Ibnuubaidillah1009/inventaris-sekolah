@@ -66,6 +66,30 @@ class Aset extends Model
         return $this->hasMany(DetailPeminjaman::class, 'id_aset', 'id_aset');
     }
 
+    /**
+     * Relasi: Aset hasMany Mutasi.
+     */
+    public function mutasi()
+    {
+        return $this->hasMany(Mutasi::class, 'id_aset', 'id_aset');
+    }
+
+    /**
+     * Relasi: Aset hasMany Kerusakan.
+     */
+    public function kerusakan()
+    {
+        return $this->hasMany(Kerusakan::class, 'id_aset', 'id_aset');
+    }
+
+    /**
+     * Relasi: Aset hasMany PenghapusanAset.
+     */
+    public function penghapusanAset()
+    {
+        return $this->hasMany(PenghapusanAset::class, 'id_aset', 'id_aset');
+    }
+
     // =========================================================================
     // SCOPES
     // =========================================================================
