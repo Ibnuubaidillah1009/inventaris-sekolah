@@ -1445,6 +1445,37 @@ const API_DATA = [
             { method: "GET", path: "/api/penghapusan-aset/{id}", summary: "Detail penghapusan", auth: true, desc: "Mengambil detail satu penghapusan aset.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID penghapusan" }], request: null, response: { status: 200, body: { status: true, message: "Detail penghapusan aset berhasil diambil." } }, errors: [{ status: 404, body: { status: false, message: "Data penghapusan aset tidak ditemukan." } }] },
             { method: "DELETE", path: "/api/penghapusan-aset/{id}", summary: "Hapus record penghapusan", auth: true, desc: "Menghapus data record penghapusan aset.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID penghapusan" }], request: null, response: { status: 200, body: { status: true, message: "Data penghapusan aset berhasil dihapus." } }, errors: [] }
         ]
+    },
+    // ───────────────── MANAJEMEN DATABASE ─────────────────
+    {
+        group: "Manajemen Database",
+        icon: "🗄️",
+        color: "#64748b",
+        description: "Modul khusus super admin untuk operasional operasional DB (backup, restore, reset, ubah koneksi).",
+        endpoints: [
+            { method: "POST", path: "/api/database/backup", summary: "Backup Database", auth: true,
+              desc: "Menghasilkan dan mengunduh file backup database (.sql) menggunakan mysqldump.",
+              request: null, response: { status: 200, body: { message: "[File Download: backup-YYYY-MM-DD-HH-mm-ss.sql]" } }, errors: [] },
+            { method: "POST", path: "/api/database/restore", summary: "Restore Database", auth: true,
+              desc: "Mengunggah file konfigurasi/backup .sql atau .txt untuk memulihkan data. Foreign key checks dinonaktifkan sementara.",
+              body: [
+                  { name: "sql_file", type: "file", required: true, desc: "File backup .sql atau .txt" }
+              ],
+              request: null, response: { status: 200, body: { message: "Database berhasil direstore." } }, errors: [{ status: 500, body: { error: "Gagal merestore database: [Error detail]" } }] },
+            { method: "POST", path: "/api/database/reset", summary: "Reset Database", auth: true,
+              desc: "Melakukan fresh migration diikuti dengan seeder ulang. PERHATIAN: Ini akan menghapus data saat ini secara permanen.",
+              request: null, response: { status: 200, body: { message: "Database berhasil direset." } }, errors: [{ status: 500, body: { error: "[Error detail]" } }] },
+            { method: "POST", path: "/api/database/change-connection", summary: "Ubah Koneksi", auth: true,
+              desc: "Mengganti parameter kredensial dan konfigurasi database di dalam file .env, lalu menghapus cache (config:clear).",
+              body: [
+                  { name: "db_host", type: "string", required: true, desc: "IP atau Host database, cth: 127.0.0.1" },
+                  { name: "db_name", type: "string", required: true, desc: "Nama skema database" },
+                  { name: "db_user", type: "string", required: true, desc: "Username database" },
+                  { name: "db_pass", type: "string", required: false, desc: "Password database, null jika diizinkan kosong" }
+              ],
+              request: { db_host: "127.0.0.1", db_name: "simins_db", db_user: "root", db_pass: "" },
+              response: { status: 200, body: { message: "Koneksi berhasil diubah." } }, errors: [] }
+        ]
     }
 ];
 

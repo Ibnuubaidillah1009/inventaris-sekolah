@@ -373,5 +373,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{penghapusanAset}', [PenghapusanAsetController::class, 'destroy'])
             ->middleware('cek.hak.akses:penghapusan_aset,hak_hapus');
     });
+
+    // =================================================================
+    // MODUL: MANAJEMEN DATABASE (Khusus Super Admin)
+    // =================================================================
+    Route::prefix('database')->group(function () {
+        // Sesuaikan middleware hak aksesnya sesuai sistem Anda
+        Route::post('/backup', [DatabaseController::class, 'backup']);
+        Route::post('/restore', [DatabaseController::class, 'restore']);
+        Route::post('/reset', [DatabaseController::class, 'reset']);
+        Route::post('/change-connection', [DatabaseController::class, 'changeConnection']);
+    });
 });
 
