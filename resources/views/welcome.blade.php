@@ -1081,10 +1081,10 @@ const API_DATA = [
     },
     // ───────────────── PERAN ─────────────────
     {
-        group: "Peran & Akses",
+        group: "Peran",
         icon: "🛡️",
         color: "#a855f7",
-        description: "Manajemen peran (role) dan hak akses modul (RBAC).",
+        description: "Manajemen peran (role) termasuk sinkronisasi hak akses.",
         endpoints: [
             { method: "GET", path: "/api/peran", summary: "Daftar peran", auth: true, desc: "Mengambil seluruh data peran beserta daftar aksesnya.", request: null, response: { status: 200, body: { status: true, message: "Daftar peran berhasil diambil.", data: [{ id_peran: 1, nama_peran: "Admin", akses_list: [] }] } }, errors: [] },
             { method: "POST", path: "/api/peran", summary: "Tambah peran", auth: true, desc: "Membuat peran baru.",
@@ -1100,7 +1100,16 @@ const API_DATA = [
               body: [{ name: "id_akses", type: "array", required: true, desc: "Array ID akses yang di-assign ke peran" }],
               request: { id_akses: [1, 2, 3, 5] },
               response: { status: 200, body: { status: true, message: "Hak akses peran berhasil disinkronisasi.", data: { id_peran: 1, nama_peran: "Admin", akses_list: [] } } },
-              errors: [{ status: 422, body: { status: false, message: "Validasi gagal.", errors: { "id_akses.0": ["ID akses tidak ditemukan."] } } }] },
+              errors: [{ status: 422, body: { status: false, message: "Validasi gagal.", errors: { "id_akses.0": ["ID akses tidak ditemukan."] } } }] }
+        ]
+    },
+    // ───────────────── AKSES ─────────────────
+    {
+        group: "Akses Modul",
+        icon: "🔑",
+        color: "#8b5cf6",
+        description: "Manajemen hak akses modul (RBAC). Setiap modul punya hak buat, baca, ubah, hapus.",
+        endpoints: [
             { method: "GET", path: "/api/akses", summary: "Daftar akses modul", auth: true, desc: "Mengambil seluruh data modul akses.", request: null, response: { status: 200, body: { status: true, message: "Daftar akses berhasil diambil.", data: [{ id_akses: 1, nama_modul: "pengguna", hak_buat: true, hak_baca: true, hak_ubah: true, hak_hapus: true }] } }, errors: [] },
             { method: "POST", path: "/api/akses", summary: "Tambah akses modul", auth: true, desc: "Mendaftarkan modul baru ke sistem akses.",
               body: [
@@ -1111,7 +1120,19 @@ const API_DATA = [
                   { name: "hak_hapus", type: "boolean", required: true, desc: "Hak delete" }
               ],
               request: { nama_modul: "mutasi", hak_buat: true, hak_baca: true, hak_ubah: true, hak_hapus: true },
-              response: { status: 201, body: { status: true, message: "Akses berhasil ditambahkan.", data: { id_akses: 10, nama_modul: "mutasi" } } }, errors: [] }
+              response: { status: 201, body: { status: true, message: "Akses berhasil ditambahkan.", data: { id_akses: 10, nama_modul: "mutasi" } } }, errors: [] },
+            { method: "GET", path: "/api/akses/{id}", summary: "Detail akses", auth: true, desc: "Mengambil detail satu modul akses.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID akses" }], request: null, response: { status: 200, body: { status: true, message: "Detail akses berhasil diambil.", data: { id_akses: 1, nama_modul: "pengguna", hak_buat: true, hak_baca: true, hak_ubah: true, hak_hapus: true } } }, errors: [{ status: 404, body: { status: false, message: "Akses tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/akses/{id}", summary: "Update akses", auth: true, desc: "Memperbarui data modul akses.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID akses" }],
+              body: [
+                  { name: "nama_modul", type: "string", required: true, desc: "Nama modul" },
+                  { name: "hak_buat", type: "boolean", required: true, desc: "Hak create" },
+                  { name: "hak_baca", type: "boolean", required: true, desc: "Hak read" },
+                  { name: "hak_ubah", type: "boolean", required: true, desc: "Hak update" },
+                  { name: "hak_hapus", type: "boolean", required: true, desc: "Hak delete" }
+              ],
+              request: { nama_modul: "pengguna", hak_buat: true, hak_baca: true, hak_ubah: true, hak_hapus: false },
+              response: { status: 200, body: { status: true, message: "Akses berhasil diperbarui.", data: { id_akses: 1, nama_modul: "pengguna" } } }, errors: [] },
+            { method: "DELETE", path: "/api/akses/{id}", summary: "Hapus akses", auth: true, desc: "Menghapus modul akses dari sistem.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID akses" }], request: null, response: { status: 200, body: { status: true, message: "Akses berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Akses tidak ditemukan." } }] }
         ]
     },
     // ───────────────── MASTER SEKOLAH ─────────────────
@@ -1121,16 +1142,36 @@ const API_DATA = [
         color: "#06b6d4",
         description: "Master data sekolah: Jurusan, Rombel, Kelas, Mata Pelajaran, Unit.",
         endpoints: [
+            // JURUSAN
             { method: "GET", path: "/api/jurusan", summary: "Daftar jurusan", auth: true, desc: "Mengambil semua data jurusan.", request: null, response: { status: 200, body: { status: true, message: "Daftar jurusan berhasil diambil.", data: [{ id_jurusan: 1, nama_jurusan: "Teknik Komputer dan Jaringan" }] } }, errors: [] },
             { method: "POST", path: "/api/jurusan", summary: "Tambah jurusan", auth: true, desc: "Menambahkan jurusan baru.", body: [{ name: "nama_jurusan", type: "string", required: true, desc: "Nama jurusan (unik)" }], request: { nama_jurusan: "Rekayasa Perangkat Lunak" }, response: { status: 201, body: { status: true, message: "Jurusan berhasil ditambahkan.", data: { id_jurusan: 2, nama_jurusan: "Rekayasa Perangkat Lunak" } } }, errors: [] },
+            { method: "GET", path: "/api/jurusan/{id}", summary: "Detail jurusan", auth: true, desc: "Mengambil detail satu jurusan.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID jurusan" }], request: null, response: { status: 200, body: { status: true, message: "Detail jurusan berhasil diambil.", data: { id_jurusan: 1, nama_jurusan: "Teknik Komputer dan Jaringan" } } }, errors: [{ status: 404, body: { status: false, message: "Jurusan tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/jurusan/{id}", summary: "Update jurusan", auth: true, desc: "Memperbarui data jurusan.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID jurusan" }], body: [{ name: "nama_jurusan", type: "string", required: true, desc: "Nama jurusan" }], request: { nama_jurusan: "TKJ Updated" }, response: { status: 200, body: { status: true, message: "Jurusan berhasil diperbarui.", data: { id_jurusan: 1, nama_jurusan: "TKJ Updated" } } }, errors: [] },
+            { method: "DELETE", path: "/api/jurusan/{id}", summary: "Hapus jurusan", auth: true, desc: "Menghapus data jurusan.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID jurusan" }], request: null, response: { status: 200, body: { status: true, message: "Jurusan berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Jurusan tidak ditemukan." } }] },
+            // ROMBEL
             { method: "GET", path: "/api/rombel", summary: "Daftar rombel", auth: true, desc: "Mengambil semua data rombongan belajar.", request: null, response: { status: 200, body: { status: true, message: "Daftar rombel berhasil diambil.", data: [{ id_rombel: 1, nama_rombel: "X TKJ 1", id_jurusan: 1 }] } }, errors: [] },
             { method: "POST", path: "/api/rombel", summary: "Tambah rombel", auth: true, desc: "Menambahkan rombel baru.", body: [{ name: "nama_rombel", type: "string", required: true, desc: "Nama rombel" }, { name: "id_jurusan", type: "integer", required: true, desc: "ID jurusan" }], request: { nama_rombel: "X RPL 1", id_jurusan: 2 }, response: { status: 201, body: { status: true, message: "Rombel berhasil ditambahkan." } }, errors: [] },
+            { method: "GET", path: "/api/rombel/{id}", summary: "Detail rombel", auth: true, desc: "Mengambil detail satu rombel beserta jurusannya.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID rombel" }], request: null, response: { status: 200, body: { status: true, message: "Detail rombel berhasil diambil.", data: { id_rombel: 1, nama_rombel: "X TKJ 1", jurusan: { nama_jurusan: "TKJ" } } } }, errors: [{ status: 404, body: { status: false, message: "Rombel tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/rombel/{id}", summary: "Update rombel", auth: true, desc: "Memperbarui data rombel.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID rombel" }], body: [{ name: "nama_rombel", type: "string", required: true, desc: "Nama rombel" }, { name: "id_jurusan", type: "integer", required: true, desc: "ID jurusan" }], request: { nama_rombel: "X TKJ 2", id_jurusan: 1 }, response: { status: 200, body: { status: true, message: "Rombel berhasil diperbarui." } }, errors: [] },
+            { method: "DELETE", path: "/api/rombel/{id}", summary: "Hapus rombel", auth: true, desc: "Menghapus data rombel.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID rombel" }], request: null, response: { status: 200, body: { status: true, message: "Rombel berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Rombel tidak ditemukan." } }] },
+            // KELAS
             { method: "GET", path: "/api/kelas", summary: "Daftar kelas", auth: true, desc: "Mengambil semua data kelas.", request: null, response: { status: 200, body: { status: true, message: "Daftar kelas berhasil diambil.", data: [{ id_kelas: 1, nama_kelas: "X TKJ 1", id_rombel: 1 }] } }, errors: [] },
             { method: "POST", path: "/api/kelas", summary: "Tambah kelas", auth: true, desc: "Menambahkan kelas baru.", body: [{ name: "nama_kelas", type: "string", required: true, desc: "Nama kelas" }, { name: "id_rombel", type: "integer", required: true, desc: "ID rombel" }], request: { nama_kelas: "XI RPL 1", id_rombel: 2 }, response: { status: 201, body: { status: true, message: "Kelas berhasil ditambahkan." } }, errors: [] },
+            { method: "GET", path: "/api/kelas/{id}", summary: "Detail kelas", auth: true, desc: "Mengambil detail satu kelas beserta rombel dan jurusannya.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID kelas" }], request: null, response: { status: 200, body: { status: true, message: "Detail kelas berhasil diambil.", data: { id_kelas: 1, nama_kelas: "X TKJ 1", rombel: { nama_rombel: "X TKJ 1", jurusan: { nama_jurusan: "TKJ" } } } } }, errors: [{ status: 404, body: { status: false, message: "Kelas tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/kelas/{id}", summary: "Update kelas", auth: true, desc: "Memperbarui data kelas.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID kelas" }], body: [{ name: "nama_kelas", type: "string", required: true, desc: "Nama kelas" }, { name: "id_rombel", type: "integer", required: true, desc: "ID rombel" }], request: { nama_kelas: "X TKJ 1 Updated", id_rombel: 1 }, response: { status: 200, body: { status: true, message: "Kelas berhasil diperbarui." } }, errors: [] },
+            { method: "DELETE", path: "/api/kelas/{id}", summary: "Hapus kelas", auth: true, desc: "Menghapus data kelas.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID kelas" }], request: null, response: { status: 200, body: { status: true, message: "Kelas berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Kelas tidak ditemukan." } }] },
+            // MAPEL
             { method: "GET", path: "/api/mapel", summary: "Daftar mapel", auth: true, desc: "Mengambil semua data mata pelajaran.", request: null, response: { status: 200, body: { status: true, message: "Daftar mapel berhasil diambil.", data: [{ id_mapel: 1, nama_mapel: "Matematika" }] } }, errors: [] },
             { method: "POST", path: "/api/mapel", summary: "Tambah mapel", auth: true, desc: "Menambahkan mata pelajaran baru.", body: [{ name: "nama_mapel", type: "string", required: true, desc: "Nama mapel (unik)" }], request: { nama_mapel: "Bahasa Inggris" }, response: { status: 201, body: { status: true, message: "Mapel berhasil ditambahkan." } }, errors: [] },
+            { method: "GET", path: "/api/mapel/{id}", summary: "Detail mapel", auth: true, desc: "Mengambil detail satu mata pelajaran.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID mapel" }], request: null, response: { status: 200, body: { status: true, message: "Detail mapel berhasil diambil.", data: { id_mapel: 1, nama_mapel: "Matematika" } } }, errors: [{ status: 404, body: { status: false, message: "Mapel tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/mapel/{id}", summary: "Update mapel", auth: true, desc: "Memperbarui data mata pelajaran.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID mapel" }], body: [{ name: "nama_mapel", type: "string", required: true, desc: "Nama mapel" }], request: { nama_mapel: "Matematika Lanjutan" }, response: { status: 200, body: { status: true, message: "Mapel berhasil diperbarui." } }, errors: [] },
+            { method: "DELETE", path: "/api/mapel/{id}", summary: "Hapus mapel", auth: true, desc: "Menghapus data mata pelajaran.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID mapel" }], request: null, response: { status: 200, body: { status: true, message: "Mapel berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Mapel tidak ditemukan." } }] },
+            // UNIT
             { method: "GET", path: "/api/unit", summary: "Daftar unit", auth: true, desc: "Mengambil semua data unit.", request: null, response: { status: 200, body: { status: true, message: "Daftar unit berhasil diambil.", data: [{ id_unit: 1, nama_unit: "Sarana Prasarana" }] } }, errors: [] },
-            { method: "POST", path: "/api/unit", summary: "Tambah unit", auth: true, desc: "Menambahkan unit baru.", body: [{ name: "nama_unit", type: "string", required: true, desc: "Nama unit (unik)" }], request: { nama_unit: "Tata Usaha" }, response: { status: 201, body: { status: true, message: "Unit berhasil ditambahkan." } }, errors: [] }
+            { method: "POST", path: "/api/unit", summary: "Tambah unit", auth: true, desc: "Menambahkan unit baru.", body: [{ name: "nama_unit", type: "string", required: true, desc: "Nama unit (unik)" }], request: { nama_unit: "Tata Usaha" }, response: { status: 201, body: { status: true, message: "Unit berhasil ditambahkan." } }, errors: [] },
+            { method: "GET", path: "/api/unit/{id}", summary: "Detail unit", auth: true, desc: "Mengambil detail satu unit.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID unit" }], request: null, response: { status: 200, body: { status: true, message: "Detail unit berhasil diambil.", data: { id_unit: 1, nama_unit: "Sarana Prasarana" } } }, errors: [{ status: 404, body: { status: false, message: "Unit tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/unit/{id}", summary: "Update unit", auth: true, desc: "Memperbarui data unit.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID unit" }], body: [{ name: "nama_unit", type: "string", required: true, desc: "Nama unit" }], request: { nama_unit: "TU Updated" }, response: { status: 200, body: { status: true, message: "Unit berhasil diperbarui." } }, errors: [] },
+            { method: "DELETE", path: "/api/unit/{id}", summary: "Hapus unit", auth: true, desc: "Menghapus data unit.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID unit" }], request: null, response: { status: 200, body: { status: true, message: "Unit berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Unit tidak ditemukan." } }] }
         ]
     },
     // ───────────────── MASTER BARANG ─────────────────
@@ -1140,12 +1181,25 @@ const API_DATA = [
         color: "#f59e0b",
         description: "Master data barang: Kategori, Merek, Satuan, dan Master Barang.",
         endpoints: [
+            // KATEGORI
             { method: "GET", path: "/api/kategori", summary: "Daftar kategori", auth: true, desc: "Mengambil semua data kategori barang.", request: null, response: { status: 200, body: { status: true, message: "Daftar kategori berhasil diambil.", data: [{ id_kategori: 1, nama_kategori: "Elektronik" }] } }, errors: [] },
             { method: "POST", path: "/api/kategori", summary: "Tambah kategori", auth: true, desc: "Menambahkan kategori barang baru.", body: [{ name: "nama_kategori", type: "string", required: true, desc: "Nama kategori (unik)" }], request: { nama_kategori: "Furnitur" }, response: { status: 201, body: { status: true, message: "Kategori berhasil ditambahkan.", data: { id_kategori: 2, nama_kategori: "Furnitur" } } }, errors: [] },
+            { method: "GET", path: "/api/kategori/{id}", summary: "Detail kategori", auth: true, desc: "Mengambil detail satu kategori.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID kategori" }], request: null, response: { status: 200, body: { status: true, message: "Detail kategori berhasil diambil.", data: { id_kategori: 1, nama_kategori: "Elektronik" } } }, errors: [{ status: 404, body: { status: false, message: "Kategori tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/kategori/{id}", summary: "Update kategori", auth: true, desc: "Memperbarui data kategori.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID kategori" }], body: [{ name: "nama_kategori", type: "string", required: true, desc: "Nama kategori" }], request: { nama_kategori: "Elektronik Updated" }, response: { status: 200, body: { status: true, message: "Kategori berhasil diperbarui." } }, errors: [] },
+            { method: "DELETE", path: "/api/kategori/{id}", summary: "Hapus kategori", auth: true, desc: "Menghapus data kategori.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID kategori" }], request: null, response: { status: 200, body: { status: true, message: "Kategori berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Kategori tidak ditemukan." } }] },
+            // MEREK
             { method: "GET", path: "/api/merek", summary: "Daftar merek", auth: true, desc: "Mengambil semua data merek barang.", request: null, response: { status: 200, body: { status: true, message: "Daftar merek berhasil diambil.", data: [{ id_merek: 1, nama_merek: "Lenovo" }] } }, errors: [] },
             { method: "POST", path: "/api/merek", summary: "Tambah merek", auth: true, desc: "Menambahkan merek barang baru.", body: [{ name: "nama_merek", type: "string", required: true, desc: "Nama merek (unik)" }], request: { nama_merek: "Epson" }, response: { status: 201, body: { status: true, message: "Merek berhasil ditambahkan." } }, errors: [] },
+            { method: "GET", path: "/api/merek/{id}", summary: "Detail merek", auth: true, desc: "Mengambil detail satu merek.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID merek" }], request: null, response: { status: 200, body: { status: true, message: "Detail merek berhasil diambil.", data: { id_merek: 1, nama_merek: "Lenovo" } } }, errors: [{ status: 404, body: { status: false, message: "Merek tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/merek/{id}", summary: "Update merek", auth: true, desc: "Memperbarui data merek.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID merek" }], body: [{ name: "nama_merek", type: "string", required: true, desc: "Nama merek" }], request: { nama_merek: "Lenovo Updated" }, response: { status: 200, body: { status: true, message: "Merek berhasil diperbarui." } }, errors: [] },
+            { method: "DELETE", path: "/api/merek/{id}", summary: "Hapus merek", auth: true, desc: "Menghapus data merek.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID merek" }], request: null, response: { status: 200, body: { status: true, message: "Merek berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Merek tidak ditemukan." } }] },
+            // SATUAN
             { method: "GET", path: "/api/satuan", summary: "Daftar satuan", auth: true, desc: "Mengambil semua data satuan.", request: null, response: { status: 200, body: { status: true, message: "Daftar satuan berhasil diambil.", data: [{ id_satuan: 1, nama_satuan: "Unit" }] } }, errors: [] },
             { method: "POST", path: "/api/satuan", summary: "Tambah satuan", auth: true, desc: "Menambahkan satuan baru.", body: [{ name: "nama_satuan", type: "string", required: true, desc: "Nama satuan (unik)" }], request: { nama_satuan: "Set" }, response: { status: 201, body: { status: true, message: "Satuan berhasil ditambahkan." } }, errors: [] },
+            { method: "GET", path: "/api/satuan/{id}", summary: "Detail satuan", auth: true, desc: "Mengambil detail satu satuan.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID satuan" }], request: null, response: { status: 200, body: { status: true, message: "Detail satuan berhasil diambil.", data: { id_satuan: 1, nama_satuan: "Unit" } } }, errors: [{ status: 404, body: { status: false, message: "Satuan tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/satuan/{id}", summary: "Update satuan", auth: true, desc: "Memperbarui data satuan.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID satuan" }], body: [{ name: "nama_satuan", type: "string", required: true, desc: "Nama satuan" }], request: { nama_satuan: "Buah" }, response: { status: 200, body: { status: true, message: "Satuan berhasil diperbarui." } }, errors: [] },
+            { method: "DELETE", path: "/api/satuan/{id}", summary: "Hapus satuan", auth: true, desc: "Menghapus data satuan.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID satuan" }], request: null, response: { status: 200, body: { status: true, message: "Satuan berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Satuan tidak ditemukan." } }] },
+            // MASTER BARANG
             { method: "GET", path: "/api/master-barang", summary: "Daftar master barang", auth: true, desc: "Mengambil semua data master barang beserta kategori, merek, dan satuan.", request: null, response: { status: 200, body: { status: true, message: "Daftar master barang berhasil diambil.", data: [{ id_master_barang: 1, nama_barang: "Laptop Lenovo ThinkPad", kategori: { nama_kategori: "Elektronik" }, merek: { nama_merek: "Lenovo" }, satuan: { nama_satuan: "Unit" } }] } }, errors: [] },
             { method: "POST", path: "/api/master-barang", summary: "Tambah master barang", auth: true, desc: "Menambahkan master barang baru.",
               body: [
@@ -1155,7 +1209,18 @@ const API_DATA = [
                   { name: "id_satuan", type: "integer", required: true, desc: "ID satuan" }
               ],
               request: { nama_barang: "Proyektor Epson EB-X51", id_kategori: 1, id_merek: 2, id_satuan: 1 },
-              response: { status: 201, body: { status: true, message: "Master barang berhasil ditambahkan.", data: { id_master_barang: 2, nama_barang: "Proyektor Epson EB-X51" } } }, errors: [] }
+              response: { status: 201, body: { status: true, message: "Master barang berhasil ditambahkan.", data: { id_master_barang: 2, nama_barang: "Proyektor Epson EB-X51" } } }, errors: [] },
+            { method: "GET", path: "/api/master-barang/{id}", summary: "Detail master barang", auth: true, desc: "Mengambil detail satu master barang beserta relasi.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID master barang" }], request: null, response: { status: 200, body: { status: true, message: "Detail master barang berhasil diambil.", data: { id_master_barang: 1, nama_barang: "Laptop Lenovo ThinkPad", kategori: { nama_kategori: "Elektronik" }, merek: { nama_merek: "Lenovo" }, satuan: { nama_satuan: "Unit" } } } }, errors: [{ status: 404, body: { status: false, message: "Master barang tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/master-barang/{id}", summary: "Update master barang", auth: true, desc: "Memperbarui data master barang.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID master barang" }],
+              body: [
+                  { name: "nama_barang", type: "string", required: true, desc: "Nama barang" },
+                  { name: "id_kategori", type: "integer", required: true, desc: "ID kategori" },
+                  { name: "id_merek", type: "integer", required: true, desc: "ID merek" },
+                  { name: "id_satuan", type: "integer", required: true, desc: "ID satuan" }
+              ],
+              request: { nama_barang: "Laptop ThinkPad X1", id_kategori: 1, id_merek: 1, id_satuan: 1 },
+              response: { status: 200, body: { status: true, message: "Master barang berhasil diperbarui." } }, errors: [] },
+            { method: "DELETE", path: "/api/master-barang/{id}", summary: "Hapus master barang", auth: true, desc: "Menghapus data master barang.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID master barang" }], request: null, response: { status: 200, body: { status: true, message: "Master barang berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Master barang tidak ditemukan." } }] }
         ]
     },
     // ───────────────── MANAJEMEN ASET ─────────────────
@@ -1166,9 +1231,15 @@ const API_DATA = [
         description: "Manajemen data aset: Lokasi, Ruang, dan Aset.",
         endpoints: [
             { method: "GET", path: "/api/lokasi", summary: "Daftar lokasi", auth: true, desc: "Mengambil semua data lokasi.", request: null, response: { status: 200, body: { status: true, message: "Daftar lokasi berhasil diambil.", data: [{ id_lokasi: 1, nama_lokasi: "Gedung A" }] } }, errors: [] },
-            { method: "POST", path: "/api/lokasi", summary: "Tambah lokasi", auth: true, desc: "Menambahkan lokasi baru.", body: [{ name: "nama_lokasi", type: "string", required: true, desc: "Nama lokasi" }], request: { nama_lokasi: "Gedung B" }, response: { status: 201, body: { status: true, message: "Lokasi berhasil ditambahkan." } }, errors: [] },
+            { method: "POST", path: "/api/lokasi", summary: "Tambah lokasi", auth: true, desc: "Menambahkan lokasi baru.", body: [{ name: "nama_lokasi", type: "string", required: true, desc: "Nama lokasi" }, { name: "alamat", type: "string", required: false, desc: "Alamat lokasi" }], request: { nama_lokasi: "Gedung B", alamat: "Jl. Pendidikan No.1" }, response: { status: 201, body: { status: true, message: "Lokasi berhasil ditambahkan." } }, errors: [] },
+            { method: "GET", path: "/api/lokasi/{id}", summary: "Detail lokasi", auth: true, desc: "Mengambil detail satu lokasi beserta daftar ruangnya.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID lokasi" }], request: null, response: { status: 200, body: { status: true, message: "Detail lokasi berhasil diambil.", data: { id_lokasi: 1, nama_lokasi: "Gedung A", ruang: [{ id_ruang: 1, nama_ruang: "Lab Komputer 1" }] } } }, errors: [{ status: 404, body: { status: false, message: "Lokasi tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/lokasi/{id}", summary: "Update lokasi", auth: true, desc: "Memperbarui data lokasi.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID lokasi" }], body: [{ name: "nama_lokasi", type: "string", required: true, desc: "Nama lokasi" }, { name: "alamat", type: "string", required: false, desc: "Alamat" }], request: { nama_lokasi: "Gedung A Updated" }, response: { status: 200, body: { status: true, message: "Lokasi berhasil diperbarui." } }, errors: [] },
+            { method: "DELETE", path: "/api/lokasi/{id}", summary: "Hapus lokasi", auth: true, desc: "Menghapus data lokasi.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID lokasi" }], request: null, response: { status: 200, body: { status: true, message: "Lokasi berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Lokasi tidak ditemukan." } }] },
             { method: "GET", path: "/api/ruang", summary: "Daftar ruang", auth: true, desc: "Mengambil semua data ruang beserta lokasinya.", request: null, response: { status: 200, body: { status: true, message: "Daftar ruang berhasil diambil.", data: [{ id_ruang: 1, nama_ruang: "Lab Komputer 1", lokasi: { nama_lokasi: "Gedung A" } }] } }, errors: [] },
             { method: "POST", path: "/api/ruang", summary: "Tambah ruang", auth: true, desc: "Menambahkan ruang baru.", body: [{ name: "nama_ruang", type: "string", required: true, desc: "Nama ruang" }, { name: "id_lokasi", type: "integer", required: true, desc: "ID lokasi" }], request: { nama_ruang: "Lab Komputer 2", id_lokasi: 1 }, response: { status: 201, body: { status: true, message: "Ruang berhasil ditambahkan." } }, errors: [] },
+            { method: "GET", path: "/api/ruang/{id}", summary: "Detail ruang", auth: true, desc: "Mengambil detail satu ruang beserta lokasinya.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID ruang" }], request: null, response: { status: 200, body: { status: true, message: "Detail ruang berhasil diambil.", data: { id_ruang: 1, nama_ruang: "Lab Komputer 1", lokasi: { nama_lokasi: "Gedung A" } } } }, errors: [{ status: 404, body: { status: false, message: "Ruang tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/ruang/{id}", summary: "Update ruang", auth: true, desc: "Memperbarui data ruang.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID ruang" }], body: [{ name: "nama_ruang", type: "string", required: true, desc: "Nama ruang" }, { name: "id_lokasi", type: "integer", required: true, desc: "ID lokasi" }], request: { nama_ruang: "Lab Komputer 1 Updated", id_lokasi: 1 }, response: { status: 200, body: { status: true, message: "Ruang berhasil diperbarui." } }, errors: [] },
+            { method: "DELETE", path: "/api/ruang/{id}", summary: "Hapus ruang", auth: true, desc: "Menghapus data ruang.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID ruang" }], request: null, response: { status: 200, body: { status: true, message: "Ruang berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Ruang tidak ditemukan." } }] },
             { method: "GET", path: "/api/aset", summary: "Daftar aset", auth: true, desc: "Mengambil seluruh data aset beserta relasi master barang, kategori, merek, satuan, ruang, dan lokasi.", request: null,
               response: { status: 200, body: { status: true, message: "Daftar aset berhasil diambil.", data: [{ id_aset: 1, kode_aset: "AST-2026-001", id_master_barang: 1, master_barang: { nama_barang: "Laptop Lenovo ThinkPad" }, id_ruang: 1, ruang: { nama_ruang: "Lab Komputer 1" }, tahun_perolehan: 2024, nilai_perolehan: 12000000, sumber_dana: "BOS", kondisi: "Baik", status: "Tersedia" }] } }, errors: [] },
             { method: "POST", path: "/api/aset", summary: "Tambah aset", auth: true, desc: "Mendaftarkan aset baru ke dalam sistem inventaris.",
@@ -1507,7 +1578,7 @@ function renderEndpointCard(ep, id) {
     const hasReq = ep.request !== null && ep.request !== undefined;
     const hasResp = ep.response;
     const hasErr = ep.errors && ep.errors.length > 0;
-    const hasTry = ep.method !== 'GET' && ep.method !== 'DELETE';
+    const hasTry = true; // Allow Try API for ALL methods
 
     html += `<div class="tabs">`;
     if (hasParms) html += `<button class="tab-btn active" onclick="switchTab(this, '${id}-params')">Parameters</button>`;
@@ -1567,10 +1638,14 @@ function renderEndpointCard(ep, id) {
         html += `<div class="tab-content" id="${id}-try">`;
         html += `<div class="try-api-panel">
             <h4>⚡ Try API — ${ep.method} ${ep.path}</h4>
-            <div class="try-input-group"><label>Base URL</label><input type="text" id="${id}-try-url" value="http://127.0.0.1:8000${ep.path}"></div>
-            <div class="try-input-group"><label>Bearer Token</label><input type="text" id="${id}-try-token" placeholder="Paste your access_token here..."></div>
-            <div class="try-input-group"><label>Request Body (JSON)</label><textarea id="${id}-try-body">${defaultBody}</textarea></div>
-            <button class="try-btn" onclick="tryApi('${id}', '${ep.method}')">🚀 Send Request</button>
+            <div class="try-input-group"><label>URL</label><input type="text" id="${id}-try-url" value="http://127.0.0.1:8000${ep.path}"></div>
+            <div class="try-input-group"><label>Bearer Token</label><input type="text" id="${id}-try-token" placeholder="Paste your access_token here..."></div>`;
+        if (ep.method === 'POST' || ep.method === 'PUT') {
+            html += `<div class="try-input-group"><label>Request Body (JSON)</label><textarea id="${id}-try-body">${defaultBody}</textarea></div>`;
+        } else {
+            html += `<input type="hidden" id="${id}-try-body" value="">`;
+        }
+        html += `<button class="try-btn" onclick="tryApi('${id}', '${ep.method}')">🚀 Send Request</button>
             <div class="try-response" id="${id}-try-response"></div>
         </div>`;
         html += `</div>`;

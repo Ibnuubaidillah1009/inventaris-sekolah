@@ -33,7 +33,6 @@ class AuthController extends Controller
             'data'    => [
                 'pengguna'     => $pengguna->load(['peran', 'kelas', 'mapel', 'unit']),
                 'access_token' => $token,
-                'token_type'   => 'Bearer',
             ],
         ]);
     }
