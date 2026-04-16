@@ -1453,8 +1453,8 @@ function renderMainContent() {
             <div class="hero-meta-item">📡 <span>JSON Response</span></div>
         </div>
         <div class="base-url-box">
-            <div><span class="label">Base URL</span><code>http://localhost:8000/api</code></div>
-            <button class="copy-btn" onclick="copyToClipboard('http://localhost:8000/api', this)">📋 Copy</button>
+            <div><span class="label">Base URL</span><code>http://127.0.0.1:8000/api</code></div>
+            <button class="copy-btn" onclick="copyToClipboard('http://127.0.0.1:8000/api', this)">📋 Copy</button>
         </div>
     </div>`;
 
@@ -1567,7 +1567,7 @@ function renderEndpointCard(ep, id) {
         html += `<div class="tab-content" id="${id}-try">`;
         html += `<div class="try-api-panel">
             <h4>⚡ Try API — ${ep.method} ${ep.path}</h4>
-            <div class="try-input-group"><label>Base URL</label><input type="text" id="${id}-try-url" value="http://localhost:8000${ep.path}"></div>
+            <div class="try-input-group"><label>Base URL</label><input type="text" id="${id}-try-url" value="http://127.0.0.1:8000${ep.path}"></div>
             <div class="try-input-group"><label>Bearer Token</label><input type="text" id="${id}-try-token" placeholder="Paste your access_token here..."></div>
             <div class="try-input-group"><label>Request Body (JSON)</label><textarea id="${id}-try-body">${defaultBody}</textarea></div>
             <button class="try-btn" onclick="tryApi('${id}', '${ep.method}')">🚀 Send Request</button>
