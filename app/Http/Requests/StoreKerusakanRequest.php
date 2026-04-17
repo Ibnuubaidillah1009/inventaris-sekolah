@@ -18,39 +18,38 @@ class StoreKerusakanRequest extends FormRequest
      * Validasi input laporan kerusakan aset.
      * Format body yang diharapkan:
      * {
-     *   "kode_barang": 1,
-     *   "tanggal_kerusakan": "2026-04-16",
-     *   "jenis_kerusakan": "Ringan",
-     *   "deskripsi": "Layar monitor berkedip-kedip",
-     *   "keterangan": "Perlu dicek segera"
+     *   "kode_barang": "BRG-001",
+     *   "tanggal_lapor": "2026-04-16",
+     *   "deskripsi_kerusakan": "Layar monitor berkedip-kedip",
+     *   "tingkat_kerusakan": "Ringan"
      * }
      */
     public function rules(): array
     {
         return [
-            'kode_barang'            => ['required', 'integer', 'exists:aset,kode_barang'],
-            'tanggal_kerusakan'  => ['required', 'date'],
-            'jenis_kerusakan'    => ['required', 'string', 'max:100'],
-            'deskripsi'          => ['required', 'string'],
-            'keterangan'         => ['nullable', 'string'],
+            'kode_barang'         => ['required', 'string', 'exists:aset,kode_barang'],
+            'tanggal_lapor'       => ['required', 'date'],
+            'deskripsi_kerusakan' => ['required', 'string'],
+            'tingkat_kerusakan'   => ['required', 'string', 'in:Ringan,Sedang,Berat'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'kode_barang.required'           => 'ID aset wajib diisi.',
-            'kode_barang.exists'             => 'Aset tidak ditemukan.',
-            'tanggal_kerusakan.required' => 'Tanggal kerusakan wajib diisi.',
-            'tanggal_kerusakan.date'     => 'Format tanggal kerusakan tidak valid.',
-            'jenis_kerusakan.required'   => 'Jenis kerusakan wajib diisi.',
-            'deskripsi.required'         => 'Deskripsi kerusakan wajib diisi.',
+            'kode_barang.required'         => 'Kode barang wajib diisi.',
+            'kode_barang.exists'           => 'Aset tidak ditemukan.',
+            'tanggal_lapor.required'       => 'Tanggal lapor wajib diisi.',
+            'tanggal_lapor.date'           => 'Format tanggal lapor tidak valid.',
+            'deskripsi_kerusakan.required' => 'Deskripsi kerusakan wajib diisi.',
+            'tingkat_kerusakan.required'   => 'Tingkat kerusakan wajib diisi.',
+            'tingkat_kerusakan.in'         => 'Tingkat kerusakan harus salah satu dari: Ringan, Sedang, Berat.',
         ];
     }
 
     /**
      * Validasi tambahan:
-     * Aset tidak boleh berstatus "Dihapus" atau "Dimusnahkan".
+     * Aset tidak boleh berstatus "Dihapus".
      */
     public function withValidator($validator): void
     {
@@ -65,10 +64,10 @@ class StoreKerusakanRequest extends FormRequest
                 return;
             }
 
-            if (in_array($aset->status, ['Dihapus', 'Dimusnahkan'])) {
+            if ($aset->status_ketersediaan === 'Dihapus') {
                 $validator->errors()->add(
                     'kode_barang',
-                    "Aset '{$aset->kode_aset}' sudah dihapus/dimusnahkan dan tidak bisa dilaporkan rusak."
+                    "Aset '{$aset->kode_barang}' sudah dihapus dan tidak bisa dilaporkan rusak."
                 );
             }
         });

@@ -13,11 +13,9 @@ class Perbaikan extends Model
     protected $fillable = [
         'id_kerusakan',
         'tanggal_perbaikan',
-        'tanggal_selesai',
-        'pelaksana',
-        'biaya',
-        'status_perbaikan',
-        'keterangan',
+        'teknisi',
+        'biaya_perbaikan',
+        'tindakan_perbaikan',
     ];
 
     /**
@@ -27,8 +25,7 @@ class Perbaikan extends Model
     {
         return [
             'tanggal_perbaikan' => 'date',
-            'tanggal_selesai'   => 'date',
-            'biaya'             => 'decimal:2',
+            'biaya_perbaikan'   => 'decimal:2',
         ];
     }
 

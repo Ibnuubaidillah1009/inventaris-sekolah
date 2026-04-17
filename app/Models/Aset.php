@@ -8,18 +8,19 @@ class Aset extends Model
 {
     protected $table = 'aset';
     protected $primaryKey = 'kode_barang';
+    public $incrementing = false;
+    protected $keyType = 'string';
     public $timestamps = false;
 
     protected $fillable = [
         'kode_barang',
         'id_master_barang',
         'id_ruang',
-        'tahun_perolehan',
-        'nilai_perolehan',
-        'sumber_dana',
-        'kondisi',
-        'status',
-        'keterangan',
+        'tanggal_registrasi',
+        'kondisi_barang',
+        'nilai_residu',
+        'status_ketersediaan',
+        'gambar',
     ];
 
     // =========================================================================
@@ -63,7 +64,7 @@ class Aset extends Model
      */
     public function detailPeminjaman()
     {
-        return $this->hasMany(DetailPeminjaman::class, 'id_aset', 'id_aset');
+        return $this->hasMany(DetailPeminjaman::class, 'kode_barang', 'kode_barang');
     }
 
     /**
@@ -71,7 +72,7 @@ class Aset extends Model
      */
     public function mutasi()
     {
-        return $this->hasMany(Mutasi::class, 'id_aset', 'id_aset');
+        return $this->hasMany(Mutasi::class, 'kode_barang', 'kode_barang');
     }
 
     /**
@@ -79,7 +80,7 @@ class Aset extends Model
      */
     public function kerusakan()
     {
-        return $this->hasMany(Kerusakan::class, 'id_aset', 'id_aset');
+        return $this->hasMany(Kerusakan::class, 'kode_barang', 'kode_barang');
     }
 
     /**
@@ -87,7 +88,7 @@ class Aset extends Model
      */
     public function penghapusanAset()
     {
-        return $this->hasMany(PenghapusanAset::class, 'id_aset', 'id_aset');
+        return $this->hasMany(PenghapusanAset::class, 'kode_barang', 'kode_barang');
     }
 
     // =========================================================================
@@ -99,6 +100,6 @@ class Aset extends Model
      */
     public function scopeTersedia($query)
     {
-        return $query->where('status', 'Tersedia')->where('kondisi', 'Baik');
+        return $query->where('status_ketersediaan', 'Tersedia')->where('kondisi_barang', 'Baik');
     }
 }

@@ -35,7 +35,7 @@ class KerusakanController extends Controller
      *
      * Proses:
      * 1. Insert data ke tabel kerusakan.
-     * 2. Update kondisi aset menjadi "Rusak" dan status menjadi "Rusak".
+     * 2. Update kondisi aset menjadi "Rusak Berat" dan status menjadi "Non-Aktif".
      *
      * Validasi dilakukan di StoreKerusakanRequest::withValidator().
      */
@@ -50,21 +50,20 @@ class KerusakanController extends Controller
                 // 1. Insert data kerusakan
                 // ──────────────────────────────────────────────────────
                 $kerusakan = Kerusakan::create([
-                    'kode_barang'           => $validated['kode_barang'],
-                    'tanggal_kerusakan' => $validated['tanggal_kerusakan'],
-                    'jenis_kerusakan'   => $validated['jenis_kerusakan'],
-                    'deskripsi'         => $validated['deskripsi'],
-                    'id_pelapor'        => $request->user()->id_pengguna,
-                    'status_kerusakan'  => 'Dilaporkan',
-                    'keterangan'        => $validated['keterangan'] ?? null,
+                    'kode_barang'         => $validated['kode_barang'],
+                    'tanggal_lapor'       => $validated['tanggal_lapor'],
+                    'deskripsi_kerusakan' => $validated['deskripsi_kerusakan'],
+                    'tingkat_kerusakan'   => $validated['tingkat_kerusakan'],
+                    'id_pelapor'          => $request->user()->id_pengguna,
+                    'status_kerusakan'    => 'Menunggu Pemeriksaan',
                 ]);
 
                 // ──────────────────────────────────────────────────────
-                // 2. Update kondisi & status aset menjadi "Rusak"
+                // 2. Update kondisi & status aset
                 // ──────────────────────────────────────────────────────
                 Aset::where('kode_barang', $validated['kode_barang'])->update([
-                    'kondisi' => 'Rusak',
-                    'status'  => 'Rusak',
+                    'kondisi_barang'      => 'Rusak Berat',
+                    'status_ketersediaan' => 'Non-Aktif',
                 ]);
 
                 return $kerusakan;

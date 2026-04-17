@@ -1241,30 +1241,34 @@ const API_DATA = [
             { method: "PUT", path: "/api/ruang/{id}", summary: "Update ruang", auth: true, desc: "Memperbarui data ruang.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID ruang" }], body: [{ name: "nama_ruang", type: "string", required: true, desc: "Nama ruang" }, { name: "id_lokasi", type: "integer", required: true, desc: "ID lokasi" }], request: { nama_ruang: "Lab Komputer 1 Updated", id_lokasi: 1 }, response: { status: 200, body: { status: true, message: "Ruang berhasil diperbarui." } }, errors: [] },
             { method: "DELETE", path: "/api/ruang/{id}", summary: "Hapus ruang", auth: true, desc: "Menghapus data ruang.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID ruang" }], request: null, response: { status: 200, body: { status: true, message: "Ruang berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Ruang tidak ditemukan." } }] },
             { method: "GET", path: "/api/aset", summary: "Daftar aset", auth: true, desc: "Mengambil seluruh data aset beserta relasi master barang, kategori, merek, satuan, ruang, dan lokasi.", request: null,
-              response: { status: 200, body: { status: true, message: "Daftar aset berhasil diambil.", data: [{ kode_barang: 1, kode_aset: "AST-2026-001", id_master_barang: 1, master_barang: { nama_barang: "Laptop Lenovo ThinkPad" }, id_ruang: 1, ruang: { nama_ruang: "Lab Komputer 1" }, tahun_perolehan: 2024, nilai_perolehan: 12000000, sumber_dana: "BOS", kondisi: "Baik", status: "Tersedia" }] } }, errors: [] },
+              response: { status: 200, body: { status: true, message: "Daftar aset berhasil diambil.", data: [{ kode_barang: "BRG-2026-001", id_master_barang: 1, master_barang: { nama_barang: "Laptop Lenovo ThinkPad" }, id_ruang: 1, ruang: { nama_ruang: "Lab Komputer 1" }, tanggal_registrasi: "2026-04-16", kondisi_barang: "Baik", nilai_residu: 0, status_ketersediaan: "Tersedia", gambar: null }] } }, errors: [] },
             { method: "POST", path: "/api/aset", summary: "Tambah aset", auth: true, desc: "Mendaftarkan aset baru ke dalam sistem inventaris.",
               body: [
-                  { name: "kode_aset", type: "string", required: true, desc: "Kode aset unik, maks 100 karakter" },
+                  { name: "kode_barang", type: "string", required: true, desc: "Kode barang unik, maks 50 karakter" },
                   { name: "id_master_barang", type: "integer", required: true, desc: "ID master barang" },
                   { name: "id_ruang", type: "integer", required: false, desc: "ID ruang penempatan aset" },
-                  { name: "tahun_perolehan", type: "integer", required: false, desc: "Tahun perolehan (4 digit)" },
-                  { name: "nilai_perolehan", type: "numeric", required: false, desc: "Nilai perolehan (rupiah)" },
-                  { name: "sumber_dana", type: "string", required: false, desc: "Sumber dana, maks 100 karakter" },
-                  { name: "kondisi", type: "string", required: true, desc: "Kondisi: Baik | Rusak Ringan | Rusak Berat" },
-                  { name: "status", type: "string", required: true, desc: "Status: Tersedia | Dipinjam | Dalam Perbaikan | Dihapuskan" },
-                  { name: "keterangan", type: "string", required: false, desc: "Catatan tambahan" }
+                  { name: "tanggal_registrasi", type: "date", required: true, desc: "Tanggal registrasi (Y-m-d)" },
+                  { name: "kondisi_barang", type: "string", required: true, desc: "Kondisi: Baik | Rusak Ringan | Rusak Berat" },
+                  { name: "nilai_residu", type: "numeric", required: false, desc: "Nilai residu aset (default: 0)" },
+                  { name: "status_ketersediaan", type: "string", required: false, desc: "Status: Tersedia | Dipinjam | Non-Aktif | Dihapus (default: Tersedia)" },
+                  { name: "gambar", type: "string", required: false, desc: "Path gambar aset, maks 255 karakter" }
               ],
-              request: { kode_aset: "AST-2026-005", id_master_barang: 1, id_ruang: 1, tahun_perolehan: 2026, nilai_perolehan: 15000000, sumber_dana: "APBD", kondisi: "Baik", status: "Tersedia" },
-              response: { status: 201, body: { status: true, message: "Aset berhasil ditambahkan.", data: { kode_barang: 5, kode_aset: "AST-2026-005", kondisi: "Baik", status: "Tersedia" } } }, errors: [{ status: 422, body: { status: false, message: "Validasi gagal.", errors: { kode_aset: ["Kode aset sudah digunakan."] } } }] },
-            { method: "GET", path: "/api/aset/{id}", summary: "Detail aset", auth: true, desc: "Mengambil detail satu aset termasuk data bangunan/tanah jika ada.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID aset" }], request: null, response: { status: 200, body: { status: true, message: "Detail aset berhasil diambil.", data: { kode_barang: 1, kode_aset: "AST-2026-001" } } }, errors: [{ status: 404, body: { status: false, message: "Aset tidak ditemukan." } }] },
-            { method: "PUT", path: "/api/aset/{id}", summary: "Update aset", auth: true, desc: "Memperbarui data aset.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID aset" }],
+              request: { kode_barang: "BRG-2026-005", id_master_barang: 1, id_ruang: 1, tanggal_registrasi: "2026-04-16", kondisi_barang: "Baik", nilai_residu: 0, status_ketersediaan: "Tersedia" },
+              response: { status: 201, body: { status: true, message: "Aset berhasil ditambahkan.", data: { kode_barang: "BRG-2026-005", kondisi_barang: "Baik", status_ketersediaan: "Tersedia" } } }, errors: [{ status: 422, body: { status: false, message: "Validasi gagal.", errors: { kode_barang: ["Kode barang sudah digunakan."] } } }] },
+            { method: "GET", path: "/api/aset/{id}", summary: "Detail aset", auth: true, desc: "Mengambil detail satu aset termasuk data bangunan/tanah jika ada.", params: [{ name: "id", in: "path", type: "string", required: true, desc: "Kode barang" }], request: null, response: { status: 200, body: { status: true, message: "Detail aset berhasil diambil.", data: { kode_barang: "BRG-2026-001", tanggal_registrasi: "2026-04-16" } } }, errors: [{ status: 404, body: { status: false, message: "Aset tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/aset/{id}", summary: "Update aset", auth: true, desc: "Memperbarui data aset.", params: [{ name: "id", in: "path", type: "string", required: true, desc: "Kode barang" }],
               body: [
-                  { name: "kode_aset", type: "string", required: true, desc: "Kode aset" },
-                  { name: "kondisi", type: "string", required: true, desc: "Kondisi aset" },
-                  { name: "status", type: "string", required: true, desc: "Status aset" }
+                  { name: "kode_barang", type: "string", required: false, desc: "Kode barang (unik)" },
+                  { name: "id_master_barang", type: "integer", required: false, desc: "ID master barang" },
+                  { name: "id_ruang", type: "integer", required: false, desc: "ID ruang" },
+                  { name: "tanggal_registrasi", type: "date", required: false, desc: "Tanggal registrasi" },
+                  { name: "kondisi_barang", type: "string", required: false, desc: "Kondisi: Baik | Rusak Ringan | Rusak Berat" },
+                  { name: "nilai_residu", type: "numeric", required: false, desc: "Nilai residu" },
+                  { name: "status_ketersediaan", type: "string", required: false, desc: "Status: Tersedia | Dipinjam | Non-Aktif | Dihapus" },
+                  { name: "gambar", type: "string", required: false, desc: "Path gambar" }
               ],
-              request: { kode_aset: "AST-2026-001", kondisi: "Baik", status: "Tersedia" }, response: { status: 200, body: { status: true, message: "Aset berhasil diperbarui." } }, errors: [] },
-            { method: "DELETE", path: "/api/aset/{id}", summary: "Hapus aset", auth: true, desc: "Menghapus aset secara permanen.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID aset" }], request: null, response: { status: 200, body: { status: true, message: "Aset berhasil dihapus." } }, errors: [] }
+              request: { kondisi_barang: "Baik", status_ketersediaan: "Tersedia" }, response: { status: 200, body: { status: true, message: "Aset berhasil diperbarui." } }, errors: [] },
+            { method: "DELETE", path: "/api/aset/{id}", summary: "Hapus aset", auth: true, desc: "Menghapus aset secara permanen.", params: [{ name: "id", in: "path", type: "string", required: true, desc: "Kode barang" }], request: null, response: { status: 200, body: { status: true, message: "Aset berhasil dihapus." } }, errors: [] }
         ]
     },
     // ───────────────── PEMINJAMAN ─────────────────
@@ -1275,30 +1279,30 @@ const API_DATA = [
         description: "Transaksi peminjaman aset. Menggunakan DB::transaction untuk konsistensi data.",
         endpoints: [
             { method: "GET", path: "/api/peminjaman", summary: "Daftar peminjaman", auth: true, desc: "Mengambil seluruh data peminjaman beserta detail aset yang dipinjam.", request: null,
-              response: { status: 200, body: { status: true, message: "Daftar peminjaman berhasil diambil.", data: [{ nomor_peminjaman: "PJM-2026-001", tanggal_pinjam: "2026-04-16", lama_pinjam_hari: 3, nomor_telepon: "0812", status_peminjaman: "Sedang Dipinjam", peminjam: { id_pengguna: 5, username: "guru01" }, detail_peminjaman: [{ id_detail_pinjam: 1, nomor_peminjaman: "PJM-2026-001", kode_barang: "BRG-001", aset: { kode_barang: "BRG-001" } }] }] } }, errors: [] },
+              response: { status: 200, body: { status: true, message: "Daftar peminjaman berhasil diambil.", data: [{ nomor_peminjaman: "PJM-2026-001", tanggal_pinjam: "2026-04-16", id_peminjam: 1, nomor_telepon: "081234567890", lama_pinjam_hari: 3, keterangan: null, status_peminjaman: "Sedang Dipinjam", peminjam: { id_pengguna: 1, username: "admin" }, detail_peminjaman: [{ id_detail_pinjam: 1, nomor_peminjaman: "PJM-2026-001", kode_barang: "BRG-001", aset: { kode_barang: "BRG-001" } }] }] } }, errors: [] },
             { method: "POST", path: "/api/peminjaman", summary: "Buat peminjaman baru", auth: true,
-              desc: "Menyimpan peminjaman baru menggunakan DB::transaction(). Insert header peminjaman → insert detail multi-item → update status setiap aset menjadi 'Dipinjam'. Aset wajib berstatus 'Tersedia' dan kondisi 'Baik'.",
+              desc: "Menyimpan peminjaman baru menggunakan DB::transaction(). Insert header peminjaman → insert detail multi-item → update status_ketersediaan setiap aset menjadi 'Dipinjam'. Aset wajib berstatus 'Tersedia' dan kondisi 'Baik'.",
               body: [
-                  { name: "nomor_peminjaman", type: "string", required: true, desc: "Nomor peminjaman unik" },
+                  { name: "nomor_peminjaman", type: "string", required: true, desc: "Nomor peminjaman unik (maks 50 karakter)" },
                   { name: "tanggal_pinjam", type: "date", required: true, desc: "Tanggal peminjaman (Y-m-d)" },
                   { name: "id_peminjam", type: "integer", required: true, desc: "ID pengguna peminjam" },
-                  { name: "nomor_telepon", type: "string", required: false, desc: "Nomor Telepon" },
-                  { name: "lama_pinjam_hari", type: "integer", required: true, desc: "Lama pinjam dalam hari" },
+                  { name: "nomor_telepon", type: "string", required: false, desc: "Nomor telepon (maks 20 karakter)" },
+                  { name: "lama_pinjam_hari", type: "integer", required: true, desc: "Lama pinjam dalam hari (min: 1)" },
                   { name: "keterangan", type: "string", required: false, desc: "Catatan peminjaman" },
                   { name: "detail", type: "array", required: true, desc: "Array detail aset yang dipinjam" },
-                  { name: "detail.*.kode_barang", type: "string", required: true, desc: "Kode barang" }
+                  { name: "detail.*.kode_barang", type: "string", required: true, desc: "Kode barang aset" }
               ],
-              request: { nomor_peminjaman: "PJM-2026-003", tanggal_pinjam: "2026-04-16", id_peminjam: 1, nomor_telepon: "081234", lama_pinjam_hari: 5, keterangan: "Untuk kegiatan praktik", detail: [{ kode_barang: "BRG-001" }, { kode_barang: "BRG-002" }] },
+              request: { nomor_peminjaman: "PJM-2026-003", tanggal_pinjam: "2026-04-16", id_peminjam: 1, nomor_telepon: "081234567890", lama_pinjam_hari: 5, keterangan: "Untuk kegiatan praktik", detail: [{ kode_barang: "BRG-001" }, { kode_barang: "BRG-002" }] },
               response: { status: 201, body: { status: true, message: "Peminjaman berhasil disimpan.", data: { nomor_peminjaman: "PJM-2026-003", status_peminjaman: "Sedang Dipinjam" } } },
               errors: [{ status: 422, body: { status: false, message: "Validasi gagal.", errors: { "detail.0.kode_barang": ["Aset 'BRG-001' tidak tersedia (status saat ini: Dipinjam)."] } } }] },
             { method: "GET", path: "/api/peminjaman/{id}", summary: "Detail peminjaman", auth: true, desc: "Mengambil detail satu peminjaman.", params: [{ name: "id", in: "path", type: "string", required: true, desc: "Nomor peminjaman" }], request: null, response: { status: 200, body: { status: true, message: "Detail peminjaman berhasil diambil." } }, errors: [{ status: 404, body: { status: false, message: "Peminjaman tidak ditemukan." } }] },
             { method: "PUT", path: "/api/peminjaman/{id}/kembalikan", summary: "Proses pengembalian", auth: true,
-              desc: "Memproses pengembalian peminjaman. Menggunakan DB::transaction() untuk update status peminjaman → 'Dikembalikan' dan status setiap aset → 'Tersedia'.",
+              desc: "Memproses pengembalian peminjaman. Menggunakan DB::transaction() untuk update status peminjaman → 'Dikembalikan' dan status_ketersediaan setiap aset → 'Tersedia'.",
               params: [{ name: "id", in: "path", type: "string", required: true, desc: "Nomor peminjaman" }],
               request: null,
               response: { status: 200, body: { status: true, message: "Peminjaman berhasil dikembalikan.", data: { nomor_peminjaman: "PJM-2026-001", status_peminjaman: "Dikembalikan" } } },
               errors: [{ status: 422, body: { status: false, message: "Peminjaman ini sudah dikembalikan sebelumnya." } }] },
-            { method: "DELETE", path: "/api/peminjaman/{id}", summary: "Hapus peminjaman", auth: true, desc: "Menghapus peminjaman. Jika masih berstatus 'Sedang Dipinjam', status aset dikembalikan ke 'Tersedia'.", params: [{ name: "id", in: "path", type: "string", required: true, desc: "Nomor peminjaman" }], request: null, response: { status: 200, body: { status: true, message: "Peminjaman berhasil dihapus." } }, errors: [] }
+            { method: "DELETE", path: "/api/peminjaman/{id}", summary: "Hapus peminjaman", auth: true, desc: "Menghapus peminjaman. Jika masih berstatus 'Sedang Dipinjam', status_ketersediaan aset dikembalikan ke 'Tersedia'.", params: [{ name: "id", in: "path", type: "string", required: true, desc: "Nomor peminjaman" }], request: null, response: { status: 200, body: { status: true, message: "Peminjaman berhasil dihapus." } }, errors: [] }
         ]
     },
     // ───────────────── PERMINTAAN ─────────────────
@@ -1343,20 +1347,20 @@ const API_DATA = [
         color: "#06b6d4",
         description: "Pencatatan perpindahan aset dari satu ruang ke ruang lain. Menggunakan DB::transaction.",
         endpoints: [
-            { method: "GET", path: "/api/mutasi", summary: "Daftar mutasi", auth: true, desc: "Mengambil seluruh riwayat mutasi aset beserta relasi aset, ruang asal, ruang tujuan, dan petugas.", request: null,
-              response: { status: 200, body: { status: true, message: "Daftar mutasi aset berhasil diambil.", data: [{ id_mutasi: 1, kode_barang: 1, aset: { kode_aset: "AST-2026-001" }, ruang_asal: { nama_ruang: "Lab Komputer 1" }, ruang_tujuan: { nama_ruang: "Lab Komputer 2" }, tanggal_mutasi: "2026-04-16", petugas: { username: "admin" } }] } }, errors: [] },
+            { method: "GET", path: "/api/mutasi", summary: "Daftar mutasi", auth: true, desc: "Mengambil seluruh riwayat mutasi aset beserta relasi aset, ruang asal, ruang tujuan, dan penanggung jawab.", request: null,
+              response: { status: 200, body: { status: true, message: "Daftar mutasi aset berhasil diambil.", data: [{ id_mutasi: 1, kode_barang: "BRG-001", aset: { kode_barang: "BRG-001" }, ruang_asal: { nama_ruang: "Lab Komputer 1" }, ruang_tujuan: { nama_ruang: "Lab Komputer 2" }, tanggal_mutasi: "2026-04-16", alasan_mutasi: "Pemindahan", penanggung_jawab: { username: "admin" } }] } }, errors: [] },
             { method: "POST", path: "/api/mutasi", summary: "Buat mutasi aset", auth: true,
-              desc: "Memindahkan aset ke ruang baru menggunakan DB::transaction(). Proses: (1) Insert log mutasi, (2) Update id_ruang pada aset ke ruang tujuan. id_petugas otomatis dari user login. Aset wajib berstatus 'Tersedia' dan ruang tujuan tidak boleh sama dengan ruang asal.",
+              desc: "Memindahkan aset ke ruang baru menggunakan DB::transaction(). Proses: (1) Insert log mutasi, (2) Update id_ruang pada aset ke ruang tujuan. id_penanggung_jawab otomatis dari user login. Aset wajib berstatus 'Tersedia' dan ruang tujuan tidak boleh sama dengan ruang asal.",
               body: [
-                  { name: "kode_barang", type: "integer", required: true, desc: "ID aset yang akan dimutasi" },
+                  { name: "kode_barang", type: "string", required: true, desc: "Kode barang aset yang akan dimutasi" },
                   { name: "id_ruang_tujuan", type: "integer", required: true, desc: "ID ruang tujuan baru" },
                   { name: "tanggal_mutasi", type: "date", required: true, desc: "Tanggal mutasi (Y-m-d)" },
-                  { name: "keterangan", type: "string", required: false, desc: "Catatan mutasi" }
+                  { name: "alasan_mutasi", type: "string", required: false, desc: "Alasan/catatan mutasi" }
               ],
-              request: { kode_barang: 1, id_ruang_tujuan: 3, tanggal_mutasi: "2026-04-16", keterangan: "Pemindahan ke Lab Komputer 2" },
-              response: { status: 201, body: { status: true, message: "Mutasi aset berhasil disimpan.", data: { id_mutasi: 1, kode_barang: 1, id_ruang_asal: 1, id_ruang_tujuan: 3, tanggal_mutasi: "2026-04-16", petugas: { username: "admin" } } } },
+              request: { kode_barang: "BRG-001", id_ruang_tujuan: 3, tanggal_mutasi: "2026-04-16", alasan_mutasi: "Pemindahan ke Lab Komputer 2" },
+              response: { status: 201, body: { status: true, message: "Mutasi aset berhasil disimpan.", data: { id_mutasi: 1, kode_barang: "BRG-001", id_ruang_asal: 1, id_ruang_tujuan: 3, tanggal_mutasi: "2026-04-16", penanggung_jawab: { username: "admin" } } } },
               errors: [
-                  { status: 422, body: { status: false, message: "Validasi gagal.", errors: { kode_barang: ["Aset 'AST-001' tidak dapat dimutasi (status saat ini: Dipinjam)."], id_ruang_tujuan: ["Ruang tujuan tidak boleh sama dengan ruang asal aset saat ini."] } } }
+                  { status: 422, body: { status: false, message: "Validasi gagal.", errors: { kode_barang: ["Aset 'BRG-001' tidak dapat dimutasi (status saat ini: Dipinjam)."], id_ruang_tujuan: ["Ruang tujuan tidak boleh sama dengan ruang asal aset saat ini."] } } }
               ] },
             { method: "GET", path: "/api/mutasi/{id}", summary: "Detail mutasi", auth: true, desc: "Mengambil detail satu mutasi aset.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID mutasi" }], request: null, response: { status: 200, body: { status: true, message: "Detail mutasi berhasil diambil." } }, errors: [{ status: 404, body: { status: false, message: "Mutasi tidak ditemukan." } }] },
             { method: "DELETE", path: "/api/mutasi/{id}", summary: "Hapus log mutasi", auth: true, desc: "Menghapus data log mutasi. Catatan: TIDAK mengembalikan posisi aset ke ruang asal.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID mutasi" }], request: null, response: { status: 200, body: { status: true, message: "Data mutasi berhasil dihapus." } }, errors: [] }
@@ -1370,19 +1374,18 @@ const API_DATA = [
         description: "Pencatatan laporan kerusakan aset. Status dan kondisi aset otomatis diupdate menjadi 'Rusak'.",
         endpoints: [
             { method: "GET", path: "/api/kerusakan", summary: "Daftar kerusakan", auth: true, desc: "Mengambil seluruh laporan kerusakan beserta relasi aset, pelapor, dan riwayat perbaikan.", request: null,
-              response: { status: 200, body: { status: true, message: "Daftar kerusakan berhasil diambil.", data: [{ id_kerusakan: 1, aset: { kode_aset: "AST-2026-001" }, tanggal_kerusakan: "2026-04-16", jenis_kerusakan: "Ringan", deskripsi: "Layar berkedip", status_kerusakan: "Dilaporkan", pelapor: { username: "guru01" } }] } }, errors: [] },
+              response: { status: 200, body: { status: true, message: "Daftar kerusakan berhasil diambil.", data: [{ id_kerusakan: 1, kode_barang: "BRG-001", aset: { kode_barang: "BRG-001" }, tanggal_lapor: "2026-04-16", deskripsi_kerusakan: "Layar berkedip", tingkat_kerusakan: "Ringan", status_kerusakan: "Menunggu Pemeriksaan", pelapor: { username: "admin" } }] } }, errors: [] },
             { method: "POST", path: "/api/kerusakan", summary: "Lapor kerusakan", auth: true,
-              desc: "Melaporkan kerusakan aset menggunakan DB::transaction(). Proses: (1) Insert laporan kerusakan, (2) Update kondisi & status aset menjadi 'Rusak'. id_pelapor otomatis dari user login. Aset tidak boleh berstatus 'Dihapus/Dimusnahkan'.",
+              desc: "Melaporkan kerusakan aset menggunakan DB::transaction(). Proses: (1) Insert laporan kerusakan, (2) Update kondisi_barang & status_ketersediaan aset. id_pelapor otomatis dari user login. Aset tidak boleh berstatus 'Dihapus'.",
               body: [
-                  { name: "kode_barang", type: "integer", required: true, desc: "ID aset yang rusak" },
-                  { name: "tanggal_kerusakan", type: "date", required: true, desc: "Tanggal kerusakan" },
-                  { name: "jenis_kerusakan", type: "string", required: true, desc: "Jenis kerusakan (maks 100 karakter)" },
-                  { name: "deskripsi", type: "string", required: true, desc: "Deskripsi detail kerusakan" },
-                  { name: "keterangan", type: "string", required: false, desc: "Catatan tambahan" }
+                  { name: "kode_barang", type: "string", required: true, desc: "Kode barang aset yang rusak" },
+                  { name: "tanggal_lapor", type: "date", required: true, desc: "Tanggal pelaporan kerusakan" },
+                  { name: "deskripsi_kerusakan", type: "string", required: true, desc: "Deskripsi detail kerusakan" },
+                  { name: "tingkat_kerusakan", type: "string", required: true, desc: "Tingkat: Ringan | Sedang | Berat" }
               ],
-              request: { kode_barang: 1, tanggal_kerusakan: "2026-04-16", jenis_kerusakan: "Ringan", deskripsi: "Layar monitor berkedip-kedip", keterangan: "Perlu dicek segera" },
-              response: { status: 201, body: { status: true, message: "Laporan kerusakan berhasil disimpan.", data: { id_kerusakan: 1, kode_barang: 1, status_kerusakan: "Dilaporkan" } } },
-              errors: [{ status: 422, body: { status: false, message: "Validasi gagal.", errors: { kode_barang: ["Aset 'AST-001' sudah dihapus/dimusnahkan dan tidak bisa dilaporkan rusak."] } } }] },
+              request: { kode_barang: "BRG-001", tanggal_lapor: "2026-04-16", deskripsi_kerusakan: "Layar monitor berkedip-kedip", tingkat_kerusakan: "Ringan" },
+              response: { status: 201, body: { status: true, message: "Laporan kerusakan berhasil disimpan.", data: { id_kerusakan: 1, kode_barang: "BRG-001", status_kerusakan: "Menunggu Pemeriksaan" } } },
+              errors: [{ status: 422, body: { status: false, message: "Validasi gagal.", errors: { kode_barang: ["Aset 'BRG-001' sudah dihapus dan tidak bisa dilaporkan rusak."] } } }] },
             { method: "GET", path: "/api/kerusakan/{id}", summary: "Detail kerusakan", auth: true, desc: "Mengambil detail satu kerusakan termasuk riwayat perbaikan.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID kerusakan" }], request: null, response: { status: 200, body: { status: true, message: "Detail kerusakan berhasil diambil." } }, errors: [{ status: 404, body: { status: false, message: "Kerusakan tidak ditemukan." } }] },
             { method: "DELETE", path: "/api/kerusakan/{id}", summary: "Hapus kerusakan", auth: true, desc: "Menghapus data kerusakan.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID kerusakan" }], request: null, response: { status: 200, body: { status: true, message: "Data kerusakan berhasil dihapus." } }, errors: [] }
         ]
@@ -1395,22 +1398,20 @@ const API_DATA = [
         description: "Pencatatan perbaikan/servis aset yang rusak. Berelasi langsung dengan data kerusakan (id_kerusakan).",
         endpoints: [
             { method: "GET", path: "/api/perbaikan", summary: "Daftar perbaikan", auth: true, desc: "Mengambil seluruh data perbaikan beserta relasi kerusakan dan aset.", request: null,
-              response: { status: 200, body: { status: true, message: "Daftar perbaikan berhasil diambil.", data: [{ id_perbaikan: 1, id_kerusakan: 1, tanggal_perbaikan: "2026-04-17", pelaksana: "CV Teknik Jaya", biaya: 500000, status_perbaikan: "Selesai" }] } }, errors: [] },
+              response: { status: 200, body: { status: true, message: "Daftar perbaikan berhasil diambil.", data: [{ id_perbaikan: 1, id_kerusakan: 1, tanggal_perbaikan: "2026-04-17", teknisi: "CV Teknik Jaya", biaya_perbaikan: 500000, tindakan_perbaikan: "Ganti layar LCD" }] } }, errors: [] },
             { method: "POST", path: "/api/perbaikan", summary: "Catat perbaikan", auth: true,
-              desc: "Menyimpan data perbaikan menggunakan DB::transaction(). Jika status_perbaikan = 'Selesai': (1) Update status kerusakan → 'Selesai Diperbaiki', (2) Update aset: kondisi → 'Baik', status → 'Tersedia'. Kerusakan yang sudah 'Selesai Diperbaiki' tidak bisa diperbaiki lagi.",
+              desc: "Menyimpan data perbaikan menggunakan DB::transaction(). Proses: (1) Insert data perbaikan, (2) Update status_kerusakan → 'Sedang Diperbaiki'. Kerusakan yang sudah 'Selesai' tidak bisa diperbaiki lagi.",
               body: [
                   { name: "id_kerusakan", type: "integer", required: true, desc: "ID kerusakan yang diperbaiki" },
-                  { name: "tanggal_perbaikan", type: "date", required: true, desc: "Tanggal mulai perbaikan" },
-                  { name: "tanggal_selesai", type: "date", required: false, desc: "Tanggal selesai (wajib jika status = Selesai)" },
-                  { name: "pelaksana", type: "string", required: true, desc: "Nama pelaksana/teknisi" },
-                  { name: "biaya", type: "numeric", required: false, desc: "Biaya perbaikan (min: 0)" },
-                  { name: "status_perbaikan", type: "string", required: true, desc: "Proses | Selesai" },
-                  { name: "keterangan", type: "string", required: false, desc: "Catatan perbaikan" }
+                  { name: "tanggal_perbaikan", type: "date", required: true, desc: "Tanggal perbaikan" },
+                  { name: "teknisi", type: "string", required: false, desc: "Nama teknisi (maks 150 karakter)" },
+                  { name: "biaya_perbaikan", type: "numeric", required: false, desc: "Biaya perbaikan (min: 0, default: 0)" },
+                  { name: "tindakan_perbaikan", type: "string", required: true, desc: "Deskripsi tindakan perbaikan yang dilakukan" }
               ],
-              request: { id_kerusakan: 1, tanggal_perbaikan: "2026-04-17", tanggal_selesai: "2026-04-20", pelaksana: "CV Teknik Jaya", biaya: 500000, status_perbaikan: "Selesai", keterangan: "Ganti layar LCD" },
-              response: { status: 201, body: { status: true, message: "Data perbaikan berhasil disimpan.", data: { id_perbaikan: 1, id_kerusakan: 1, status_perbaikan: "Selesai" } } },
+              request: { id_kerusakan: 1, tanggal_perbaikan: "2026-04-17", teknisi: "CV Teknik Jaya", biaya_perbaikan: 500000, tindakan_perbaikan: "Ganti layar LCD" },
+              response: { status: 201, body: { status: true, message: "Data perbaikan berhasil disimpan.", data: { id_perbaikan: 1, id_kerusakan: 1, tindakan_perbaikan: "Ganti layar LCD" } } },
               errors: [
-                  { status: 422, body: { status: false, message: "Validasi gagal.", errors: { id_kerusakan: ["Kerusakan ini sudah selesai diperbaiki."], tanggal_selesai: ["Tanggal selesai wajib diisi jika status perbaikan adalah Selesai."] } } }
+                  { status: 422, body: { status: false, message: "Validasi gagal.", errors: { id_kerusakan: ["Kerusakan ini sudah selesai diperbaiki."] } } }
               ] },
             { method: "GET", path: "/api/perbaikan/{id}", summary: "Detail perbaikan", auth: true, desc: "Mengambil detail satu perbaikan.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID perbaikan" }], request: null, response: { status: 200, body: { status: true, message: "Detail perbaikan berhasil diambil." } }, errors: [{ status: 404, body: { status: false, message: "Perbaikan tidak ditemukan." } }] },
             { method: "DELETE", path: "/api/perbaikan/{id}", summary: "Hapus perbaikan", auth: true, desc: "Menghapus data perbaikan.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID perbaikan" }], request: null, response: { status: 200, body: { status: true, message: "Data perbaikan berhasil dihapus." } }, errors: [] }
@@ -1424,22 +1425,19 @@ const API_DATA = [
         description: "Pencatatan penghapusan/pemusnahan aset dari sistem inventaris. Aset yang dihapus tidak muncul di daftar aktif.",
         endpoints: [
             { method: "GET", path: "/api/penghapusan-aset", summary: "Daftar penghapusan", auth: true, desc: "Mengambil seluruh data penghapusan aset beserta relasi aset dan penyetuju.", request: null,
-              response: { status: 200, body: { status: true, message: "Daftar penghapusan aset berhasil diambil.", data: [{ id_penghapusan: 1, aset: { kode_aset: "AST-2026-001" }, tanggal_penghapusan: "2026-04-16", alasan: "Sudah tidak layak pakai", metode_penghapusan: "Dimusnahkan", penyetuju: { username: "admin" } }] } }, errors: [] },
+              response: { status: 200, body: { status: true, message: "Daftar penghapusan aset berhasil diambil.", data: [{ id_penghapusan: 1, kode_barang: "BRG-001", aset: { kode_barang: "BRG-001" }, tanggal_hapus: "2026-04-16", alasan_hapus: "Sudah tidak layak pakai", penyetuju: { username: "admin" } }] } }, errors: [] },
             { method: "POST", path: "/api/penghapusan-aset", summary: "Hapuskan aset", auth: true,
-              desc: "Menghapuskan aset dari sistem menggunakan DB::transaction(). Proses: (1) Insert record penghapusan, (2) Update status aset menjadi 'Dihapus'. Aset tidak boleh berstatus 'Dihapus/Dimusnahkan' atau 'Dipinjam'.",
+              desc: "Menghapuskan aset dari sistem menggunakan DB::transaction(). Proses: (1) Insert record penghapusan, (2) Update status_ketersediaan aset menjadi 'Dihapus'. Aset tidak boleh berstatus 'Dihapus' atau 'Dipinjam'.",
               body: [
-                  { name: "kode_barang", type: "integer", required: true, desc: "ID aset yang akan dihapuskan" },
-                  { name: "tanggal_penghapusan", type: "date", required: true, desc: "Tanggal penghapusan" },
-                  { name: "alasan", type: "string", required: true, desc: "Alasan penghapusan" },
-                  { name: "metode_penghapusan", type: "string", required: true, desc: "Dimusnahkan | Dilelang | Dihibahkan" },
-                  { name: "id_penyetuju", type: "integer", required: true, desc: "ID pengguna yang menyetujui" },
-                  { name: "dokumen_pendukung", type: "string", required: false, desc: "Nomor dokumen pendukung" },
-                  { name: "keterangan", type: "string", required: false, desc: "Catatan tambahan" }
+                  { name: "kode_barang", type: "string", required: true, desc: "Kode barang aset yang akan dihapuskan" },
+                  { name: "tanggal_hapus", type: "date", required: true, desc: "Tanggal penghapusan" },
+                  { name: "alasan_hapus", type: "string", required: true, desc: "Alasan penghapusan" },
+                  { name: "id_penyetuju", type: "integer", required: true, desc: "ID pengguna yang menyetujui" }
               ],
-              request: { kode_barang: 3, tanggal_penghapusan: "2026-04-16", alasan: "Rusak berat, tidak ekonomis diperbaiki", metode_penghapusan: "Dimusnahkan", id_penyetuju: 1, dokumen_pendukung: "BA-001/2026", keterangan: "Berita acara pemusnahan terlampir" },
-              response: { status: 201, body: { status: true, message: "Penghapusan aset berhasil disimpan.", data: { id_penghapusan: 1, kode_barang: 3, metode_penghapusan: "Dimusnahkan" } } },
+              request: { kode_barang: "BRG-003", tanggal_hapus: "2026-04-16", alasan_hapus: "Rusak berat, tidak ekonomis diperbaiki", id_penyetuju: 1 },
+              response: { status: 201, body: { status: true, message: "Penghapusan aset berhasil disimpan.", data: { id_penghapusan: 1, kode_barang: "BRG-003", tanggal_hapus: "2026-04-16" } } },
               errors: [
-                  { status: 422, body: { status: false, message: "Validasi gagal.", errors: { kode_barang: ["Aset 'AST-003' sedang dipinjam dan tidak dapat dihapuskan."] } } }
+                  { status: 422, body: { status: false, message: "Validasi gagal.", errors: { kode_barang: ["Aset 'BRG-003' sedang dipinjam dan tidak dapat dihapuskan."] } } }
               ] },
             { method: "GET", path: "/api/penghapusan-aset/{id}", summary: "Detail penghapusan", auth: true, desc: "Mengambil detail satu penghapusan aset.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID penghapusan" }], request: null, response: { status: 200, body: { status: true, message: "Detail penghapusan aset berhasil diambil." } }, errors: [{ status: 404, body: { status: false, message: "Data penghapusan aset tidak ditemukan." } }] },
             { method: "DELETE", path: "/api/penghapusan-aset/{id}", summary: "Hapus record penghapusan", auth: true, desc: "Menghapus data record penghapusan aset.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID penghapusan" }], request: null, response: { status: 200, body: { status: true, message: "Data penghapusan aset berhasil dihapus." } }, errors: [] }

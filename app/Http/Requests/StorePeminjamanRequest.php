@@ -18,49 +18,48 @@ class StorePeminjamanRequest extends FormRequest
      * Validasi input peminjaman.
      * Format body yang diharapkan:
      * {
-     *   "kode_peminjaman": "PJM-2026-001",
+     *   "nomor_peminjaman": "PJM-2026-001",
      *   "tanggal_pinjam": "2026-04-16",
-     *   "tanggal_kembali": "2026-04-23",
      *   "id_peminjam": 5,
+     *   "nomor_telepon": "081234567890",
+     *   "lama_pinjam_hari": 7,
      *   "keterangan": "Untuk kegiatan praktik",
      *   "detail": [
-     *     { "kode_barang": 1, "jumlah": 1, "keterangan": "Laptop A" },
-     *     { "kode_barang": 2, "jumlah": 1, "keterangan": "Proyektor B" }
+     *     { "kode_barang": "BRG-001" },
+     *     { "kode_barang": "BRG-002" }
      *   ]
      * }
      */
     public function rules(): array
     {
         return [
-            'nomor_peminjaman'    => ['required', 'string', 'max:100', 'unique:peminjaman,nomor_peminjaman'],
-            'tanggal_pinjam'     => ['required', 'date'],
-            'tanggal_kembali'    => ['nullable', 'date', 'after_or_equal:tanggal_pinjam'],
-            'id_peminjam'        => ['required', 'integer', 'exists:pengguna,id_pengguna'],
-            'keterangan'         => ['nullable', 'string'],
+            'nomor_peminjaman'       => ['required', 'string', 'max:50', 'unique:peminjaman,nomor_peminjaman'],
+            'tanggal_pinjam'         => ['required', 'date'],
+            'id_peminjam'            => ['required', 'integer', 'exists:pengguna,id_pengguna'],
+            'nomor_telepon'          => ['nullable', 'string', 'max:20'],
+            'lama_pinjam_hari'       => ['required', 'integer', 'min:1'],
+            'keterangan'             => ['nullable', 'string'],
 
             // Validasi array detail peminjaman (multi-item)
-            'detail'             => ['required', 'array', 'min:1'],
+            'detail'                 => ['required', 'array', 'min:1'],
             'detail.*.kode_barang'   => ['required', 'string', 'exists:aset,kode_barang'],
-            'detail.*.jumlah'    => ['required', 'integer', 'min:1'],
-            'detail.*.keterangan' => ['nullable', 'string'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'nomor_peminjaman.required'  => 'Kode peminjaman wajib diisi.',
-            'nomor_peminjaman.unique'    => 'Kode peminjaman sudah ada.',
-            'tanggal_pinjam.required'   => 'Tanggal pinjam wajib diisi.',
-            'tanggal_kembali.after_or_equal' => 'Tanggal kembali tidak boleh sebelum tanggal pinjam.',
-            'id_peminjam.required'      => 'Peminjam wajib dipilih.',
-            'id_peminjam.exists'        => 'Peminjam tidak ditemukan.',
-            'detail.required'           => 'Detail peminjaman wajib diisi.',
-            'detail.min'                => 'Minimal harus ada 1 item yang dipinjam.',
-            'detail.*.kode_barang.required' => 'ID aset wajib diisi untuk setiap item.',
+            'nomor_peminjaman.required'     => 'Nomor peminjaman wajib diisi.',
+            'nomor_peminjaman.unique'       => 'Nomor peminjaman sudah ada.',
+            'tanggal_pinjam.required'       => 'Tanggal pinjam wajib diisi.',
+            'id_peminjam.required'          => 'Peminjam wajib dipilih.',
+            'id_peminjam.exists'            => 'Peminjam tidak ditemukan.',
+            'lama_pinjam_hari.required'     => 'Lama pinjam (hari) wajib diisi.',
+            'lama_pinjam_hari.min'          => 'Lama pinjam minimal 1 hari.',
+            'detail.required'               => 'Detail peminjaman wajib diisi.',
+            'detail.min'                    => 'Minimal harus ada 1 item yang dipinjam.',
+            'detail.*.kode_barang.required' => 'Kode barang wajib diisi untuk setiap item.',
             'detail.*.kode_barang.exists'   => 'Aset tidak ditemukan.',
-            'detail.*.jumlah.required'  => 'Jumlah wajib diisi untuk setiap item.',
-            'detail.*.jumlah.min'       => 'Jumlah minimal 1.',
         ];
     }
 
@@ -76,10 +75,10 @@ class StorePeminjamanRequest extends FormRequest
             }
 
             $details = $this->input('detail', []);
-            $idAsets = collect($details)->pluck('kode_barang')->unique();
+            $kodeBarangs = collect($details)->pluck('kode_barang')->unique();
 
             // Query semua aset yang diminta
-            $asets = Aset::whereIn('kode_barang', $idAsets)->get()->keyBy('kode_barang');
+            $asets = Aset::whereIn('kode_barang', $kodeBarangs)->get()->keyBy('kode_barang');
 
             foreach ($details as $index => $item) {
                 $aset = $asets->get($item['kode_barang']);
@@ -87,22 +86,22 @@ class StorePeminjamanRequest extends FormRequest
                 if (!$aset) {
                     $validator->errors()->add(
                         "detail.{$index}.kode_barang",
-                        "Aset dengan ID {$item['kode_barang']} tidak ditemukan."
+                        "Aset dengan kode {$item['kode_barang']} tidak ditemukan."
                     );
                     continue;
                 }
 
-                if ($aset->status !== 'Tersedia') {
+                if ($aset->status_ketersediaan !== 'Tersedia') {
                     $validator->errors()->add(
                         "detail.{$index}.kode_barang",
-                        "Aset '{$aset->kode_aset}' tidak tersedia (status saat ini: {$aset->status})."
+                        "Aset '{$aset->kode_barang}' tidak tersedia (status saat ini: {$aset->status_ketersediaan})."
                     );
                 }
 
-                if ($aset->kondisi !== 'Baik') {
+                if ($aset->kondisi_barang !== 'Baik') {
                     $validator->errors()->add(
                         "detail.{$index}.kode_barang",
-                        "Aset '{$aset->kode_aset}' tidak dalam kondisi baik (kondisi saat ini: {$aset->kondisi})."
+                        "Aset '{$aset->kode_barang}' tidak dalam kondisi baik (kondisi saat ini: {$aset->kondisi_barang})."
                     );
                 }
             }

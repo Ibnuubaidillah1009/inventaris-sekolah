@@ -12,12 +12,11 @@ class Kerusakan extends Model
 
     protected $fillable = [
         'kode_barang',
-        'tanggal_kerusakan',
-        'jenis_kerusakan',
-        'deskripsi',
+        'tanggal_lapor',
         'id_pelapor',
+        'deskripsi_kerusakan',
+        'tingkat_kerusakan',
         'status_kerusakan',
-        'keterangan',
     ];
 
     /**
@@ -26,7 +25,7 @@ class Kerusakan extends Model
     protected function casts(): array
     {
         return [
-            'tanggal_kerusakan' => 'date',
+            'tanggal_lapor' => 'date',
         ];
     }
 

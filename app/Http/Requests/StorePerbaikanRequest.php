@@ -20,46 +20,38 @@ class StorePerbaikanRequest extends FormRequest
      * {
      *   "id_kerusakan": 3,
      *   "tanggal_perbaikan": "2026-04-17",
-     *   "tanggal_selesai": "2026-04-20",
-     *   "pelaksana": "CV Teknik Jaya",
-     *   "biaya": 500000,
-     *   "status_perbaikan": "Selesai",
-     *   "keterangan": "Ganti layar LCD"
+     *   "teknisi": "CV Teknik Jaya",
+     *   "biaya_perbaikan": 500000,
+     *   "tindakan_perbaikan": "Ganti layar LCD"
      * }
      */
     public function rules(): array
     {
         return [
-            'id_kerusakan'      => ['required', 'integer', 'exists:kerusakan,id_kerusakan'],
-            'tanggal_perbaikan' => ['required', 'date'],
-            'tanggal_selesai'   => ['nullable', 'date', 'after_or_equal:tanggal_perbaikan'],
-            'pelaksana'         => ['required', 'string', 'max:255'],
-            'biaya'             => ['nullable', 'numeric', 'min:0'],
-            'status_perbaikan'  => ['required', 'string', 'in:Proses,Selesai'],
-            'keterangan'        => ['nullable', 'string'],
+            'id_kerusakan'        => ['required', 'integer', 'exists:kerusakan,id_kerusakan'],
+            'tanggal_perbaikan'   => ['required', 'date'],
+            'teknisi'             => ['nullable', 'string', 'max:150'],
+            'biaya_perbaikan'     => ['nullable', 'numeric', 'min:0'],
+            'tindakan_perbaikan'  => ['required', 'string'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'id_kerusakan.required'             => 'ID kerusakan wajib diisi.',
-            'id_kerusakan.exists'               => 'Data kerusakan tidak ditemukan.',
-            'tanggal_perbaikan.required'        => 'Tanggal perbaikan wajib diisi.',
-            'tanggal_perbaikan.date'            => 'Format tanggal perbaikan tidak valid.',
-            'tanggal_selesai.after_or_equal'    => 'Tanggal selesai tidak boleh sebelum tanggal perbaikan.',
-            'pelaksana.required'                => 'Nama pelaksana/teknisi wajib diisi.',
-            'biaya.numeric'                     => 'Biaya harus berupa angka.',
-            'biaya.min'                         => 'Biaya tidak boleh negatif.',
-            'status_perbaikan.required'         => 'Status perbaikan wajib diisi.',
-            'status_perbaikan.in'               => 'Status perbaikan harus berisi: Proses atau Selesai.',
+            'id_kerusakan.required'        => 'ID kerusakan wajib diisi.',
+            'id_kerusakan.exists'          => 'Data kerusakan tidak ditemukan.',
+            'tanggal_perbaikan.required'   => 'Tanggal perbaikan wajib diisi.',
+            'tanggal_perbaikan.date'       => 'Format tanggal perbaikan tidak valid.',
+            'biaya_perbaikan.numeric'      => 'Biaya perbaikan harus berupa angka.',
+            'biaya_perbaikan.min'          => 'Biaya perbaikan tidak boleh negatif.',
+            'tindakan_perbaikan.required'  => 'Tindakan perbaikan wajib diisi.',
         ];
     }
 
     /**
      * Validasi tambahan:
-     * 1. Jika status_perbaikan = "Selesai", tanggal_selesai wajib diisi.
-     * 2. Kerusakan yang dirujuk tidak boleh sudah berstatus "Selesai Diperbaiki".
+     * Kerusakan yang dirujuk tidak boleh sudah berstatus "Selesai".
      */
     public function withValidator($validator): void
     {
@@ -68,18 +60,10 @@ class StorePerbaikanRequest extends FormRequest
                 return;
             }
 
-            // Jika selesai, tanggal_selesai wajib ada
-            if ($this->input('status_perbaikan') === 'Selesai' && empty($this->input('tanggal_selesai'))) {
-                $validator->errors()->add(
-                    'tanggal_selesai',
-                    'Tanggal selesai wajib diisi jika status perbaikan adalah Selesai.'
-                );
-            }
-
             // Cek status kerusakan
             $kerusakan = Kerusakan::find($this->input('id_kerusakan'));
 
-            if ($kerusakan && $kerusakan->status_kerusakan === 'Selesai Diperbaiki') {
+            if ($kerusakan && $kerusakan->status_kerusakan === 'Selesai') {
                 $validator->errors()->add(
                     'id_kerusakan',
                     'Kerusakan ini sudah selesai diperbaiki.'

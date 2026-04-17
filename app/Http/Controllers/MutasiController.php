@@ -13,7 +13,7 @@ class MutasiController extends Controller
 {
     /**
      * Tampilkan daftar semua mutasi aset.
-     * Eager load: aset → masterBarang, ruangAsal → lokasi, ruangTujuan → lokasi, petugas
+     * Eager load: aset → masterBarang, ruangAsal → lokasi, ruangTujuan → lokasi, penanggungJawab
      */
     public function index(): JsonResponse
     {
@@ -21,7 +21,7 @@ class MutasiController extends Controller
             'aset.masterBarang',
             'ruangAsal.lokasi',
             'ruangTujuan.lokasi',
-            'petugas',
+            'penanggungJawab',
         ])->orderByDesc('id_mutasi')->get();
 
         return response()->json([
@@ -59,11 +59,11 @@ class MutasiController extends Controller
                 // ──────────────────────────────────────────────────────
                 $mutasi = Mutasi::create([
                     'kode_barang'         => $validated['kode_barang'],
-                    'id_ruang_asal'   => $idRuangAsal,
-                    'id_ruang_tujuan' => $validated['id_ruang_tujuan'],
-                    'tanggal_mutasi'  => $validated['tanggal_mutasi'],
-                    'id_petugas'      => $request->user()->id_pengguna,
-                    'keterangan'      => $validated['keterangan'] ?? null,
+                    'id_ruang_asal'       => $idRuangAsal,
+                    'id_ruang_tujuan'     => $validated['id_ruang_tujuan'],
+                    'tanggal_mutasi'      => $validated['tanggal_mutasi'],
+                    'id_penanggung_jawab' => $request->user()->id_pengguna,
+                    'alasan_mutasi'       => $validated['alasan_mutasi'] ?? null,
                 ]);
 
                 // ──────────────────────────────────────────────────────
@@ -81,7 +81,7 @@ class MutasiController extends Controller
                 'aset.masterBarang',
                 'ruangAsal.lokasi',
                 'ruangTujuan.lokasi',
-                'petugas',
+                'penanggungJawab',
             ]);
 
             return response()->json([
@@ -108,7 +108,7 @@ class MutasiController extends Controller
             'aset.masterBarang',
             'ruangAsal.lokasi',
             'ruangTujuan.lokasi',
-            'petugas',
+            'penanggungJawab',
         ])->find($id);
 
         if (!$mutasi) {

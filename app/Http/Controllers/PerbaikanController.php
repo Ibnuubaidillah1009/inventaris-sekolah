@@ -34,9 +34,7 @@ class PerbaikanController extends Controller
      *
      * Proses:
      * 1. Insert data ke tabel perbaikan.
-     * 2. Jika status_perbaikan = "Selesai":
-     *    a. Update status_kerusakan menjadi "Selesai Diperbaiki".
-     *    b. Update kondisi aset kembali menjadi "Baik" dan status menjadi "Tersedia".
+     * 2. Update status_kerusakan menjadi "Sedang Diperbaiki".
      *
      * Validasi dilakukan di StorePerbaikanRequest::withValidator().
      */
@@ -51,31 +49,20 @@ class PerbaikanController extends Controller
                 // 1. Insert data perbaikan
                 // ──────────────────────────────────────────────────────
                 $perbaikan = Perbaikan::create([
-                    'id_kerusakan'      => $validated['id_kerusakan'],
-                    'tanggal_perbaikan' => $validated['tanggal_perbaikan'],
-                    'tanggal_selesai'   => $validated['tanggal_selesai'] ?? null,
-                    'pelaksana'         => $validated['pelaksana'],
-                    'biaya'             => $validated['biaya'] ?? null,
-                    'status_perbaikan'  => $validated['status_perbaikan'],
-                    'keterangan'        => $validated['keterangan'] ?? null,
+                    'id_kerusakan'       => $validated['id_kerusakan'],
+                    'tanggal_perbaikan'  => $validated['tanggal_perbaikan'],
+                    'teknisi'            => $validated['teknisi'] ?? null,
+                    'biaya_perbaikan'    => $validated['biaya_perbaikan'] ?? null,
+                    'tindakan_perbaikan' => $validated['tindakan_perbaikan'],
                 ]);
 
                 // ──────────────────────────────────────────────────────
-                // 2. Jika perbaikan selesai → update kerusakan & aset
+                // 2. Update status kerusakan → "Sedang Diperbaiki"
                 // ──────────────────────────────────────────────────────
-                if ($validated['status_perbaikan'] === 'Selesai') {
-                    // Update status kerusakan
-                    $kerusakan = Kerusakan::findOrFail($validated['id_kerusakan']);
-                    $kerusakan->update([
-                        'status_kerusakan' => 'Selesai Diperbaiki',
-                    ]);
-
-                    // Update kondisi & status aset kembali normal
-                    Aset::where('kode_barang', $kerusakan->kode_barang)->update([
-                        'kondisi' => 'Baik',
-                        'status'  => 'Tersedia',
-                    ]);
-                }
+                $kerusakan = Kerusakan::findOrFail($validated['id_kerusakan']);
+                $kerusakan->update([
+                    'status_kerusakan' => 'Sedang Diperbaiki',
+                ]);
 
                 return $perbaikan;
             });

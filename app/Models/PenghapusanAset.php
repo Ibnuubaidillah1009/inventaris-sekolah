@@ -12,12 +12,9 @@ class PenghapusanAset extends Model
 
     protected $fillable = [
         'kode_barang',
-        'tanggal_penghapusan',
-        'alasan',
-        'metode_penghapusan',
+        'tanggal_hapus',
+        'alasan_hapus',
         'id_penyetuju',
-        'dokumen_pendukung',
-        'keterangan',
     ];
 
     /**
@@ -26,7 +23,7 @@ class PenghapusanAset extends Model
     protected function casts(): array
     {
         return [
-            'tanggal_penghapusan' => 'date',
+            'tanggal_hapus' => 'date',
         ];
     }
 

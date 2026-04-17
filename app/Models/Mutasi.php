@@ -15,8 +15,8 @@ class Mutasi extends Model
         'id_ruang_asal',
         'id_ruang_tujuan',
         'tanggal_mutasi',
-        'id_petugas',
-        'keterangan',
+        'alasan_mutasi',
+        'id_penanggung_jawab',
     ];
 
     /**
@@ -58,10 +58,10 @@ class Mutasi extends Model
     }
 
     /**
-     * Relasi: Mutasi belongsTo Pengguna sebagai petugas.
+     * Relasi: Mutasi belongsTo Pengguna sebagai penanggung jawab.
      */
-    public function petugas()
+    public function penanggungJawab()
     {
-        return $this->belongsTo(Pengguna::class, 'id_petugas', 'id_pengguna');
+        return $this->belongsTo(Pengguna::class, 'id_penanggung_jawab', 'id_pengguna');
     }
 }
