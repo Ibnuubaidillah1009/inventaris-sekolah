@@ -15,14 +15,14 @@ class PeminjamanResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id_peminjaman'      => $this->id_peminjaman,
-            'kode_peminjaman'    => $this->kode_peminjaman,
+            'nomor_peminjaman'   => $this->nomor_peminjaman,
             'tanggal_pinjam'     => $this->tanggal_pinjam?->format('Y-m-d'),
-            'tanggal_kembali'    => $this->tanggal_kembali?->format('Y-m-d'),
             'id_peminjam'        => $this->id_peminjam,
-            'peminjam'           => new PenggunaResource($this->whenLoaded('peminjam')),
+            'nomor_telepon'      => $this->nomor_telepon,
+            'lama_pinjam_hari'   => $this->lama_pinjam_hari,
             'status_peminjaman'  => $this->status_peminjaman,
             'keterangan'         => $this->keterangan,
+            'peminjam'           => new PenggunaResource($this->whenLoaded('peminjam')),
             'detail_peminjaman'  => DetailPeminjamanResource::collection($this->whenLoaded('detailPeminjaman')),
         ];
     }

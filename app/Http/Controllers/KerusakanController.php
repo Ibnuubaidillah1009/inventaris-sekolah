@@ -50,7 +50,7 @@ class KerusakanController extends Controller
                 // 1. Insert data kerusakan
                 // ──────────────────────────────────────────────────────
                 $kerusakan = Kerusakan::create([
-                    'id_aset'           => $validated['id_aset'],
+                    'kode_barang'           => $validated['kode_barang'],
                     'tanggal_kerusakan' => $validated['tanggal_kerusakan'],
                     'jenis_kerusakan'   => $validated['jenis_kerusakan'],
                     'deskripsi'         => $validated['deskripsi'],
@@ -62,7 +62,7 @@ class KerusakanController extends Controller
                 // ──────────────────────────────────────────────────────
                 // 2. Update kondisi & status aset menjadi "Rusak"
                 // ──────────────────────────────────────────────────────
-                Aset::where('id_aset', $validated['id_aset'])->update([
+                Aset::where('kode_barang', $validated['kode_barang'])->update([
                     'kondisi' => 'Rusak',
                     'status'  => 'Rusak',
                 ]);

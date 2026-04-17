@@ -10,12 +10,10 @@ class DetailPeminjamanResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id_detail_peminjaman' => $this->id_detail_peminjaman,
-            'id_peminjaman'        => $this->id_peminjaman,
-            'id_aset'              => $this->id_aset,
-            'aset'                 => new AsetResource($this->whenLoaded('aset')),
-            'jumlah'               => $this->jumlah,
-            'keterangan'           => $this->keterangan,
+            'id_detail_pinjam' => $this->id_detail_pinjam,
+            'nomor_peminjaman' => $this->nomor_peminjaman,
+            'kode_barang'      => $this->kode_barang,
+            'aset'             => new AsetResource($this->whenLoaded('aset')),
         ];
     }
 }

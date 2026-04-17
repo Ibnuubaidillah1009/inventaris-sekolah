@@ -10,7 +10,7 @@ class DatabaseController extends Controller
 {
     public function reset()
     {
-        try { 
+        try {
             // Hapus semua tabel dan jalankan ulang migrasi serta seeder
             Artisan::call('migrate:fresh', ['--seed' => true]);
             return response()->json(['message' => 'Database berhasil direset.']);
@@ -23,7 +23,7 @@ class DatabaseController extends Controller
     {
         $filename = "backup-" . date('Y-m-d-H-i-s') . ".sql";
         $path = storage_path('app/backups/' . $filename);
-        
+
         $user = env('DB_USERNAME');
         $password = env('DB_PASSWORD');
         $database = env('DB_DATABASE');
@@ -43,7 +43,7 @@ class DatabaseController extends Controller
 
         try {
             $sql = file_get_contents($request->file('sql_file')->getRealPath());
-            
+
             // Disable foreign key checks sementara agar tidak error saat drop table
             DB::unprepared('SET FOREIGN_KEY_CHECKS=0;');
             DB::unprepared($sql);

@@ -51,14 +51,14 @@ class MutasiController extends Controller
                 // ──────────────────────────────────────────────────────
                 // 1. Ambil data aset untuk mendapatkan ruang asal
                 // ──────────────────────────────────────────────────────
-                $aset = Aset::findOrFail($validated['id_aset']);
+                $aset = Aset::findOrFail($validated['kode_barang']);
                 $idRuangAsal = $aset->id_ruang;
 
                 // ──────────────────────────────────────────────────────
                 // 2. Insert log mutasi
                 // ──────────────────────────────────────────────────────
                 $mutasi = Mutasi::create([
-                    'id_aset'         => $validated['id_aset'],
+                    'kode_barang'         => $validated['kode_barang'],
                     'id_ruang_asal'   => $idRuangAsal,
                     'id_ruang_tujuan' => $validated['id_ruang_tujuan'],
                     'tanggal_mutasi'  => $validated['tanggal_mutasi'],

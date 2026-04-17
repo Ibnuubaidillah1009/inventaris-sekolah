@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class AsetTanah extends Model
 {
     protected $table = 'aset_tanah';
-    protected $primaryKey = 'id_aset_tanah';
+    protected $primaryKey = 'kode_barang_tanah';
     public $timestamps = false;
 
     protected $fillable = [
-        'id_aset',
+        'kode_barang',
         'luas_tanah',
         'alamat_tanah',
         'no_sertifikat',
@@ -26,6 +26,6 @@ class AsetTanah extends Model
      */
     public function aset()
     {
-        return $this->belongsTo(Aset::class, 'id_aset', 'id_aset');
+        return $this->belongsTo(Aset::class, 'kode_barang', 'kode_barang');
     }
 }

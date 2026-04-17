@@ -13,16 +13,12 @@ use Illuminate\Support\Facades\DB;
 
 class PeminjamanController extends Controller
 {
-    /**
-     * Tampilkan daftar semua peminjaman.
-     * Eager load: peminjam, detailPeminjaman → aset → masterBarang
-     */
     public function index(): JsonResponse
     {
         $data = Peminjaman::with([
             'peminjam',
             'detailPeminjaman.aset.masterBarang',
-        ])->orderByDesc('id_peminjaman')->get();
+        ])->orderByDesc('nomor_peminjaman')->get();
 
         return response()->json([
             'status'  => true,
@@ -31,16 +27,6 @@ class PeminjamanController extends Controller
         ]);
     }
 
-    /**
-     * Simpan peminjaman baru menggunakan DB::transaction().
-     *
-     * Proses:
-     * 1. Insert ke tabel peminjaman.
-     * 2. Insert ke tabel detail_peminjaman (multi-item dari array input).
-     * 3. Update status setiap aset menjadi "Dipinjam".
-     *
-     * Validasi ketersediaan aset dilakukan di StorePeminjamanRequest::withValidator().
-     */
     public function store(StorePeminjamanRequest $request): JsonResponse
     {
         $validated = $request->validated();
@@ -48,45 +34,34 @@ class PeminjamanController extends Controller
         try {
             $peminjaman = DB::transaction(function () use ($validated) {
 
-                // ──────────────────────────────────────────────────────
-                // 1. Insert data peminjaman (header)
-                // ──────────────────────────────────────────────────────
                 $peminjaman = Peminjaman::create([
-                    'kode_peminjaman'   => $validated['kode_peminjaman'],
+                    'nomor_peminjaman'  => $validated['nomor_peminjaman'],
                     'tanggal_pinjam'    => $validated['tanggal_pinjam'],
-                    'tanggal_kembali'   => $validated['tanggal_kembali'] ?? null,
                     'id_peminjam'       => $validated['id_peminjam'],
-                    'status_peminjaman' => 'Dipinjam',
+                    'nomor_telepon'     => $validated['nomor_telepon'] ?? null,
+                    'lama_pinjam_hari'  => $validated['lama_pinjam_hari'],
+                    'status_peminjaman' => 'Sedang Dipinjam',
                     'keterangan'        => $validated['keterangan'] ?? null,
                 ]);
 
-                // ──────────────────────────────────────────────────────
-                // 2. Insert detail peminjaman (multi-item)
-                // ──────────────────────────────────────────────────────
-                $idAsets = [];
+                $kodeBarangs = [];
 
                 foreach ($validated['detail'] as $item) {
                     DetailPeminjaman::create([
-                        'id_peminjaman' => $peminjaman->id_peminjaman,
-                        'id_aset'       => $item['id_aset'],
-                        'jumlah'        => $item['jumlah'],
-                        'keterangan'    => $item['keterangan'] ?? null,
+                        'nomor_peminjaman' => $peminjaman->nomor_peminjaman,
+                        'kode_barang'      => $item['kode_barang'],
                     ]);
 
-                    $idAsets[] = $item['id_aset'];
+                    $kodeBarangs[] = $item['kode_barang'];
                 }
 
-                // ──────────────────────────────────────────────────────
-                // 3. Update status aset menjadi "Dipinjam"
-                // ──────────────────────────────────────────────────────
-                Aset::whereIn('id_aset', $idAsets)->update([
-                    'status' => 'Dipinjam',
+                Aset::whereIn('kode_barang', $kodeBarangs)->update([
+                    'status_ketersediaan' => 'Dipinjam',
                 ]);
 
                 return $peminjaman;
             });
 
-            // Eager load untuk response
             $peminjaman->load([
                 'peminjam',
                 'detailPeminjaman.aset.masterBarang',
@@ -107,9 +82,6 @@ class PeminjamanController extends Controller
         }
     }
 
-    /**
-     * Tampilkan detail satu peminjaman.
-     */
     public function show(string $id): JsonResponse
     {
         $peminjaman = Peminjaman::with([
@@ -131,12 +103,6 @@ class PeminjamanController extends Controller
         ]);
     }
 
-    /**
-     * Proses pengembalian peminjaman.
-     * Update status peminjaman → "Dikembalikan" dan status setiap aset → "Tersedia".
-     *
-     * PUT /api/peminjaman/{id}/kembalikan
-     */
     public function kembalikan(string $id): JsonResponse
     {
         $peminjaman = Peminjaman::with('detailPeminjaman')->find($id);
@@ -160,14 +126,19 @@ class PeminjamanController extends Controller
                 // Update status peminjaman
                 $peminjaman->update([
                     'status_peminjaman' => 'Dikembalikan',
-                    'tanggal_kembali'   => now()->toDateString(),
+                ]);
+
+                // Record di pengembalian berdasarkan skema db
+                \DB::table('pengembalian')->insert([
+                    'nomor_peminjaman' => $peminjaman->nomor_peminjaman,
+                    'tanggal_kembali'  => now()->toDateString()
                 ]);
 
                 // Update status semua aset yang dipinjam → Tersedia
-                $idAsets = $peminjaman->detailPeminjaman->pluck('id_aset')->toArray();
+                $kodeBarangs = $peminjaman->detailPeminjaman->pluck('kode_barang')->toArray();
 
-                Aset::whereIn('id_aset', $idAsets)->update([
-                    'status' => 'Tersedia',
+                Aset::whereIn('kode_barang', $kodeBarangs)->update([
+                    'status_ketersediaan' => 'Tersedia',
                 ]);
             });
 
@@ -191,9 +162,6 @@ class PeminjamanController extends Controller
         }
     }
 
-    /**
-     * Hapus peminjaman (hanya jika masih berstatus Dipinjam, akan mengembalikan status aset).
-     */
     public function destroy(string $id): JsonResponse
     {
         $peminjaman = Peminjaman::with('detailPeminjaman')->find($id);
@@ -208,15 +176,14 @@ class PeminjamanController extends Controller
         try {
             DB::transaction(function () use ($peminjaman) {
                 // Jika masih Dipinjam, kembalikan status aset
-                if ($peminjaman->status_peminjaman === 'Dipinjam') {
-                    $idAsets = $peminjaman->detailPeminjaman->pluck('id_aset')->toArray();
+                if ($peminjaman->status_peminjaman === 'Sedang Dipinjam') {
+                    $kodeBarangs = $peminjaman->detailPeminjaman->pluck('kode_barang')->toArray();
 
-                    Aset::whereIn('id_aset', $idAsets)->update([
-                        'status' => 'Tersedia',
+                    Aset::whereIn('kode_barang', $kodeBarangs)->update([
+                        'status_ketersediaan' => 'Tersedia',
                     ]);
                 }
 
-                // Hapus detail dan header
                 $peminjaman->detailPeminjaman()->delete();
                 $peminjaman->delete();
             });

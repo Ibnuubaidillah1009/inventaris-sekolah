@@ -15,7 +15,7 @@ class PenghapusanAsetResource extends JsonResource
     {
         return [
             'id_penghapusan'      => $this->id_penghapusan,
-            'id_aset'             => $this->id_aset,
+            'kode_barang'             => $this->kode_barang,
             'aset'                => new AsetResource($this->whenLoaded('aset')),
             'tanggal_penghapusan' => $this->tanggal_penghapusan?->format('Y-m-d'),
             'alasan'              => $this->alasan,

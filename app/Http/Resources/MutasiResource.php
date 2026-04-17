@@ -15,7 +15,7 @@ class MutasiResource extends JsonResource
     {
         return [
             'id_mutasi'       => $this->id_mutasi,
-            'id_aset'         => $this->id_aset,
+            'kode_barang'         => $this->kode_barang,
             'aset'            => new AsetResource($this->whenLoaded('aset')),
             'id_ruang_asal'   => $this->id_ruang_asal,
             'ruang_asal'      => new RuangResource($this->whenLoaded('ruangAsal')),

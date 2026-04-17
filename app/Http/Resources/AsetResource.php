@@ -10,7 +10,7 @@ class AsetResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id_aset'          => $this->id_aset,
+            'kode_barang'          => $this->kode_barang,
             'kode_aset'        => $this->kode_aset,
             'id_master_barang' => $this->id_master_barang,
             'master_barang'    => new MasterBarangResource($this->whenLoaded('masterBarang')),

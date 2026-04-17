@@ -50,7 +50,7 @@ class PenghapusanAsetController extends Controller
                 // 1. Insert data penghapusan aset
                 // ──────────────────────────────────────────────────────
                 $penghapusan = PenghapusanAset::create([
-                    'id_aset'              => $validated['id_aset'],
+                    'kode_barang'              => $validated['kode_barang'],
                     'tanggal_penghapusan'  => $validated['tanggal_penghapusan'],
                     'alasan'               => $validated['alasan'],
                     'metode_penghapusan'   => $validated['metode_penghapusan'],
@@ -64,7 +64,7 @@ class PenghapusanAsetController extends Controller
                 //    Aset dengan status ini tidak akan muncul di
                 //    daftar aset aktif atau pilihan peminjaman.
                 // ──────────────────────────────────────────────────────
-                Aset::where('id_aset', $validated['id_aset'])->update([
+                Aset::where('kode_barang', $validated['kode_barang'])->update([
                     'status' => 'Dihapus',
                 ]);
 

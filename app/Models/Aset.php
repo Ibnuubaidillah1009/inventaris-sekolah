@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Aset extends Model
 {
     protected $table = 'aset';
-    protected $primaryKey = 'id_aset';
+    protected $primaryKey = 'kode_barang';
     public $timestamps = false;
 
     protected $fillable = [
-        'kode_aset',
+        'kode_barang',
         'id_master_barang',
         'id_ruang',
         'tahun_perolehan',

@@ -18,7 +18,7 @@ class StorePenghapusanAsetRequest extends FormRequest
      * Validasi input penghapusan aset.
      * Format body yang diharapkan:
      * {
-     *   "id_aset": 1,
+     *   "kode_barang": 1,
      *   "tanggal_penghapusan": "2026-04-16",
      *   "alasan": "Sudah tidak layak pakai",
      *   "metode_penghapusan": "Dimusnahkan",
@@ -30,7 +30,7 @@ class StorePenghapusanAsetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_aset'              => ['required', 'integer', 'exists:aset,id_aset'],
+            'kode_barang'              => ['required', 'integer', 'exists:aset,kode_barang'],
             'tanggal_penghapusan'  => ['required', 'date'],
             'alasan'               => ['required', 'string'],
             'metode_penghapusan'   => ['required', 'string', 'in:Dimusnahkan,Dilelang,Dihibahkan'],
@@ -43,8 +43,8 @@ class StorePenghapusanAsetRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'id_aset.required'              => 'ID aset wajib diisi.',
-            'id_aset.exists'                => 'Aset tidak ditemukan.',
+            'kode_barang.required'              => 'ID aset wajib diisi.',
+            'kode_barang.exists'                => 'Aset tidak ditemukan.',
             'tanggal_penghapusan.required'  => 'Tanggal penghapusan wajib diisi.',
             'tanggal_penghapusan.date'      => 'Format tanggal penghapusan tidak valid.',
             'alasan.required'               => 'Alasan penghapusan wajib diisi.',
@@ -67,7 +67,7 @@ class StorePenghapusanAsetRequest extends FormRequest
                 return;
             }
 
-            $aset = Aset::find($this->input('id_aset'));
+            $aset = Aset::find($this->input('kode_barang'));
 
             if (!$aset) {
                 return;
@@ -75,14 +75,14 @@ class StorePenghapusanAsetRequest extends FormRequest
 
             if (in_array($aset->status, ['Dihapus', 'Dimusnahkan'])) {
                 $validator->errors()->add(
-                    'id_aset',
+                    'kode_barang',
                     "Aset '{$aset->kode_aset}' sudah berstatus {$aset->status}."
                 );
             }
 
             if ($aset->status === 'Dipinjam') {
                 $validator->errors()->add(
-                    'id_aset',
+                    'kode_barang',
                     "Aset '{$aset->kode_aset}' sedang dipinjam dan tidak dapat dihapuskan."
                 );
             }

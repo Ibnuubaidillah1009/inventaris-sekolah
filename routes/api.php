@@ -22,6 +22,7 @@ use App\Http\Controllers\RombelController;
 use App\Http\Controllers\RuangController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\DatabaseController;
 use Illuminate\Support\Facades\Route;
 
 /*

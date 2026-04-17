@@ -18,7 +18,7 @@ class StoreMutasiRequest extends FormRequest
      * Validasi input mutasi aset.
      * Format body yang diharapkan:
      * {
-     *   "id_aset": 1,
+     *   "kode_barang": 1,
      *   "id_ruang_tujuan": 5,
      *   "tanggal_mutasi": "2026-04-16",
      *   "keterangan": "Pemindahan ke Lab Komputer"
@@ -27,7 +27,7 @@ class StoreMutasiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_aset'         => ['required', 'integer', 'exists:aset,id_aset'],
+            'kode_barang'         => ['required', 'integer', 'exists:aset,kode_barang'],
             'id_ruang_tujuan' => ['required', 'integer', 'exists:ruang,id_ruang'],
             'tanggal_mutasi'  => ['required', 'date'],
             'keterangan'      => ['nullable', 'string'],
@@ -37,8 +37,8 @@ class StoreMutasiRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'id_aset.required'         => 'ID aset wajib diisi.',
-            'id_aset.exists'           => 'Aset tidak ditemukan.',
+            'kode_barang.required'         => 'ID aset wajib diisi.',
+            'kode_barang.exists'           => 'Aset tidak ditemukan.',
             'id_ruang_tujuan.required' => 'Ruang tujuan wajib dipilih.',
             'id_ruang_tujuan.exists'   => 'Ruang tujuan tidak ditemukan.',
             'tanggal_mutasi.required'  => 'Tanggal mutasi wajib diisi.',
@@ -58,7 +58,7 @@ class StoreMutasiRequest extends FormRequest
                 return;
             }
 
-            $aset = Aset::find($this->input('id_aset'));
+            $aset = Aset::find($this->input('kode_barang'));
 
             if (!$aset) {
                 return;
@@ -67,7 +67,7 @@ class StoreMutasiRequest extends FormRequest
             // Cek status aset — hanya aset Tersedia yang boleh dimutasi
             if ($aset->status !== 'Tersedia') {
                 $validator->errors()->add(
-                    'id_aset',
+                    'kode_barang',
                     "Aset '{$aset->kode_aset}' tidak dapat dimutasi (status saat ini: {$aset->status})."
                 );
             }

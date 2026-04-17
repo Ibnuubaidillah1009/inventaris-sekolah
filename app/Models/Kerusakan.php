@@ -11,7 +11,7 @@ class Kerusakan extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'id_aset',
+        'kode_barang',
         'tanggal_kerusakan',
         'jenis_kerusakan',
         'deskripsi',
@@ -39,7 +39,7 @@ class Kerusakan extends Model
      */
     public function aset()
     {
-        return $this->belongsTo(Aset::class, 'id_aset', 'id_aset');
+        return $this->belongsTo(Aset::class, 'kode_barang', 'kode_barang');
     }
 
     /**

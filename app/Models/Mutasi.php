@@ -11,7 +11,7 @@ class Mutasi extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'id_aset',
+        'kode_barang',
         'id_ruang_asal',
         'id_ruang_tujuan',
         'tanggal_mutasi',
@@ -38,7 +38,7 @@ class Mutasi extends Model
      */
     public function aset()
     {
-        return $this->belongsTo(Aset::class, 'id_aset', 'id_aset');
+        return $this->belongsTo(Aset::class, 'kode_barang', 'kode_barang');
     }
 
     /**

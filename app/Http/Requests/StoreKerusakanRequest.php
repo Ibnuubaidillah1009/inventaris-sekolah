@@ -18,7 +18,7 @@ class StoreKerusakanRequest extends FormRequest
      * Validasi input laporan kerusakan aset.
      * Format body yang diharapkan:
      * {
-     *   "id_aset": 1,
+     *   "kode_barang": 1,
      *   "tanggal_kerusakan": "2026-04-16",
      *   "jenis_kerusakan": "Ringan",
      *   "deskripsi": "Layar monitor berkedip-kedip",
@@ -28,7 +28,7 @@ class StoreKerusakanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_aset'            => ['required', 'integer', 'exists:aset,id_aset'],
+            'kode_barang'            => ['required', 'integer', 'exists:aset,kode_barang'],
             'tanggal_kerusakan'  => ['required', 'date'],
             'jenis_kerusakan'    => ['required', 'string', 'max:100'],
             'deskripsi'          => ['required', 'string'],
@@ -39,8 +39,8 @@ class StoreKerusakanRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'id_aset.required'           => 'ID aset wajib diisi.',
-            'id_aset.exists'             => 'Aset tidak ditemukan.',
+            'kode_barang.required'           => 'ID aset wajib diisi.',
+            'kode_barang.exists'             => 'Aset tidak ditemukan.',
             'tanggal_kerusakan.required' => 'Tanggal kerusakan wajib diisi.',
             'tanggal_kerusakan.date'     => 'Format tanggal kerusakan tidak valid.',
             'jenis_kerusakan.required'   => 'Jenis kerusakan wajib diisi.',
@@ -59,7 +59,7 @@ class StoreKerusakanRequest extends FormRequest
                 return;
             }
 
-            $aset = Aset::find($this->input('id_aset'));
+            $aset = Aset::find($this->input('kode_barang'));
 
             if (!$aset) {
                 return;
@@ -67,7 +67,7 @@ class StoreKerusakanRequest extends FormRequest
 
             if (in_array($aset->status, ['Dihapus', 'Dimusnahkan'])) {
                 $validator->errors()->add(
-                    'id_aset',
+                    'kode_barang',
                     "Aset '{$aset->kode_aset}' sudah dihapus/dimusnahkan dan tidak bisa dilaporkan rusak."
                 );
             }

@@ -71,7 +71,7 @@ class PerbaikanController extends Controller
                     ]);
 
                     // Update kondisi & status aset kembali normal
-                    Aset::where('id_aset', $kerusakan->id_aset)->update([
+                    Aset::where('kode_barang', $kerusakan->kode_barang)->update([
                         'kondisi' => 'Baik',
                         'status'  => 'Tersedia',
                     ]);
