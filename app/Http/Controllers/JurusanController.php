@@ -10,6 +10,27 @@ use Illuminate\Http\JsonResponse;
 
 class JurusanController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/jurusan",
+     *     operationId="indexJurusan",
+     *     tags={"Jurusan"},
+     *     summary="Daftar semua jurusan",
+     *     description="Mengambil daftar semua jurusan beserta relasi rombel.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Daftar jurusan berhasil diambil",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Daftar jurusan berhasil diambil."),
+     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden")
+     * )
+     */
     public function index(): JsonResponse
     {
         $data = Jurusan::with('rombel')->get();
@@ -21,6 +42,35 @@ class JurusanController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/jurusan",
+     *     operationId="storeJurusan",
+     *     tags={"Jurusan"},
+     *     summary="Tambah jurusan baru",
+     *     description="Menyimpan data jurusan baru.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"nama_jurusan"},
+     *             @OA\Property(property="nama_jurusan", type="string", maxLength=100, example="Teknik Komputer dan Jaringan")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Jurusan berhasil ditambahkan",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Jurusan berhasil ditambahkan."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=422, description="Validasi gagal")
+     * )
+     */
     public function store(StoreJurusanRequest $request): JsonResponse
     {
         $jurusan = Jurusan::create($request->validated());
@@ -32,6 +82,29 @@ class JurusanController extends Controller
         ], 201);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/jurusan/{id}",
+     *     operationId="showJurusan",
+     *     tags={"Jurusan"},
+     *     summary="Detail jurusan",
+     *     description="Mengambil detail satu jurusan beserta rombel dan kelas.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID jurusan", @OA\Schema(type="string", example="1")),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Detail jurusan berhasil diambil",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Detail jurusan berhasil diambil."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Jurusan tidak ditemukan")
+     * )
+     */
     public function show(string $id): JsonResponse
     {
         $jurusan = Jurusan::with('rombel.kelas')->find($id);
@@ -50,6 +123,36 @@ class JurusanController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Put(
+     *     path="/jurusan/{id}",
+     *     operationId="updateJurusan",
+     *     tags={"Jurusan"},
+     *     summary="Update jurusan",
+     *     description="Memperbarui data jurusan berdasarkan ID.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID jurusan", @OA\Schema(type="string", example="1")),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="nama_jurusan", type="string", maxLength=100, example="Rekayasa Perangkat Lunak")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Jurusan berhasil diperbarui",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Jurusan berhasil diperbarui."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Jurusan tidak ditemukan"),
+     *     @OA\Response(response=422, description="Validasi gagal")
+     * )
+     */
     public function update(UpdateJurusanRequest $request, string $id): JsonResponse
     {
         $jurusan = Jurusan::find($id);
@@ -70,6 +173,28 @@ class JurusanController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/jurusan/{id}",
+     *     operationId="destroyJurusan",
+     *     tags={"Jurusan"},
+     *     summary="Hapus jurusan",
+     *     description="Menghapus data jurusan berdasarkan ID.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID jurusan", @OA\Schema(type="string", example="1")),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Jurusan berhasil dihapus",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Jurusan berhasil dihapus.")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Jurusan tidak ditemukan")
+     * )
+     */
     public function destroy(string $id): JsonResponse
     {
         $jurusan = Jurusan::find($id);

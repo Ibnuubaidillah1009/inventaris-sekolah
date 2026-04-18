@@ -14,6 +14,24 @@ class PermintaanController extends Controller
 {
     /**
      * Tampilkan daftar semua permintaan.
+     *
+     * @OA\Get(
+     *     path="/permintaan",
+     *     operationId="indexPermintaan",
+     *     tags={"Permintaan"},
+     *     summary="Daftar semua permintaan",
+     *     description="Mengambil daftar semua permintaan barang beserta pemohon, penyetuju, dan detail barang.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Daftar permintaan berhasil diambil",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Daftar permintaan berhasil diambil."),
+     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden")
+     * )
      */
     public function index(): JsonResponse
     {
@@ -32,6 +50,45 @@ class PermintaanController extends Controller
 
     /**
      * Simpan permintaan baru menggunakan DB::transaction().
+     *
+     * @OA\Post(
+     *     path="/permintaan",
+     *     operationId="storePermintaan",
+     *     tags={"Permintaan"},
+     *     summary="Buat permintaan baru",
+     *     description="Menyimpan permintaan barang baru beserta detail item yang diminta.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(required=true,
+     *         @OA\JsonContent(
+     *             required={"tanggal_permintaan","id_pemohon","detail"},
+     *             @OA\Property(property="tanggal_permintaan", type="string", format="date", example="2026-04-18"),
+     *             @OA\Property(property="id_pemohon", type="integer", example=5),
+     *             @OA\Property(property="keterangan", type="string", nullable=true, example="Permintaan alat praktik"),
+     *             @OA\Property(
+     *                 property="detail",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     required={"id_master_barang","jumlah"},
+     *                     @OA\Property(property="id_master_barang", type="integer", example=1),
+     *                     @OA\Property(property="jumlah", type="integer", minimum=1, example=5),
+     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Laptop")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Permintaan berhasil disimpan",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Permintaan berhasil disimpan."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=422, description="Validasi gagal"),
+     *     @OA\Response(response=500, description="Gagal menyimpan permintaan")
+     * )
      */
     public function store(StorePermintaanRequest $request): JsonResponse
     {
@@ -82,6 +139,26 @@ class PermintaanController extends Controller
 
     /**
      * Tampilkan detail satu permintaan.
+     *
+     * @OA\Get(
+     *     path="/permintaan/{id}",
+     *     operationId="showPermintaan",
+     *     tags={"Permintaan"},
+     *     summary="Detail permintaan",
+     *     description="Mengambil detail satu permintaan beserta pemohon, penyetuju, dan detail barang.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID permintaan", @OA\Schema(type="string", example="1")),
+     *     @OA\Response(response=200, description="Detail permintaan berhasil diambil",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Detail permintaan berhasil diambil."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Permintaan tidak ditemukan")
+     * )
      */
     public function show(string $id): JsonResponse
     {
@@ -110,6 +187,41 @@ class PermintaanController extends Controller
      *
      * PUT /api/permintaan/{id}/keputusan
      * Body: { "status_permintaan": "Disetujui" | "Ditolak", "id_penyetuju": int }
+     *
+     * @OA\Put(
+     *     path="/permintaan/{id}/keputusan",
+     *     operationId="keputusanPermintaan",
+     *     tags={"Permintaan"},
+     *     summary="Keputusan permintaan (setujui/tolak)",
+     *     description="Menyetujui atau menolak permintaan barang. Hanya permintaan berstatus 'Menunggu' yang dapat diproses.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID permintaan", @OA\Schema(type="string", example="1")),
+     *     @OA\RequestBody(required=true,
+     *         @OA\JsonContent(
+     *             required={"status_permintaan","id_penyetuju"},
+     *             @OA\Property(property="status_permintaan", type="string", enum={"Disetujui","Ditolak"}, example="Disetujui"),
+     *             @OA\Property(property="id_penyetuju", type="integer", example=1)
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Permintaan berhasil diproses",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Permintaan berhasil Disetujui."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Permintaan tidak ditemukan"),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Permintaan sudah diproses atau validasi gagal",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Permintaan ini sudah diproses sebelumnya.")
+     *         )
+     *     )
+     * )
      */
     public function keputusan(Request $request, string $id): JsonResponse
     {
@@ -154,6 +266,33 @@ class PermintaanController extends Controller
 
     /**
      * Hapus permintaan (hanya jika masih Menunggu).
+     *
+     * @OA\Delete(
+     *     path="/permintaan/{id}",
+     *     operationId="destroyPermintaan",
+     *     tags={"Permintaan"},
+     *     summary="Hapus permintaan",
+     *     description="Menghapus permintaan barang. Hanya permintaan berstatus 'Menunggu' yang dapat dihapus.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID permintaan", @OA\Schema(type="string", example="1")),
+     *     @OA\Response(response=200, description="Permintaan berhasil dihapus",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Permintaan berhasil dihapus.")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Permintaan tidak ditemukan"),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Permintaan tidak berstatus Menunggu",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Hanya permintaan berstatus Menunggu yang dapat dihapus.")
+     *         )
+     *     )
+     * )
      */
     public function destroy(string $id): JsonResponse
     {

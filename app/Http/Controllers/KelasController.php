@@ -12,6 +12,26 @@ class KelasController extends Controller
 {
     /**
      * Tampilkan daftar semua kelas beserta relasi rombel.
+     *
+     * @OA\Get(
+     *     path="/kelas",
+     *     operationId="indexKelas",
+     *     tags={"Kelas"},
+     *     summary="Daftar semua kelas",
+     *     description="Mengambil daftar semua kelas beserta relasi rombel dan jurusan.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Daftar kelas berhasil diambil",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Daftar kelas berhasil diambil."),
+     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden")
+     * )
      */
     public function index(): JsonResponse
     {
@@ -26,6 +46,35 @@ class KelasController extends Controller
 
     /**
      * Simpan kelas baru.
+     *
+     * @OA\Post(
+     *     path="/kelas",
+     *     operationId="storeKelas",
+     *     tags={"Kelas"},
+     *     summary="Tambah kelas baru",
+     *     description="Menyimpan data kelas baru.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"nama_kelas","id_rombel"},
+     *             @OA\Property(property="nama_kelas", type="string", maxLength=100, example="Kelas A"),
+     *             @OA\Property(property="id_rombel", type="integer", example=1)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Kelas berhasil ditambahkan",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Kelas berhasil ditambahkan."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=422, description="Validasi gagal")
+     * )
      */
     public function store(StoreKelasRequest $request): JsonResponse
     {
@@ -41,6 +90,28 @@ class KelasController extends Controller
 
     /**
      * Tampilkan detail satu kelas.
+     *
+     * @OA\Get(
+     *     path="/kelas/{id}",
+     *     operationId="showKelas",
+     *     tags={"Kelas"},
+     *     summary="Detail kelas",
+     *     description="Mengambil detail satu kelas beserta rombel dan jurusan.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID kelas", @OA\Schema(type="string", example="1")),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Detail kelas berhasil diambil",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Detail kelas berhasil diambil."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Kelas tidak ditemukan")
+     * )
      */
     public function show(string $id): JsonResponse
     {
@@ -62,6 +133,36 @@ class KelasController extends Controller
 
     /**
      * Update data kelas.
+     *
+     * @OA\Put(
+     *     path="/kelas/{id}",
+     *     operationId="updateKelas",
+     *     tags={"Kelas"},
+     *     summary="Update kelas",
+     *     description="Memperbarui data kelas berdasarkan ID.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID kelas", @OA\Schema(type="string", example="1")),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="nama_kelas", type="string", maxLength=100, example="Kelas B"),
+     *             @OA\Property(property="id_rombel", type="integer", example=2)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Kelas berhasil diperbarui",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Kelas berhasil diperbarui."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Kelas tidak ditemukan"),
+     *     @OA\Response(response=422, description="Validasi gagal")
+     * )
      */
     public function update(UpdateKelasRequest $request, string $id): JsonResponse
     {
@@ -86,6 +187,27 @@ class KelasController extends Controller
 
     /**
      * Hapus kelas.
+     *
+     * @OA\Delete(
+     *     path="/kelas/{id}",
+     *     operationId="destroyKelas",
+     *     tags={"Kelas"},
+     *     summary="Hapus kelas",
+     *     description="Menghapus data kelas berdasarkan ID.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID kelas", @OA\Schema(type="string", example="1")),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Kelas berhasil dihapus",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Kelas berhasil dihapus.")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Kelas tidak ditemukan")
+     * )
      */
     public function destroy(string $id): JsonResponse
     {

@@ -10,6 +10,25 @@ use Illuminate\Http\JsonResponse;
 
 class KategoriController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/kategori",
+     *     operationId="indexKategori",
+     *     tags={"Kategori"},
+     *     summary="Daftar semua kategori",
+     *     description="Mengambil daftar semua kategori barang.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Daftar kategori berhasil diambil",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Daftar kategori berhasil diambil."),
+     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden")
+     * )
+     */
     public function index(): JsonResponse
     {
         return response()->json([
@@ -19,6 +38,32 @@ class KategoriController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/kategori",
+     *     operationId="storeKategori",
+     *     tags={"Kategori"},
+     *     summary="Tambah kategori baru",
+     *     description="Menyimpan data kategori barang baru.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(required=true,
+     *         @OA\JsonContent(
+     *             required={"nama_kategori"},
+     *             @OA\Property(property="nama_kategori", type="string", maxLength=100, example="Elektronik")
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Kategori berhasil ditambahkan",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Kategori berhasil ditambahkan."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=422, description="Validasi gagal")
+     * )
+     */
     public function store(StoreKategoriRequest $request): JsonResponse
     {
         $kategori = Kategori::create($request->validated());
@@ -30,6 +75,27 @@ class KategoriController extends Controller
         ], 201);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/kategori/{id}",
+     *     operationId="showKategori",
+     *     tags={"Kategori"},
+     *     summary="Detail kategori",
+     *     description="Mengambil detail satu kategori berdasarkan ID.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID kategori", @OA\Schema(type="string", example="1")),
+     *     @OA\Response(response=200, description="Detail kategori berhasil diambil",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Detail kategori berhasil diambil."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Kategori tidak ditemukan")
+     * )
+     */
     public function show(string $id): JsonResponse
     {
         $kategori = Kategori::find($id);
@@ -48,6 +114,33 @@ class KategoriController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Put(
+     *     path="/kategori/{id}",
+     *     operationId="updateKategori",
+     *     tags={"Kategori"},
+     *     summary="Update kategori",
+     *     description="Memperbarui data kategori berdasarkan ID.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID kategori", @OA\Schema(type="string", example="1")),
+     *     @OA\RequestBody(required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="nama_kategori", type="string", maxLength=100, example="Furnitur")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Kategori berhasil diperbarui",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Kategori berhasil diperbarui."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Kategori tidak ditemukan"),
+     *     @OA\Response(response=422, description="Validasi gagal")
+     * )
+     */
     public function update(UpdateKategoriRequest $request, string $id): JsonResponse
     {
         $kategori = Kategori::find($id);
@@ -68,6 +161,26 @@ class KategoriController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/kategori/{id}",
+     *     operationId="destroyKategori",
+     *     tags={"Kategori"},
+     *     summary="Hapus kategori",
+     *     description="Menghapus data kategori berdasarkan ID.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID kategori", @OA\Schema(type="string", example="1")),
+     *     @OA\Response(response=200, description="Kategori berhasil dihapus",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Kategori berhasil dihapus.")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Kategori tidak ditemukan")
+     * )
+     */
     public function destroy(string $id): JsonResponse
     {
         $kategori = Kategori::find($id);
