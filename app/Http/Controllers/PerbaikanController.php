@@ -15,6 +15,24 @@ class PerbaikanController extends Controller
     /**
      * Tampilkan daftar semua perbaikan.
      * Eager load: kerusakan → aset → masterBarang
+     *
+     * @OA\Get(
+     *     path="/perbaikan",
+     *     operationId="indexPerbaikan",
+     *     tags={"Perbaikan"},
+     *     summary="Daftar semua perbaikan",
+     *     description="Mengambil daftar semua data perbaikan beserta kerusakan dan aset terkait.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Daftar perbaikan berhasil diambil",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Daftar perbaikan berhasil diambil."),
+     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden")
+     * )
      */
     public function index(): JsonResponse
     {
@@ -37,6 +55,36 @@ class PerbaikanController extends Controller
      * 2. Update status_kerusakan menjadi "Sedang Diperbaiki".
      *
      * Validasi dilakukan di StorePerbaikanRequest::withValidator().
+     *
+     * @OA\Post(
+     *     path="/perbaikan",
+     *     operationId="storePerbaikan",
+     *     tags={"Perbaikan"},
+     *     summary="Simpan data perbaikan baru",
+     *     description="Menyimpan data perbaikan untuk kerusakan tertentu. Status kerusakan otomatis diubah menjadi 'Sedang Diperbaiki'.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(required=true,
+     *         @OA\JsonContent(
+     *             required={"id_kerusakan","tanggal_perbaikan","tindakan_perbaikan"},
+     *             @OA\Property(property="id_kerusakan", type="integer", example=1),
+     *             @OA\Property(property="tanggal_perbaikan", type="string", format="date", example="2026-04-18"),
+     *             @OA\Property(property="teknisi", type="string", nullable=true, example="Budi Santoso"),
+     *             @OA\Property(property="biaya_perbaikan", type="number", nullable=true, minimum=0, example=250000),
+     *             @OA\Property(property="tindakan_perbaikan", type="string", example="Ganti layar LCD")
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Data perbaikan berhasil disimpan",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Data perbaikan berhasil disimpan."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=422, description="Validasi gagal"),
+     *     @OA\Response(response=500, description="Gagal menyimpan data perbaikan")
+     * )
      */
     public function store(StorePerbaikanRequest $request): JsonResponse
     {
@@ -89,6 +137,26 @@ class PerbaikanController extends Controller
 
     /**
      * Tampilkan detail satu perbaikan.
+     *
+     * @OA\Get(
+     *     path="/perbaikan/{id}",
+     *     operationId="showPerbaikan",
+     *     tags={"Perbaikan"},
+     *     summary="Detail perbaikan",
+     *     description="Mengambil detail satu data perbaikan beserta kerusakan dan aset terkait.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID perbaikan", @OA\Schema(type="string", example="1")),
+     *     @OA\Response(response=200, description="Detail perbaikan berhasil diambil",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Detail perbaikan berhasil diambil."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Perbaikan tidak ditemukan")
+     * )
      */
     public function show(string $id): JsonResponse
     {
@@ -112,6 +180,26 @@ class PerbaikanController extends Controller
 
     /**
      * Hapus data perbaikan.
+     *
+     * @OA\Delete(
+     *     path="/perbaikan/{id}",
+     *     operationId="destroyPerbaikan",
+     *     tags={"Perbaikan"},
+     *     summary="Hapus data perbaikan",
+     *     description="Menghapus data perbaikan berdasarkan ID.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID perbaikan", @OA\Schema(type="string", example="1")),
+     *     @OA\Response(response=200, description="Data perbaikan berhasil dihapus",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Data perbaikan berhasil dihapus.")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Perbaikan tidak ditemukan"),
+     *     @OA\Response(response=500, description="Gagal menghapus data perbaikan")
+     * )
      */
     public function destroy(string $id): JsonResponse
     {

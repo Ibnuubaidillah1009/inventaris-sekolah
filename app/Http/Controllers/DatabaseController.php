@@ -8,6 +8,27 @@ use Illuminate\Support\Facades\Artisan;
 
 class DatabaseController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/database/reset",
+     *     operationId="resetDatabase",
+     *     tags={"Database"},
+     *     summary="Reset database",
+     *     description="Menghapus semua tabel dan menjalankan ulang migrasi serta seeder. PERHATIAN: Semua data akan hilang!",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Database berhasil direset",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Database berhasil direset.")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=500, description="Gagal mereset database",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Error message")
+     *         )
+     *     )
+     * )
+     */
     public function reset()
     {
         try {
@@ -19,6 +40,26 @@ class DatabaseController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/database/backup",
+     *     operationId="backupDatabase",
+     *     tags={"Database"},
+     *     summary="Backup database",
+     *     description="Membuat file backup SQL dari database saat ini dan mengembalikannya sebagai file download.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="File backup SQL berhasil diunduh",
+     *         @OA\MediaType(
+     *             mediaType="application/octet-stream",
+     *             @OA\Schema(type="string", format="binary")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=500, description="Gagal membuat backup database")
+     * )
+     */
     public function backup()
     {
         $filename = "backup-" . date('Y-m-d-H-i-s') . ".sql";
@@ -35,6 +76,37 @@ class DatabaseController extends Controller
         return response()->download($path);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/database/restore",
+     *     operationId="restoreDatabase",
+     *     tags={"Database"},
+     *     summary="Restore database",
+     *     description="Mengembalikan database dari file SQL yang diunggah. PERHATIAN: Data saat ini akan ditimpa!",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"sql_file"},
+     *                 @OA\Property(property="sql_file", type="string", format="binary", description="File SQL untuk restore (ekstensi .sql atau .txt)")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Database berhasil direstore",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Database berhasil direstore.")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=422, description="Validasi gagal — file tidak valid"),
+     *     @OA\Response(response=500, description="Gagal merestore database",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Gagal merestore database: Error message")
+     *         )
+     *     )
+     * )
+     */
     public function restore(Request $request)
     {
         $request->validate([
@@ -55,6 +127,32 @@ class DatabaseController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/database/change-connection",
+     *     operationId="changeConnectionDatabase",
+     *     tags={"Database"},
+     *     summary="Ubah koneksi database",
+     *     description="Mengubah konfigurasi koneksi database di file .env. Aplikasi akan menggunakan koneksi baru setelah cache dikosongkan.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(required=true,
+     *         @OA\JsonContent(
+     *             required={"db_host","db_name","db_user"},
+     *             @OA\Property(property="db_host", type="string", example="127.0.0.1"),
+     *             @OA\Property(property="db_name", type="string", example="inventaris_sekolah_db"),
+     *             @OA\Property(property="db_user", type="string", example="root"),
+     *             @OA\Property(property="db_pass", type="string", nullable=true, example="secret123")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Koneksi berhasil diubah",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Koneksi berhasil diubah.")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=422, description="Validasi gagal")
+     * )
+     */
     public function changeConnection(Request $request)
     {
         $request->validate([

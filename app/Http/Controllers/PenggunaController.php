@@ -12,6 +12,26 @@ class PenggunaController extends Controller
 {
     /**
      * Tampilkan daftar semua pengguna.
+     *
+     * @OA\Get(
+     *     path="/pengguna",
+     *     operationId="indexPengguna",
+     *     tags={"Pengguna"},
+     *     summary="Daftar semua pengguna",
+     *     description="Mengambil daftar semua pengguna beserta relasi peran, kelas, mapel, dan unit.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Daftar pengguna berhasil diambil",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Daftar pengguna berhasil diambil."),
+     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden — tidak memiliki hak akses")
+     * )
      */
     public function index(): JsonResponse
     {
@@ -26,6 +46,47 @@ class PenggunaController extends Controller
 
     /**
      * Simpan pengguna baru.
+     *
+     * @OA\Post(
+     *     path="/pengguna",
+     *     operationId="storePengguna",
+     *     tags={"Pengguna"},
+     *     summary="Tambah pengguna baru",
+     *     description="Menyimpan data pengguna baru ke dalam sistem.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"username","password","id_peran"},
+     *             @OA\Property(property="username", type="string", maxLength=100, example="guru01"),
+     *             @OA\Property(property="password", type="string", minLength=8, example="password123"),
+     *             @OA\Property(property="id_peran", type="integer", example=2),
+     *             @OA\Property(property="id_kelas", type="integer", nullable=true, example=1),
+     *             @OA\Property(property="id_mapel", type="integer", nullable=true, example=3),
+     *             @OA\Property(property="id_unit", type="integer", nullable=true, example=1)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Pengguna berhasil ditambahkan",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Pengguna berhasil ditambahkan."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden — tidak memiliki hak akses"),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validasi gagal",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Validasi gagal."),
+     *             @OA\Property(property="errors", type="object")
+     *         )
+     *     )
+     * )
      */
     public function store(StorePenggunaRequest $request): JsonResponse
     {
@@ -41,6 +102,41 @@ class PenggunaController extends Controller
 
     /**
      * Tampilkan detail satu pengguna.
+     *
+     * @OA\Get(
+     *     path="/pengguna/{id}",
+     *     operationId="showPengguna",
+     *     tags={"Pengguna"},
+     *     summary="Detail pengguna",
+     *     description="Mengambil detail satu pengguna berdasarkan ID, termasuk relasi peran, akses, kelas, mapel, dan unit.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID pengguna",
+     *         @OA\Schema(type="string", example="1")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Detail pengguna berhasil diambil",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Detail pengguna berhasil diambil."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden — tidak memiliki hak akses"),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Pengguna tidak ditemukan",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Pengguna tidak ditemukan.")
+     *         )
+     *     )
+     * )
      */
     public function show(string $id): JsonResponse
     {
@@ -62,6 +158,46 @@ class PenggunaController extends Controller
 
     /**
      * Update data pengguna.
+     *
+     * @OA\Put(
+     *     path="/pengguna/{id}",
+     *     operationId="updatePengguna",
+     *     tags={"Pengguna"},
+     *     summary="Update pengguna",
+     *     description="Memperbarui data pengguna berdasarkan ID. Password bersifat opsional.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID pengguna",
+     *         @OA\Schema(type="string", example="1")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="username", type="string", maxLength=100, example="guru01_updated"),
+     *             @OA\Property(property="password", type="string", nullable=true, minLength=8, example="newpassword123"),
+     *             @OA\Property(property="id_peran", type="integer", example=2),
+     *             @OA\Property(property="id_kelas", type="integer", nullable=true, example=1),
+     *             @OA\Property(property="id_mapel", type="integer", nullable=true, example=3),
+     *             @OA\Property(property="id_unit", type="integer", nullable=true, example=1)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Pengguna berhasil diperbarui",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Pengguna berhasil diperbarui."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden — tidak memiliki hak akses"),
+     *     @OA\Response(response=404, description="Pengguna tidak ditemukan"),
+     *     @OA\Response(response=422, description="Validasi gagal")
+     * )
      */
     public function update(UpdatePenggunaRequest $request, string $id): JsonResponse
     {
@@ -93,6 +229,33 @@ class PenggunaController extends Controller
 
     /**
      * Hapus pengguna.
+     *
+     * @OA\Delete(
+     *     path="/pengguna/{id}",
+     *     operationId="destroyPengguna",
+     *     tags={"Pengguna"},
+     *     summary="Hapus pengguna",
+     *     description="Menghapus data pengguna berdasarkan ID.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID pengguna",
+     *         @OA\Schema(type="string", example="1")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Pengguna berhasil dihapus",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Pengguna berhasil dihapus.")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden — tidak memiliki hak akses"),
+     *     @OA\Response(response=404, description="Pengguna tidak ditemukan")
+     * )
      */
     public function destroy(string $id): JsonResponse
     {
