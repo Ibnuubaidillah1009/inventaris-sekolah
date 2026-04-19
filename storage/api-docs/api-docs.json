@@ -950,6 +950,109 @@
                                             "example": "Data pengguna berhasil diambil."
                                         },
                                         "data": {
+                                            "description": "Objek data pengguna beserta relasinya",
+                                            "properties": {
+                                                "id_pengguna": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "username": {
+                                                    "type": "string",
+                                                    "example": "admin_rpl"
+                                                },
+                                                "id_peran": {
+                                                    "type": "integer",
+                                                    "example": 1,
+                                                    "nullable": true
+                                                },
+                                                "id_kelas": {
+                                                    "type": "integer",
+                                                    "example": null,
+                                                    "nullable": true
+                                                },
+                                                "id_mapel": {
+                                                    "type": "integer",
+                                                    "example": null,
+                                                    "nullable": true
+                                                },
+                                                "id_unit": {
+                                                    "type": "integer",
+                                                    "example": null,
+                                                    "nullable": true
+                                                },
+                                                "peran": {
+                                                    "properties": {
+                                                        "id_peran": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "nama_peran": {
+                                                            "type": "string",
+                                                            "example": "Administrator"
+                                                        },
+                                                        "akses_list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "properties": {
+                                                                    "id_akses": {
+                                                                        "type": "integer",
+                                                                        "example": 1
+                                                                    },
+                                                                    "nama_akses": {
+                                                                        "type": "string",
+                                                                        "example": "kelola_inventaris"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            }
+                                                        }
+                                                    },
+                                                    "type": "object",
+                                                    "nullable": true
+                                                },
+                                                "kelas": {
+                                                    "properties": {
+                                                        "id_kelas": {
+                                                            "type": "integer",
+                                                            "example": 10
+                                                        },
+                                                        "nama_kelas": {
+                                                            "type": "string",
+                                                            "example": "XI PPLG 1"
+                                                        }
+                                                    },
+                                                    "type": "object",
+                                                    "nullable": true
+                                                },
+                                                "mapel": {
+                                                    "properties": {
+                                                        "id_mapel": {
+                                                            "type": "integer",
+                                                            "example": 5
+                                                        },
+                                                        "nama_mapel": {
+                                                            "type": "string",
+                                                            "example": "Pemrograman Web"
+                                                        }
+                                                    },
+                                                    "type": "object",
+                                                    "nullable": true
+                                                },
+                                                "unit": {
+                                                    "properties": {
+                                                        "id_unit": {
+                                                            "type": "integer",
+                                                            "example": 2
+                                                        },
+                                                        "nama_unit": {
+                                                            "type": "string",
+                                                            "example": "Laboratorium Komputer"
+                                                        }
+                                                    },
+                                                    "type": "object",
+                                                    "nullable": true
+                                                }
+                                            },
                                             "type": "object"
                                         }
                                     },
