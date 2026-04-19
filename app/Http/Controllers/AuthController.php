@@ -137,7 +137,54 @@ class AuthController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Data pengguna berhasil diambil."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 description="Objek data pengguna beserta relasinya",
+     *                 @OA\Property(property="id_pengguna", type="integer", example=1),
+     *                 @OA\Property(property="username", type="string", example="admin_rpl"),
+     *                 @OA\Property(property="id_peran", type="integer", nullable=true, example=1),
+     *                 @OA\Property(property="id_kelas", type="integer", nullable=true, example=null),
+     *                 @OA\Property(property="id_mapel", type="integer", nullable=true, example=null),
+     *                 @OA\Property(property="id_unit", type="integer", nullable=true, example=null),
+     *                 @OA\Property(
+     *                     property="peran",
+     *                     type="object",
+     *                     nullable=true,
+     *                     @OA\Property(property="id_peran", type="integer", example=1),
+     *                     @OA\Property(property="nama_peran", type="string", example="Administrator"),
+     *                     @OA\Property(
+     *                         property="akses_list",
+     *                         type="array",
+     *                         @OA\Items(
+     *                             type="object",
+     *                             @OA\Property(property="id_akses", type="integer", example=1),
+     *                             @OA\Property(property="nama_akses", type="string", example="kelola_inventaris")
+     *                         )
+     *                     )
+     *                 ),
+     *                 @OA\Property(
+     *                     property="kelas",
+     *                     type="object",
+     *                     nullable=true,
+     *                     @OA\Property(property="id_kelas", type="integer", example=10),
+     *                     @OA\Property(property="nama_kelas", type="string", example="XI PPLG 1")
+     *                 ),
+     *                 @OA\Property(
+     *                     property="mapel",
+     *                     type="object",
+     *                     nullable=true,
+     *                     @OA\Property(property="id_mapel", type="integer", example=5),
+     *                     @OA\Property(property="nama_mapel", type="string", example="Pemrograman Web")
+     *                 ),
+     *                 @OA\Property(
+     *                     property="unit",
+     *                     type="object",
+     *                     nullable=true,
+     *                     @OA\Property(property="id_unit", type="integer", example=2),
+     *                     @OA\Property(property="nama_unit", type="string", example="Laboratorium Komputer")
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(
