@@ -27,7 +27,20 @@ class PeranController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Daftar peran berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(type="object",
+     *                     @OA\Property(property="id_peran", type="integer", example=1),
+     *                     @OA\Property(property="nama_peran", type="string", example="Administrator"),
+     *                     @OA\Property(property="akses_list", type="array", @OA\Items(type="object",
+     *                         @OA\Property(property="id_akses", type="integer", example=1),
+     *                         @OA\Property(property="nama_modul", type="string", example="inventaris"),
+     *                         @OA\Property(property="hak_buat", type="boolean", example=true),
+     *                         @OA\Property(property="hak_baca", type="boolean", example=true),
+     *                         @OA\Property(property="hak_ubah", type="boolean", example=true),
+     *                         @OA\Property(property="hak_hapus", type="boolean", example=true)
+     *                     ))
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -68,7 +81,10 @@ class PeranController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Peran berhasil ditambahkan."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_peran", type="integer", example=1),
+     *                 @OA\Property(property="nama_peran", type="string", example="Kepala Sekolah")
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -110,7 +126,18 @@ class PeranController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Detail peran berhasil diambil."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_peran", type="integer", example=1),
+     *                 @OA\Property(property="nama_peran", type="string", example="Administrator"),
+     *                 @OA\Property(property="akses_list", type="array", @OA\Items(type="object",
+     *                     @OA\Property(property="id_akses", type="integer", example=1),
+     *                     @OA\Property(property="nama_modul", type="string", example="inventaris"),
+     *                     @OA\Property(property="hak_buat", type="boolean", example=true),
+     *                     @OA\Property(property="hak_baca", type="boolean", example=true),
+     *                     @OA\Property(property="hak_ubah", type="boolean", example=true),
+     *                     @OA\Property(property="hak_hapus", type="boolean", example=true)
+     *                 ))
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -165,7 +192,10 @@ class PeranController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Peran berhasil diperbarui."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_peran", type="integer", example=1),
+     *                 @OA\Property(property="nama_peran", type="string", example="Wakil Kepala Sekolah")
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -282,7 +312,18 @@ class PeranController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Hak akses peran berhasil disinkronisasi."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_peran", type="integer", example=1),
+     *                 @OA\Property(property="nama_peran", type="string", example="Administrator"),
+     *                 @OA\Property(property="akses_list", type="array", @OA\Items(type="object",
+     *                     @OA\Property(property="id_akses", type="integer", example=1),
+     *                     @OA\Property(property="nama_modul", type="string", example="inventaris"),
+     *                     @OA\Property(property="hak_buat", type="boolean", example=true),
+     *                     @OA\Property(property="hak_baca", type="boolean", example=true),
+     *                     @OA\Property(property="hak_ubah", type="boolean", example=true),
+     *                     @OA\Property(property="hak_hapus", type="boolean", example=true)
+     *                 ))
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),

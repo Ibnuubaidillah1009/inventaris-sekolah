@@ -26,7 +26,21 @@ class MutasiController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Daftar mutasi aset berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(type="object",
+     *                     @OA\Property(property="id_mutasi", type="integer", example=1),
+     *                     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+     *                     @OA\Property(property="aset", type="object", nullable=true),
+     *                     @OA\Property(property="id_ruang_asal", type="integer", example=1),
+     *                     @OA\Property(property="ruang_asal", type="object", nullable=true),
+     *                     @OA\Property(property="id_ruang_tujuan", type="integer", example=3),
+     *                     @OA\Property(property="ruang_tujuan", type="object", nullable=true),
+     *                     @OA\Property(property="tanggal_mutasi", type="string", format="date", example="2026-04-18"),
+     *                     @OA\Property(property="id_petugas", type="integer", example=1),
+     *                     @OA\Property(property="petugas", type="object", nullable=true),
+     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Pindah ke lab baru")
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -79,7 +93,19 @@ class MutasiController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Mutasi aset berhasil disimpan."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_mutasi", type="integer", example=1),
+     *                 @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+     *                 @OA\Property(property="aset", type="object", nullable=true),
+     *                 @OA\Property(property="id_ruang_asal", type="integer", example=1),
+     *                 @OA\Property(property="ruang_asal", type="object", nullable=true),
+     *                 @OA\Property(property="id_ruang_tujuan", type="integer", example=3),
+     *                 @OA\Property(property="ruang_tujuan", type="object", nullable=true),
+     *                 @OA\Property(property="tanggal_mutasi", type="string", format="date", example="2026-04-18"),
+     *                 @OA\Property(property="id_petugas", type="integer", example=1),
+     *                 @OA\Property(property="petugas", type="object", nullable=true),
+     *                 @OA\Property(property="keterangan", type="string", nullable=true, example="Pindah ke lab baru")
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -161,7 +187,19 @@ class MutasiController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Detail mutasi berhasil diambil."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_mutasi", type="integer", example=1),
+     *                 @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+     *                 @OA\Property(property="aset", type="object", nullable=true),
+     *                 @OA\Property(property="id_ruang_asal", type="integer", example=1),
+     *                 @OA\Property(property="ruang_asal", type="object", nullable=true),
+     *                 @OA\Property(property="id_ruang_tujuan", type="integer", example=3),
+     *                 @OA\Property(property="ruang_tujuan", type="object", nullable=true),
+     *                 @OA\Property(property="tanggal_mutasi", type="string", format="date", example="2026-04-18"),
+     *                 @OA\Property(property="id_petugas", type="integer", example=1),
+     *                 @OA\Property(property="petugas", type="object", nullable=true),
+     *                 @OA\Property(property="keterangan", type="string", nullable=true, example="Pindah ke lab baru")
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),

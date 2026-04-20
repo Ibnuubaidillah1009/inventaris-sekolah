@@ -26,7 +26,26 @@ class PermintaanController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Daftar permintaan berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(type="object",
+     *                     @OA\Property(property="id_permintaan", type="integer", example=1),
+     *                     @OA\Property(property="tanggal_permintaan", type="string", format="date", example="2026-04-18"),
+     *                     @OA\Property(property="id_pemohon", type="integer", example=5),
+     *                     @OA\Property(property="pemohon", type="object", nullable=true),
+     *                     @OA\Property(property="id_penyetuju", type="integer", nullable=true, example=null),
+     *                     @OA\Property(property="penyetuju", type="object", nullable=true),
+     *                     @OA\Property(property="status_permintaan", type="string", example="Menunggu"),
+     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Permintaan alat praktik"),
+     *                     @OA\Property(property="detail_permintaan", type="array", @OA\Items(type="object",
+     *                     @OA\Property(property="id_detail_permintaan", type="integer", example=1),
+     *                     @OA\Property(property="id_permintaan", type="integer", example=1),
+     *                     @OA\Property(property="id_master_barang", type="integer", example=1),
+     *                     @OA\Property(property="master_barang", type="object", nullable=true),
+     *                     @OA\Property(property="jumlah", type="integer", example=5),
+     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Laptop")
+     *                 ))
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -81,7 +100,24 @@ class PermintaanController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Permintaan berhasil disimpan."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_permintaan", type="integer", example=1),
+     *                 @OA\Property(property="tanggal_permintaan", type="string", format="date", example="2026-04-18"),
+     *                 @OA\Property(property="id_pemohon", type="integer", example=5),
+     *                 @OA\Property(property="pemohon", type="object", nullable=true),
+     *                 @OA\Property(property="id_penyetuju", type="integer", nullable=true, example=null),
+     *                 @OA\Property(property="penyetuju", type="object", nullable=true),
+     *                 @OA\Property(property="status_permintaan", type="string", example="Menunggu"),
+     *                 @OA\Property(property="keterangan", type="string", nullable=true, example="Permintaan alat praktik"),
+     *                 @OA\Property(property="detail_permintaan", type="array", @OA\Items(type="object",
+     *                     @OA\Property(property="id_detail_permintaan", type="integer", example=1),
+     *                     @OA\Property(property="id_permintaan", type="integer", example=1),
+     *                     @OA\Property(property="id_master_barang", type="integer", example=1),
+     *                     @OA\Property(property="master_barang", type="object", nullable=true),
+     *                     @OA\Property(property="jumlah", type="integer", example=5),
+     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Laptop")
+     *                 ))
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -152,7 +188,24 @@ class PermintaanController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Detail permintaan berhasil diambil."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_permintaan", type="integer", example=1),
+     *                 @OA\Property(property="tanggal_permintaan", type="string", format="date", example="2026-04-18"),
+     *                 @OA\Property(property="id_pemohon", type="integer", example=5),
+     *                 @OA\Property(property="pemohon", type="object", nullable=true),
+     *                 @OA\Property(property="id_penyetuju", type="integer", nullable=true, example=1),
+     *                 @OA\Property(property="penyetuju", type="object", nullable=true),
+     *                 @OA\Property(property="status_permintaan", type="string", example="Menunggu"),
+     *                 @OA\Property(property="keterangan", type="string", nullable=true, example="Permintaan alat praktik"),
+     *                 @OA\Property(property="detail_permintaan", type="array", @OA\Items(type="object",
+     *                     @OA\Property(property="id_detail_permintaan", type="integer", example=1),
+     *                     @OA\Property(property="id_permintaan", type="integer", example=1),
+     *                     @OA\Property(property="id_master_barang", type="integer", example=1),
+     *                     @OA\Property(property="master_barang", type="object", nullable=true),
+     *                     @OA\Property(property="jumlah", type="integer", example=5),
+     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Laptop")
+     *                 ))
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -207,7 +260,24 @@ class PermintaanController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Permintaan berhasil Disetujui."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_permintaan", type="integer", example=1),
+     *                 @OA\Property(property="tanggal_permintaan", type="string", format="date", example="2026-04-18"),
+     *                 @OA\Property(property="id_pemohon", type="integer", example=5),
+     *                 @OA\Property(property="pemohon", type="object", nullable=true),
+     *                 @OA\Property(property="id_penyetuju", type="integer", nullable=true, example=1),
+     *                 @OA\Property(property="penyetuju", type="object", nullable=true),
+     *                 @OA\Property(property="status_permintaan", type="string", example="Disetujui"),
+     *                 @OA\Property(property="keterangan", type="string", nullable=true, example="Permintaan alat praktik"),
+     *                 @OA\Property(property="detail_permintaan", type="array", @OA\Items(type="object",
+     *                     @OA\Property(property="id_detail_permintaan", type="integer", example=1),
+     *                     @OA\Property(property="id_permintaan", type="integer", example=1),
+     *                     @OA\Property(property="id_master_barang", type="integer", example=1),
+     *                     @OA\Property(property="master_barang", type="object", nullable=true),
+     *                     @OA\Property(property="jumlah", type="integer", example=5),
+     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Laptop")
+     *                 ))
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),

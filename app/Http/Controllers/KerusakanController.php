@@ -26,7 +26,30 @@ class KerusakanController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Daftar kerusakan berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(type="object",
+     *                     @OA\Property(property="id_kerusakan", type="integer", example=1),
+     *                     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+     *                     @OA\Property(property="aset", type="object", nullable=true),
+     *                     @OA\Property(property="tanggal_kerusakan", type="string", format="date", example="2026-04-10"),
+     *                     @OA\Property(property="jenis_kerusakan", type="string", example="Ringan"),
+     *                     @OA\Property(property="deskripsi", type="string", nullable=true, example="Layar retak"),
+     *                     @OA\Property(property="id_pelapor", type="integer", example=1),
+     *                     @OA\Property(property="pelapor", type="object", nullable=true),
+     *                     @OA\Property(property="status_kerusakan", type="string", example="Dilaporkan"),
+     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Perlu segera diperbaiki"),
+     *                     @OA\Property(property="perbaikan", type="array", @OA\Items(type="object",
+     *                     @OA\Property(property="id_perbaikan", type="integer", example=1),
+     *                     @OA\Property(property="id_kerusakan", type="integer", example=1),
+     *                     @OA\Property(property="tanggal_perbaikan", type="string", format="date", nullable=true, example="2026-04-18"),
+     *                     @OA\Property(property="tanggal_selesai", type="string", format="date", nullable=true, example="2026-04-20"),
+     *                     @OA\Property(property="pelaksana", type="string", nullable=true, example="Budi Santoso"),
+     *                     @OA\Property(property="biaya", type="number", nullable=true, example=250000),
+     *                     @OA\Property(property="status_perbaikan", type="string", example="Selesai"),
+     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Ganti layar LCD")
+     *                 ))
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -77,7 +100,28 @@ class KerusakanController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Laporan kerusakan berhasil disimpan."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_kerusakan", type="integer", example=1),
+     *                 @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+     *                 @OA\Property(property="aset", type="object", nullable=true),
+     *                 @OA\Property(property="tanggal_kerusakan", type="string", format="date", example="2026-04-10"),
+     *                 @OA\Property(property="jenis_kerusakan", type="string", example="Ringan"),
+     *                 @OA\Property(property="deskripsi", type="string", nullable=true, example="Layar retak"),
+     *                 @OA\Property(property="id_pelapor", type="integer", example=1),
+     *                 @OA\Property(property="pelapor", type="object", nullable=true),
+     *                 @OA\Property(property="status_kerusakan", type="string", example="Menunggu Pemeriksaan"),
+     *                 @OA\Property(property="keterangan", type="string", nullable=true, example=null),
+     *                 @OA\Property(property="perbaikan", type="array", @OA\Items(type="object",
+     *                     @OA\Property(property="id_perbaikan", type="integer", example=1),
+     *                     @OA\Property(property="id_kerusakan", type="integer", example=1),
+     *                     @OA\Property(property="tanggal_perbaikan", type="string", format="date", nullable=true, example="2026-04-18"),
+     *                     @OA\Property(property="tanggal_selesai", type="string", format="date", nullable=true, example="2026-04-20"),
+     *                     @OA\Property(property="pelaksana", type="string", nullable=true, example="Budi Santoso"),
+     *                     @OA\Property(property="biaya", type="number", nullable=true, example=250000),
+     *                     @OA\Property(property="status_perbaikan", type="string", example="Selesai"),
+     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Ganti layar LCD")
+     *                 ))
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -152,7 +196,28 @@ class KerusakanController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Detail kerusakan berhasil diambil."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_kerusakan", type="integer", example=1),
+     *                 @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+     *                 @OA\Property(property="aset", type="object", nullable=true),
+     *                 @OA\Property(property="tanggal_kerusakan", type="string", format="date", example="2026-04-10"),
+     *                 @OA\Property(property="jenis_kerusakan", type="string", example="Ringan"),
+     *                 @OA\Property(property="deskripsi", type="string", nullable=true, example="Layar retak"),
+     *                 @OA\Property(property="id_pelapor", type="integer", example=1),
+     *                 @OA\Property(property="pelapor", type="object", nullable=true),
+     *                 @OA\Property(property="status_kerusakan", type="string", example="Dilaporkan"),
+     *                 @OA\Property(property="keterangan", type="string", nullable=true, example="Perlu segera diperbaiki"),
+     *                 @OA\Property(property="perbaikan", type="array", @OA\Items(type="object",
+     *                     @OA\Property(property="id_perbaikan", type="integer", example=1),
+     *                     @OA\Property(property="id_kerusakan", type="integer", example=1),
+     *                     @OA\Property(property="tanggal_perbaikan", type="string", format="date", nullable=true, example="2026-04-18"),
+     *                     @OA\Property(property="tanggal_selesai", type="string", format="date", nullable=true, example="2026-04-20"),
+     *                     @OA\Property(property="pelaksana", type="string", nullable=true, example="Budi Santoso"),
+     *                     @OA\Property(property="biaya", type="number", nullable=true, example=250000),
+     *                     @OA\Property(property="status_perbaikan", type="string", example="Selesai"),
+     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Ganti layar LCD")
+     *                 ))
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),

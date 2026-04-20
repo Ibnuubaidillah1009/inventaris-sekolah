@@ -24,7 +24,12 @@ class MapelController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Daftar mapel berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(type="object",
+     *                     @OA\Property(property="id_mapel", type="integer", example=1),
+     *                     @OA\Property(property="nama_mapel", type="string", example="Matematika")
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -61,7 +66,10 @@ class MapelController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Mapel berhasil ditambahkan."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_mapel", type="integer", example=1),
+     *                 @OA\Property(property="nama_mapel", type="string", example="Matematika")
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -95,7 +103,10 @@ class MapelController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Detail mapel berhasil diambil."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_mapel", type="integer", example=1),
+     *                 @OA\Property(property="nama_mapel", type="string", example="Matematika")
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -142,7 +153,10 @@ class MapelController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Mapel berhasil diperbarui."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_mapel", type="integer", example=1),
+     *                 @OA\Property(property="nama_mapel", type="string", example="Fisika")
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),

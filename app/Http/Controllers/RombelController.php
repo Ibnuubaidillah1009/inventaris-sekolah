@@ -24,7 +24,22 @@ class RombelController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Daftar rombel berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(type="object",
+     *                     @OA\Property(property="id_rombel", type="integer", example=1),
+     *                     @OA\Property(property="nama_rombel", type="string", example="X TKJ 1"),
+     *                     @OA\Property(property="id_jurusan", type="integer", example=1),
+     *                     @OA\Property(property="jurusan", type="object", nullable=true,
+     *                         @OA\Property(property="id_jurusan", type="integer", example=1),
+     *                         @OA\Property(property="nama_jurusan", type="string", example="Teknik Komputer dan Jaringan")
+     *                     ),
+     *                     @OA\Property(property="kelas", type="array", @OA\Items(type="object",
+     *                         @OA\Property(property="id_kelas", type="integer", example=1),
+     *                         @OA\Property(property="nama_kelas", type="string", example="Kelas A"),
+     *                         @OA\Property(property="id_rombel", type="integer", example=1)
+     *                     ))
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -64,7 +79,15 @@ class RombelController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Rombel berhasil ditambahkan."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_rombel", type="integer", example=1),
+     *                 @OA\Property(property="nama_rombel", type="string", example="X TKJ 1"),
+     *                 @OA\Property(property="id_jurusan", type="integer", example=1),
+     *                 @OA\Property(property="jurusan", type="object", nullable=true,
+     *                     @OA\Property(property="id_jurusan", type="integer", example=1),
+     *                     @OA\Property(property="nama_jurusan", type="string", example="Teknik Komputer dan Jaringan")
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -99,7 +122,20 @@ class RombelController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Detail rombel berhasil diambil."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_rombel", type="integer", example=1),
+     *                 @OA\Property(property="nama_rombel", type="string", example="X TKJ 1"),
+     *                 @OA\Property(property="id_jurusan", type="integer", example=1),
+     *                 @OA\Property(property="jurusan", type="object", nullable=true,
+     *                     @OA\Property(property="id_jurusan", type="integer", example=1),
+     *                     @OA\Property(property="nama_jurusan", type="string", example="Teknik Komputer dan Jaringan")
+     *                 ),
+     *                 @OA\Property(property="kelas", type="array", @OA\Items(type="object",
+     *                     @OA\Property(property="id_kelas", type="integer", example=1),
+     *                     @OA\Property(property="nama_kelas", type="string", example="Kelas A"),
+     *                     @OA\Property(property="id_rombel", type="integer", example=1)
+     *                 ))
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -147,7 +183,15 @@ class RombelController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Rombel berhasil diperbarui."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_rombel", type="integer", example=1),
+     *                 @OA\Property(property="nama_rombel", type="string", example="XI TKJ 2"),
+     *                 @OA\Property(property="id_jurusan", type="integer", example=1),
+     *                 @OA\Property(property="jurusan", type="object", nullable=true,
+     *                     @OA\Property(property="id_jurusan", type="integer", example=1),
+     *                     @OA\Property(property="nama_jurusan", type="string", example="Teknik Komputer dan Jaringan")
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),

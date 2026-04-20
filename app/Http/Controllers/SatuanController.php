@@ -22,7 +22,12 @@ class SatuanController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Daftar satuan berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(type="object",
+     *                     @OA\Property(property="id_satuan", type="integer", example=1),
+     *                     @OA\Property(property="nama_satuan", type="string", example="Unit")
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -56,7 +61,10 @@ class SatuanController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Satuan berhasil ditambahkan."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_satuan", type="integer", example=1),
+     *                 @OA\Property(property="nama_satuan", type="string", example="Unit")
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -88,7 +96,10 @@ class SatuanController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Detail satuan berhasil diambil."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_satuan", type="integer", example=1),
+     *                 @OA\Property(property="nama_satuan", type="string", example="Unit")
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -132,7 +143,10 @@ class SatuanController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Satuan berhasil diperbarui."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_satuan", type="integer", example=1),
+     *                 @OA\Property(property="nama_satuan", type="string", example="Buah")
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),

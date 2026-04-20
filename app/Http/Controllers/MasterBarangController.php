@@ -24,7 +24,27 @@ class MasterBarangController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Daftar master barang berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(type="object",
+     *                     @OA\Property(property="id_master_barang", type="integer", example=1),
+     *                     @OA\Property(property="nama_barang", type="string", example="Laptop Lenovo ThinkPad"),
+     *                     @OA\Property(property="id_kategori", type="integer", example=1),
+     *                     @OA\Property(property="kategori", type="object", nullable=true,
+     *                         @OA\Property(property="id_kategori", type="integer", example=1),
+     *                         @OA\Property(property="nama_kategori", type="string", example="Elektronik")
+     *                     ),
+     *                     @OA\Property(property="id_merek", type="integer", example=1),
+     *                     @OA\Property(property="merek", type="object", nullable=true,
+     *                         @OA\Property(property="id_merek", type="integer", example=1),
+     *                         @OA\Property(property="nama_merek", type="string", example="Lenovo")
+     *                     ),
+     *                     @OA\Property(property="id_satuan", type="integer", example=1),
+     *                     @OA\Property(property="satuan", type="object", nullable=true,
+     *                         @OA\Property(property="id_satuan", type="integer", example=1),
+     *                         @OA\Property(property="nama_satuan", type="string", example="Unit")
+     *                     )
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -65,7 +85,25 @@ class MasterBarangController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Master barang berhasil ditambahkan."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_master_barang", type="integer", example=1),
+     *                 @OA\Property(property="nama_barang", type="string", example="Laptop Lenovo ThinkPad"),
+     *                 @OA\Property(property="id_kategori", type="integer", example=1),
+     *                 @OA\Property(property="kategori", type="object", nullable=true,
+     *                     @OA\Property(property="id_kategori", type="integer", example=1),
+     *                     @OA\Property(property="nama_kategori", type="string", example="Elektronik")
+     *                 ),
+     *                 @OA\Property(property="id_merek", type="integer", example=1),
+     *                 @OA\Property(property="merek", type="object", nullable=true,
+     *                     @OA\Property(property="id_merek", type="integer", example=1),
+     *                     @OA\Property(property="nama_merek", type="string", example="Lenovo")
+     *                 ),
+     *                 @OA\Property(property="id_satuan", type="integer", example=1),
+     *                 @OA\Property(property="satuan", type="object", nullable=true,
+     *                     @OA\Property(property="id_satuan", type="integer", example=1),
+     *                     @OA\Property(property="nama_satuan", type="string", example="Unit")
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -100,7 +138,25 @@ class MasterBarangController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Detail master barang berhasil diambil."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_master_barang", type="integer", example=1),
+     *                 @OA\Property(property="nama_barang", type="string", example="Laptop Lenovo ThinkPad"),
+     *                 @OA\Property(property="id_kategori", type="integer", example=1),
+     *                 @OA\Property(property="kategori", type="object", nullable=true,
+     *                     @OA\Property(property="id_kategori", type="integer", example=1),
+     *                     @OA\Property(property="nama_kategori", type="string", example="Elektronik")
+     *                 ),
+     *                 @OA\Property(property="id_merek", type="integer", example=1),
+     *                 @OA\Property(property="merek", type="object", nullable=true,
+     *                     @OA\Property(property="id_merek", type="integer", example=1),
+     *                     @OA\Property(property="nama_merek", type="string", example="Lenovo")
+     *                 ),
+     *                 @OA\Property(property="id_satuan", type="integer", example=1),
+     *                 @OA\Property(property="satuan", type="object", nullable=true,
+     *                     @OA\Property(property="id_satuan", type="integer", example=1),
+     *                     @OA\Property(property="nama_satuan", type="string", example="Unit")
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -149,7 +205,25 @@ class MasterBarangController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Master barang berhasil diperbarui."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_master_barang", type="integer", example=1),
+     *                 @OA\Property(property="nama_barang", type="string", example="Laptop HP EliteBook"),
+     *                 @OA\Property(property="id_kategori", type="integer", example=1),
+     *                 @OA\Property(property="kategori", type="object", nullable=true,
+     *                     @OA\Property(property="id_kategori", type="integer", example=1),
+     *                     @OA\Property(property="nama_kategori", type="string", example="Elektronik")
+     *                 ),
+     *                 @OA\Property(property="id_merek", type="integer", example=2),
+     *                 @OA\Property(property="merek", type="object", nullable=true,
+     *                     @OA\Property(property="id_merek", type="integer", example=2),
+     *                     @OA\Property(property="nama_merek", type="string", example="HP")
+     *                 ),
+     *                 @OA\Property(property="id_satuan", type="integer", example=1),
+     *                 @OA\Property(property="satuan", type="object", nullable=true,
+     *                     @OA\Property(property="id_satuan", type="integer", example=1),
+     *                     @OA\Property(property="nama_satuan", type="string", example="Unit")
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),

@@ -24,7 +24,17 @@ class AsetController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Daftar aset berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(type="object",
+     *                     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+     *                     @OA\Property(property="id_master_barang", type="integer", example=1),
+     *                     @OA\Property(property="master_barang", type="object", nullable=true),
+     *                     @OA\Property(property="id_ruang", type="integer", nullable=true, example=1),
+     *                     @OA\Property(property="nama_ruang", type="string", nullable=true, example="Lab Komputer 1"),
+     *                     @OA\Property(property="nilai_residu", type="number", nullable=true, example=500000),
+     *                     @OA\Property(property="kondisi_barang", type="string", example="Baik")
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -74,7 +84,15 @@ class AsetController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Aset berhasil ditambahkan."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+     *                 @OA\Property(property="id_master_barang", type="integer", example=1),
+     *                 @OA\Property(property="master_barang", type="object", nullable=true),
+     *                 @OA\Property(property="id_ruang", type="integer", nullable=true, example=1),
+     *                 @OA\Property(property="nama_ruang", type="string", nullable=true, example="Lab Komputer 1"),
+     *                 @OA\Property(property="nilai_residu", type="number", nullable=true, example=500000),
+     *                 @OA\Property(property="kondisi_barang", type="string", example="Baik")
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -114,7 +132,17 @@ class AsetController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Detail aset berhasil diambil."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+     *                 @OA\Property(property="id_master_barang", type="integer", example=1),
+     *                 @OA\Property(property="master_barang", type="object", nullable=true),
+     *                 @OA\Property(property="id_ruang", type="integer", nullable=true, example=1),
+     *                 @OA\Property(property="nama_ruang", type="string", nullable=true, example="Lab Komputer 1"),
+     *                 @OA\Property(property="nilai_residu", type="number", nullable=true, example=500000),
+     *                 @OA\Property(property="kondisi_barang", type="string", example="Baik"),
+     *                 @OA\Property(property="aset_bangunan", type="object", nullable=true),
+     *                 @OA\Property(property="aset_tanah", type="object", nullable=true)
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -174,7 +202,15 @@ class AsetController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Aset berhasil diperbarui."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+     *                 @OA\Property(property="id_master_barang", type="integer", example=1),
+     *                 @OA\Property(property="master_barang", type="object", nullable=true),
+     *                 @OA\Property(property="id_ruang", type="integer", nullable=true, example=2),
+     *                 @OA\Property(property="nama_ruang", type="string", nullable=true, example="Lab Komputer 2"),
+     *                 @OA\Property(property="nilai_residu", type="number", nullable=true, example=400000),
+     *                 @OA\Property(property="kondisi_barang", type="string", example="Baik")
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),

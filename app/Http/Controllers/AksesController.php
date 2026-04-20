@@ -26,7 +26,16 @@ class AksesController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Daftar akses berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(type="object",
+     *                     @OA\Property(property="id_akses", type="integer", example=1),
+     *                     @OA\Property(property="nama_modul", type="string", example="inventaris"),
+     *                     @OA\Property(property="hak_buat", type="boolean", example=true),
+     *                     @OA\Property(property="hak_baca", type="boolean", example=true),
+     *                     @OA\Property(property="hak_ubah", type="boolean", example=true),
+     *                     @OA\Property(property="hak_hapus", type="boolean", example=false)
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -71,7 +80,14 @@ class AksesController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Akses berhasil ditambahkan."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_akses", type="integer", example=1),
+     *                 @OA\Property(property="nama_modul", type="string", example="inventaris"),
+     *                 @OA\Property(property="hak_buat", type="boolean", example=true),
+     *                 @OA\Property(property="hak_baca", type="boolean", example=true),
+     *                 @OA\Property(property="hak_ubah", type="boolean", example=true),
+     *                 @OA\Property(property="hak_hapus", type="boolean", example=false)
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -113,7 +129,14 @@ class AksesController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Detail akses berhasil diambil."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_akses", type="integer", example=1),
+     *                 @OA\Property(property="nama_modul", type="string", example="inventaris"),
+     *                 @OA\Property(property="hak_buat", type="boolean", example=true),
+     *                 @OA\Property(property="hak_baca", type="boolean", example=true),
+     *                 @OA\Property(property="hak_ubah", type="boolean", example=true),
+     *                 @OA\Property(property="hak_hapus", type="boolean", example=false)
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -172,7 +195,14 @@ class AksesController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Akses berhasil diperbarui."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_akses", type="integer", example=1),
+     *                 @OA\Property(property="nama_modul", type="string", example="inventaris"),
+     *                 @OA\Property(property="hak_buat", type="boolean", example=true),
+     *                 @OA\Property(property="hak_baca", type="boolean", example=true),
+     *                 @OA\Property(property="hak_ubah", type="boolean", example=false),
+     *                 @OA\Property(property="hak_hapus", type="boolean", example=false)
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),

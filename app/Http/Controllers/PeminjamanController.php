@@ -25,7 +25,24 @@ class PeminjamanController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Daftar peminjaman berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(type="object",
+     *                     @OA\Property(property="nomor_peminjaman", type="string", example="PJM-2026-001"),
+     *                     @OA\Property(property="tanggal_pinjam", type="string", format="date", example="2026-04-18"),
+     *                     @OA\Property(property="id_peminjam", type="integer", example=5),
+     *                     @OA\Property(property="nomor_telepon", type="string", nullable=true, example="081234567890"),
+     *                     @OA\Property(property="lama_pinjam_hari", type="integer", example=7),
+     *                     @OA\Property(property="status_peminjaman", type="string", example="Sedang Dipinjam"),
+     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Untuk kegiatan praktikum"),
+     *                     @OA\Property(property="peminjam", type="object", nullable=true),
+     *                     @OA\Property(property="detail_peminjaman", type="array", @OA\Items(type="object",
+     *                     @OA\Property(property="id_detail_pinjam", type="integer", example=1),
+     *                     @OA\Property(property="nomor_peminjaman", type="string", example="PJM-2026-001"),
+     *                     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+     *                     @OA\Property(property="aset", type="object", nullable=true)
+     *                 ))
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -78,7 +95,22 @@ class PeminjamanController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Peminjaman berhasil disimpan."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="nomor_peminjaman", type="string", example="PJM-2026-001"),
+     *                 @OA\Property(property="tanggal_pinjam", type="string", format="date", example="2026-04-18"),
+     *                 @OA\Property(property="id_peminjam", type="integer", example=5),
+     *                 @OA\Property(property="nomor_telepon", type="string", nullable=true, example="081234567890"),
+     *                 @OA\Property(property="lama_pinjam_hari", type="integer", example=7),
+     *                 @OA\Property(property="status_peminjaman", type="string", example="Sedang Dipinjam"),
+     *                 @OA\Property(property="keterangan", type="string", nullable=true, example="Untuk kegiatan praktikum"),
+     *                 @OA\Property(property="peminjam", type="object", nullable=true),
+     *                 @OA\Property(property="detail_peminjaman", type="array", @OA\Items(type="object",
+     *                     @OA\Property(property="id_detail_pinjam", type="integer", example=1),
+     *                     @OA\Property(property="nomor_peminjaman", type="string", example="PJM-2026-001"),
+     *                     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+     *                     @OA\Property(property="aset", type="object", nullable=true)
+     *                 ))
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -155,7 +187,22 @@ class PeminjamanController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Detail peminjaman berhasil diambil."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="nomor_peminjaman", type="string", example="PJM-2026-001"),
+     *                 @OA\Property(property="tanggal_pinjam", type="string", format="date", example="2026-04-18"),
+     *                 @OA\Property(property="id_peminjam", type="integer", example=5),
+     *                 @OA\Property(property="nomor_telepon", type="string", nullable=true, example="081234567890"),
+     *                 @OA\Property(property="lama_pinjam_hari", type="integer", example=7),
+     *                 @OA\Property(property="status_peminjaman", type="string", example="Sedang Dipinjam"),
+     *                 @OA\Property(property="keterangan", type="string", nullable=true, example="Untuk kegiatan praktikum"),
+     *                 @OA\Property(property="peminjam", type="object", nullable=true),
+     *                 @OA\Property(property="detail_peminjaman", type="array", @OA\Items(type="object",
+     *                     @OA\Property(property="id_detail_pinjam", type="integer", example=1),
+     *                     @OA\Property(property="nomor_peminjaman", type="string", example="PJM-2026-001"),
+     *                     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+     *                     @OA\Property(property="aset", type="object", nullable=true)
+     *                 ))
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -197,7 +244,22 @@ class PeminjamanController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Peminjaman berhasil dikembalikan."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="nomor_peminjaman", type="string", example="PJM-2026-001"),
+     *                 @OA\Property(property="tanggal_pinjam", type="string", format="date", example="2026-04-18"),
+     *                 @OA\Property(property="id_peminjam", type="integer", example=5),
+     *                 @OA\Property(property="nomor_telepon", type="string", nullable=true, example="081234567890"),
+     *                 @OA\Property(property="lama_pinjam_hari", type="integer", example=7),
+     *                 @OA\Property(property="status_peminjaman", type="string", example="Dikembalikan"),
+     *                 @OA\Property(property="keterangan", type="string", nullable=true, example="Untuk kegiatan praktikum"),
+     *                 @OA\Property(property="peminjam", type="object", nullable=true),
+     *                 @OA\Property(property="detail_peminjaman", type="array", @OA\Items(type="object",
+     *                     @OA\Property(property="id_detail_pinjam", type="integer", example=1),
+     *                     @OA\Property(property="nomor_peminjaman", type="string", example="PJM-2026-001"),
+     *                     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+     *                     @OA\Property(property="aset", type="object", nullable=true)
+     *                 ))
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),

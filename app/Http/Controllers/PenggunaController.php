@@ -26,7 +26,20 @@ class PenggunaController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Daftar pengguna berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(type="object",
+     *                     @OA\Property(property="id_pengguna", type="integer", example=1),
+     *                     @OA\Property(property="username", type="string", example="admin"),
+     *                     @OA\Property(property="id_peran", type="integer", nullable=true, example=1),
+     *                     @OA\Property(property="peran", type="object", nullable=true),
+     *                     @OA\Property(property="id_kelas", type="integer", nullable=true, example=null),
+     *                     @OA\Property(property="kelas", type="object", nullable=true),
+     *                     @OA\Property(property="id_mapel", type="integer", nullable=true, example=null),
+     *                     @OA\Property(property="mapel", type="object", nullable=true),
+     *                     @OA\Property(property="id_unit", type="integer", nullable=true, example=null),
+     *                     @OA\Property(property="unit", type="object", nullable=true)
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -72,7 +85,18 @@ class PenggunaController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Pengguna berhasil ditambahkan."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_pengguna", type="integer", example=1),
+     *                 @OA\Property(property="username", type="string", example="guru01"),
+     *                 @OA\Property(property="id_peran", type="integer", nullable=true, example=2),
+     *                 @OA\Property(property="peran", type="object", nullable=true),
+     *                 @OA\Property(property="id_kelas", type="integer", nullable=true, example=1),
+     *                 @OA\Property(property="kelas", type="object", nullable=true),
+     *                 @OA\Property(property="id_mapel", type="integer", nullable=true, example=3),
+     *                 @OA\Property(property="mapel", type="object", nullable=true),
+     *                 @OA\Property(property="id_unit", type="integer", nullable=true, example=1),
+     *                 @OA\Property(property="unit", type="object", nullable=true)
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -123,7 +147,18 @@ class PenggunaController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Detail pengguna berhasil diambil."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_pengguna", type="integer", example=1),
+     *                 @OA\Property(property="username", type="string", example="guru01"),
+     *                 @OA\Property(property="id_peran", type="integer", nullable=true, example=2),
+     *                 @OA\Property(property="peran", type="object", nullable=true),
+     *                 @OA\Property(property="id_kelas", type="integer", nullable=true, example=1),
+     *                 @OA\Property(property="kelas", type="object", nullable=true),
+     *                 @OA\Property(property="id_mapel", type="integer", nullable=true, example=3),
+     *                 @OA\Property(property="mapel", type="object", nullable=true),
+     *                 @OA\Property(property="id_unit", type="integer", nullable=true, example=1),
+     *                 @OA\Property(property="unit", type="object", nullable=true)
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -190,7 +225,18 @@ class PenggunaController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Pengguna berhasil diperbarui."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_pengguna", type="integer", example=1),
+     *                 @OA\Property(property="username", type="string", example="guru01_updated"),
+     *                 @OA\Property(property="id_peran", type="integer", nullable=true, example=2),
+     *                 @OA\Property(property="peran", type="object", nullable=true),
+     *                 @OA\Property(property="id_kelas", type="integer", nullable=true, example=1),
+     *                 @OA\Property(property="kelas", type="object", nullable=true),
+     *                 @OA\Property(property="id_mapel", type="integer", nullable=true, example=3),
+     *                 @OA\Property(property="mapel", type="object", nullable=true),
+     *                 @OA\Property(property="id_unit", type="integer", nullable=true, example=1),
+     *                 @OA\Property(property="unit", type="object", nullable=true)
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),

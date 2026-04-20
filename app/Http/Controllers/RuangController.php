@@ -22,7 +22,18 @@ class RuangController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Daftar ruang berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(type="object",
+     *                     @OA\Property(property="id_ruang", type="integer", example=1),
+     *                     @OA\Property(property="nama_ruang", type="string", example="Lab Komputer 1"),
+     *                     @OA\Property(property="id_lokasi", type="integer", example=1),
+     *                     @OA\Property(property="lokasi", type="object", nullable=true,
+     *                         @OA\Property(property="id_lokasi", type="integer", example=1),
+     *                         @OA\Property(property="nama_lokasi", type="string", example="Gedung A"),
+     *                         @OA\Property(property="alamat", type="string", nullable=true, example="Jl. Pendidikan No. 1")
+     *                     )
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -59,7 +70,16 @@ class RuangController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Ruang berhasil ditambahkan."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_ruang", type="integer", example=1),
+     *                 @OA\Property(property="nama_ruang", type="string", example="Lab Komputer 1"),
+     *                 @OA\Property(property="id_lokasi", type="integer", example=1),
+     *                 @OA\Property(property="lokasi", type="object", nullable=true,
+     *                     @OA\Property(property="id_lokasi", type="integer", example=1),
+     *                     @OA\Property(property="nama_lokasi", type="string", example="Gedung A"),
+     *                     @OA\Property(property="alamat", type="string", nullable=true, example="Jl. Pendidikan No. 1")
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -92,7 +112,16 @@ class RuangController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Detail ruang berhasil diambil."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_ruang", type="integer", example=1),
+     *                 @OA\Property(property="nama_ruang", type="string", example="Lab Komputer 1"),
+     *                 @OA\Property(property="id_lokasi", type="integer", example=1),
+     *                 @OA\Property(property="lokasi", type="object", nullable=true,
+     *                     @OA\Property(property="id_lokasi", type="integer", example=1),
+     *                     @OA\Property(property="nama_lokasi", type="string", example="Gedung A"),
+     *                     @OA\Property(property="alamat", type="string", nullable=true, example="Jl. Pendidikan No. 1")
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
@@ -137,7 +166,16 @@ class RuangController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Ruang berhasil diperbarui."),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id_ruang", type="integer", example=1),
+     *                 @OA\Property(property="nama_ruang", type="string", example="Lab Komputer 2"),
+     *                 @OA\Property(property="id_lokasi", type="integer", example=1),
+     *                 @OA\Property(property="lokasi", type="object", nullable=true,
+     *                     @OA\Property(property="id_lokasi", type="integer", example=1),
+     *                     @OA\Property(property="nama_lokasi", type="string", example="Gedung A"),
+     *                     @OA\Property(property="alamat", type="string", nullable=true, example="Jl. Pendidikan No. 1")
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
