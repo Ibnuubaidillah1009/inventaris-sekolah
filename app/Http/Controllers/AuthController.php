@@ -37,7 +37,7 @@ class AuthController extends Controller
      *                 property="data",
      *                 type="object",
      *                 @OA\Property(property="pengguna", type="object"),
-     *                 @OA\Property(property="access_token", type="string", example="1|abc123tokenxyz")
+     *                 @OA\Property(property="token", type="string", example="1|abc123tokenxyz")
      *             )
      *         )
      *     ),
@@ -64,7 +64,7 @@ class AuthController extends Controller
     {
         $pengguna = Pengguna::where('username', $request->username)->first();
 
-        if (!$pengguna || $request->password !== $pengguna->password) {
+        if (!$pengguna || !Hash::check($request->password, $pengguna->password)) {
             return response()->json([
                 'status'  => false,
                 'message' => 'Username atau password salah.',
@@ -79,7 +79,7 @@ class AuthController extends Controller
             'message' => 'Login berhasil.',
             'data'    => [
                 'pengguna'     => $pengguna->load(['peran', 'kelas', 'mapel', 'unit']),
-                'access_token' => $token,
+                'token' => $token,
             ],
         ]);
     }

@@ -40,6 +40,8 @@ class Pengguna extends Authenticatable
         'password',
     ];
 
+    public $timestamps = false;
+
     /**
      * Cast atribut.
      *

@@ -30,7 +30,7 @@ class DummyDataSeeder extends Seeder
             DB::table('merek')->insertOrIgnore(['id_merek' => $i + 1, 'nama_merek' => "Merek Dummy $i"]);
             DB::table('satuan')->insertOrIgnore(['id_satuan' => $i + 1, 'nama_satuan' => "Satuan $i"]);
             DB::table('pemasok')->insertOrIgnore([
-                'id_pemasok' => $i, 
+                'id_pemasok' => $i,
                 'nama_pemasok' => "Pemasok Dummy $i",
                 'nomor_telepon' => "0812345678" . $i,
                 'alamat' => "Alamat Pemasok $i"
@@ -38,6 +38,16 @@ class DummyDataSeeder extends Seeder
             DB::table('pengaturan')->insertOrIgnore([
                 'id_pengaturan' => $i + 1,
                 'nama_instansi' => "Instansi Dummy $i",
+                'alamat_instansi' => "Lokasi Dummy $i",
+                'logo_instansi' => "Logo Dummy $i",
+                'wallpaper_aplikasi' => "wallpaper Dummy $i",
+                'telpon' => "Telpon Dummy $i",
+                'website' => "Website Dummy $i",
+                'email' => "Email Dummy $i",
+                'kota' => "Kota Dummy $i",
+                'kepala_sekolah' => "Kepala Sekolah Dummy $i",
+                'NIP' => "3570943805",
+                'bagian_invetaris' => "Inventaris Dummy $i",
             ]);
             DB::table('peran')->insertOrIgnore(['id_peran' => $i + 1, 'nama_peran' => "Peran Dummy $i"]);
         }
@@ -48,10 +58,10 @@ class DummyDataSeeder extends Seeder
         for ($i = 1; $i <= 3; $i++) {
             $idJurusan = DB::table('jurusan')->inRandomOrder()->value('id_jurusan') ?? 1;
             DB::table('rombel')->insertOrIgnore(['id_rombel' => $i, 'id_jurusan' => $idJurusan, 'nama_rombel' => "Rombel Dummy $i"]);
-            
+
             $idRombel = DB::table('rombel')->inRandomOrder()->value('id_rombel') ?? 1;
             DB::table('kelas')->insertOrIgnore(['id_kelas' => $i, 'id_rombel' => $idRombel, 'nama_kelas' => "Kelas $i", 'tahun_ajaran' => '2025/2026']);
-            
+
             $idLokasi = DB::table('lokasi')->inRandomOrder()->value('id_lokasi') ?? 1;
             DB::table('ruang')->insertOrIgnore(['id_ruang' => $i, 'id_lokasi' => $idLokasi, 'nama_ruang' => "Ruang Dummy $i"]);
         }
@@ -64,7 +74,7 @@ class DummyDataSeeder extends Seeder
             $idKelas = DB::table('kelas')->inRandomOrder()->value('id_kelas');
             $idMapel = DB::table('mapel')->inRandomOrder()->value('id_mapel');
             $idUnit = DB::table('unit')->inRandomOrder()->value('id_unit');
-            
+
             DB::table('pengguna')->insertOrIgnore([
                 'id_pengguna' => $i + 1, // ID 1 biasanya admin bawaan
                 'username' => "user_dummy_$i",
@@ -83,7 +93,7 @@ class DummyDataSeeder extends Seeder
             $idKategori = DB::table('kategori')->inRandomOrder()->value('id_kategori');
             $idMerek = DB::table('merek')->inRandomOrder()->value('id_merek');
             $idSatuan = DB::table('satuan')->inRandomOrder()->value('id_satuan');
-            
+
             DB::table('master_barang')->insertOrIgnore([
                 'id_master_barang' => $i + 1,
                 'nama_barang' => "Barang Dummy $i",
@@ -114,7 +124,7 @@ class DummyDataSeeder extends Seeder
         // ==========================================
         for ($i = 1; $i <= 3; $i++) {
             $idLokasi = DB::table('lokasi')->inRandomOrder()->value('id_lokasi');
-            
+
             DB::table('aset_tanah')->insertOrIgnore([
                 'id_tanah' => $i,
                 'nama_tanah' => "Tanah Dummy $i",
@@ -126,9 +136,9 @@ class DummyDataSeeder extends Seeder
                 'status_hak' => 'Hak Milik',
                 'nilai_aset' => rand(50000000, 100000000)
             ]);
-            
+
             $idTanah = DB::table('aset_tanah')->inRandomOrder()->value('id_tanah');
-            
+
             DB::table('aset_bangunan')->insertOrIgnore([
                 'id_bangunan' => $i,
                 'nama_bangunan' => "Bangunan Dummy $i",
