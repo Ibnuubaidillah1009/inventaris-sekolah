@@ -8,6 +8,60 @@ use App\Http\Resources\MapelResource;
 use App\Models\Mapel;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * ============================================================
+ *  SCHEMA DEFINITIONS – Mapel Module
+ * ============================================================
+ *
+ * @OA\Schema(
+ *     schema="MapelResource",
+ *     type="object",
+ *     description="Representasi data mata pelajaran",
+ *     @OA\Property(property="id_mapel", type="integer", example=1),
+ *     @OA\Property(property="nama_mapel", type="string", example="Matematika")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="StoreMapelRequest",
+ *     type="object",
+ *     required={"nama_mapel"},
+ *     description="Payload untuk menambah mata pelajaran baru",
+ *     @OA\Property(property="nama_mapel", type="string", maxLength=100, example="Matematika")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="UpdateMapelRequest",
+ *     type="object",
+ *     description="Payload untuk memperbarui mata pelajaran",
+ *     @OA\Property(property="nama_mapel", type="string", maxLength=100, example="Fisika")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="MapelListResponse",
+ *     type="object",
+ *     description="Response wrapper untuk daftar mapel",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Daftar mapel berhasil diambil."),
+ *     @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/MapelResource"))
+ * )
+ *
+ * @OA\Schema(
+ *     schema="MapelSingleResponse",
+ *     type="object",
+ *     description="Response wrapper untuk satu mapel",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Detail mapel berhasil diambil."),
+ *     @OA\Property(property="data", ref="#/components/schemas/MapelResource")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="MapelDeleteResponse",
+ *     type="object",
+ *     description="Response wrapper untuk penghapusan mapel",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Mapel berhasil dihapus.")
+ * )
+ */
 class MapelController extends Controller
 {
     /**
@@ -18,19 +72,8 @@ class MapelController extends Controller
      *     summary="Daftar semua mata pelajaran",
      *     description="Mengambil daftar semua mata pelajaran.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Daftar mapel berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Daftar mapel berhasil diambil."),
-     *             @OA\Property(property="data", type="array",
-     *                 @OA\Items(type="object",
-     *                     @OA\Property(property="id_mapel", type="integer", example=1),
-     *                     @OA\Property(property="nama_mapel", type="string", example="Matematika")
-     *                 )
-     *             )
-     *         )
+     *     @OA\Response(response=200, description="Daftar mapel berhasil diambil",
+     *         @OA\JsonContent(ref="#/components/schemas/MapelListResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden")
@@ -53,24 +96,11 @@ class MapelController extends Controller
      *     summary="Tambah mata pelajaran baru",
      *     description="Menyimpan data mata pelajaran baru.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"nama_mapel"},
-     *             @OA\Property(property="nama_mapel", type="string", maxLength=100, example="Matematika")
-     *         )
+     *     @OA\RequestBody(required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/StoreMapelRequest")
      *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Mapel berhasil ditambahkan",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Mapel berhasil ditambahkan."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_mapel", type="integer", example=1),
-     *                 @OA\Property(property="nama_mapel", type="string", example="Matematika")
-     *             )
-     *         )
+     *     @OA\Response(response=201, description="Mapel berhasil ditambahkan",
+     *         @OA\JsonContent(ref="#/components/schemas/MapelSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -97,17 +127,8 @@ class MapelController extends Controller
      *     description="Mengambil detail satu mata pelajaran berdasarkan ID.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID mapel", @OA\Schema(type="string", example="1")),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Detail mapel berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Detail mapel berhasil diambil."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_mapel", type="integer", example=1),
-     *                 @OA\Property(property="nama_mapel", type="string", example="Matematika")
-     *             )
-     *         )
+     *     @OA\Response(response=200, description="Detail mapel berhasil diambil",
+     *         @OA\JsonContent(ref="#/components/schemas/MapelSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -141,23 +162,11 @@ class MapelController extends Controller
      *     description="Memperbarui data mata pelajaran berdasarkan ID.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID mapel", @OA\Schema(type="string", example="1")),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="nama_mapel", type="string", maxLength=100, example="Fisika")
-     *         )
+     *     @OA\RequestBody(required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateMapelRequest")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Mapel berhasil diperbarui",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Mapel berhasil diperbarui."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_mapel", type="integer", example=1),
-     *                 @OA\Property(property="nama_mapel", type="string", example="Fisika")
-     *             )
-     *         )
+     *     @OA\Response(response=200, description="Mapel berhasil diperbarui",
+     *         @OA\JsonContent(ref="#/components/schemas/MapelSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -194,13 +203,8 @@ class MapelController extends Controller
      *     description="Menghapus data mata pelajaran berdasarkan ID.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID mapel", @OA\Schema(type="string", example="1")),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Mapel berhasil dihapus",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Mapel berhasil dihapus.")
-     *         )
+     *     @OA\Response(response=200, description="Mapel berhasil dihapus",
+     *         @OA\JsonContent(ref="#/components/schemas/MapelDeleteResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),

@@ -8,25 +8,42 @@ use App\Http\Resources\SatuanResource;
 use App\Models\Satuan;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @OA\Schema(schema="SatuanResource", type="object",
+ *     @OA\Property(property="id_satuan", type="integer", example=1),
+ *     @OA\Property(property="nama_satuan", type="string", example="Unit"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Satuan barang")
+ * )
+ * @OA\Schema(schema="StoreSatuanRequest", type="object", required={"nama_satuan"},
+ *     @OA\Property(property="nama_satuan", type="string", example="Unit"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Satuan barang")
+ * )
+ * @OA\Schema(schema="UpdateSatuanRequest", type="object",
+ *     @OA\Property(property="nama_satuan", type="string", example="Unit Updated"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Updated info")
+ * )
+ * @OA\Schema(schema="SatuanListResponse", type="object",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Daftar satuan berhasil diambil."),
+ *     @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/SatuanResource"))
+ * )
+ * @OA\Schema(schema="SatuanSingleResponse", type="object",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Detail satuan berhasil diambil."),
+ *     @OA\Property(property="data", ref="#/components/schemas/SatuanResource")
+ * )
+ * @OA\Schema(schema="SatuanDeleteResponse", type="object",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Satuan berhasil dihapus.")
+ * )
+ */
 class SatuanController extends Controller
 {
     /**
      * Tampilkan daftar all satuan.
      *
-     * @OA\Get(
-     *     path="/satuan",
-     *     operationId="indexSatuan",
-     *     tags={"Satuan"},
-     *     summary="Daftar satuan",
-     *     description="Mengambil daftar all satuan.",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(response=200, description="Daftar satuan berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Daftar satuan berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
-     *         )
-     *     )
+     * @OA\Get(path="/satuan", operationId="indexSatuan", tags={"Satuan"}, summary="Daftar satuan", security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="OK", @OA\JsonContent(ref="#/components/schemas/SatuanListResponse"))
      * )
      */
     public function index(): JsonResponse
@@ -42,21 +59,9 @@ class SatuanController extends Controller
     /**
      * Simpan satuan baru.
      *
-     * @OA\Post(
-     *     path="/satuan",
-     *     operationId="storeSatuan",
-     *     tags={"Satuan"},
-     *     summary="Tambah satuan",
-     *     description="Menyimpan data satuan baru.",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\RequestBody(required=true,
-     *         @OA\JsonContent(
-     *             required={"nama_satuan"},
-     *             @OA\Property(property="nama_satuan", type="string", example="Unit"),
-     *             @OA\Property(property="keterangan", type="string", example="Satuan barang")
-     *         )
-     *     ),
-     *     @OA\Response(response=201, description="Satuan berhasil ditambahkan"),
+     * @OA\Post(path="/satuan", operationId="storeSatuan", tags={"Satuan"}, summary="Tambah satuan", security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/StoreSatuanRequest")),
+     *     @OA\Response(response=201, description="Created", @OA\JsonContent(ref="#/components/schemas/SatuanSingleResponse")),
      *     @OA\Response(response=422, description="Validasi gagal")
      * )
      */
@@ -73,16 +78,10 @@ class SatuanController extends Controller
     /**
      * Tampilkan detail satuan.
      *
-     * @OA\Get(
-     *     path="/satuan/{id}",
-     *     operationId="showSatuan",
-     *     tags={"Satuan"},
-     *     summary="Detail satuan",
-     *     description="Mengambil detail satu satuan.",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="id", in="path", required=true, description="ID satuan", @OA\Schema(type="integer", example=1)),
-     *     @OA\Response(response=200, description="Detail satuan berhasil diambil"),
-     *     @OA\Response(response=404, description="Satuan tidak ditemukan")
+     * @OA\Get(path="/satuan/{id}", operationId="showSatuan", tags={"Satuan"}, summary="Detail satuan", security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer", example=1)),
+     *     @OA\Response(response=200, description="OK", @OA\JsonContent(ref="#/components/schemas/SatuanSingleResponse")),
+     *     @OA\Response(response=404, description="Tidak ditemukan")
      * )
      */
     public function show(int $id): JsonResponse
@@ -101,22 +100,11 @@ class SatuanController extends Controller
     /**
      * Update satuan.
      *
-     * @OA\Put(
-     *     path="/satuan/{id}",
-     *     operationId="updateSatuan",
-     *     tags={"Satuan"},
-     *     summary="Update satuan",
-     *     description="Memperbarui data satuan.",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="id", in="path", required=true, description="ID satuan", @OA\Schema(type="integer", example=1)),
-     *     @OA\RequestBody(required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="nama_satuan", type="string", example="Unit Updated"),
-     *             @OA\Property(property="keterangan", type="string", example="Updated info")
-     *         )
-     *     ),
-     *     @OA\Response(response=200, description="Satuan berhasil diperbarui"),
-     *     @OA\Response(response=404, description="Satuan tidak ditemukan")
+     * @OA\Put(path="/satuan/{id}", operationId="updateSatuan", tags={"Satuan"}, summary="Update satuan", security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer", example=1)),
+     *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/UpdateSatuanRequest")),
+     *     @OA\Response(response=200, description="OK", @OA\JsonContent(ref="#/components/schemas/SatuanSingleResponse")),
+     *     @OA\Response(response=404, description="Tidak ditemukan")
      * )
      */
     public function update(UpdateSatuanRequest $request, int $id): JsonResponse
@@ -136,15 +124,9 @@ class SatuanController extends Controller
     /**
      * Hapus satuan.
      *
-     * @OA\Delete(
-     *     path="/satuan/{id}",
-     *     operationId="destroySatuan",
-     *     tags={"Satuan"},
-     *     summary="Hapus satuan",
-     *     description="Menghapus satuan.",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="id", in="path", required=true, description="ID satuan", @OA\Schema(type="integer", example=1)),
-     *     @OA\Response(response=200, description="Satuan berhasil dihapus")
+     * @OA\Delete(path="/satuan/{id}", operationId="destroySatuan", tags={"Satuan"}, summary="Hapus satuan", security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer", example=1)),
+     *     @OA\Response(response=200, description="OK", @OA\JsonContent(ref="#/components/schemas/SatuanDeleteResponse"))
      * )
      */
     public function destroy(int $id): JsonResponse

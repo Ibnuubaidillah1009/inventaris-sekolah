@@ -8,6 +8,63 @@ use App\Http\Resources\JurusanResource;
 use App\Models\Jurusan;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * ============================================================
+ *  SCHEMA DEFINITIONS – Jurusan Module
+ * ============================================================
+ *
+ * @OA\Schema(
+ *     schema="JurusanResource",
+ *     type="object",
+ *     description="Representasi data jurusan",
+ *     @OA\Property(property="id_jurusan", type="integer", example=1),
+ *     @OA\Property(property="nama_jurusan", type="string", example="Teknik Komputer dan Jaringan"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Jurusan TKJ")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="StoreJurusanRequest",
+ *     type="object",
+ *     required={"nama_jurusan"},
+ *     description="Payload untuk menambah jurusan baru",
+ *     @OA\Property(property="nama_jurusan", type="string", maxLength=100, example="Teknik Komputer dan Jaringan"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Jurusan TKJ")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="UpdateJurusanRequest",
+ *     type="object",
+ *     description="Payload untuk memperbarui jurusan",
+ *     @OA\Property(property="nama_jurusan", type="string", maxLength=100, example="Rekayasa Perangkat Lunak"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Jurusan RPL")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="JurusanListResponse",
+ *     type="object",
+ *     description="Response wrapper untuk daftar jurusan",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Daftar jurusan berhasil diambil."),
+ *     @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/JurusanResource"))
+ * )
+ *
+ * @OA\Schema(
+ *     schema="JurusanSingleResponse",
+ *     type="object",
+ *     description="Response wrapper untuk satu jurusan",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Detail jurusan berhasil diambil."),
+ *     @OA\Property(property="data", ref="#/components/schemas/JurusanResource")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="JurusanDeleteResponse",
+ *     type="object",
+ *     description="Response wrapper untuk penghapusan jurusan",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Jurusan berhasil dihapus.")
+ * )
+ */
 class JurusanController extends Controller
 {
     /**
@@ -16,26 +73,10 @@ class JurusanController extends Controller
      *     operationId="indexJurusan",
      *     tags={"Jurusan"},
      *     summary="Daftar semua jurusan",
-     *     description="Mengambil daftar semua jurusan beserta relasi rombel.",
+     *     description="Mengambil daftar semua jurusan.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Daftar jurusan berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Daftar jurusan berhasil diambil."),
-     *             @OA\Property(property="data", type="array",
-     *                 @OA\Items(type="object",
-     *                     @OA\Property(property="id_jurusan", type="integer", example=1),
-     *                     @OA\Property(property="nama_jurusan", type="string", example="Teknik Komputer dan Jaringan"),
-     *                     @OA\Property(property="rombel", type="array", @OA\Items(type="object",
-     *                         @OA\Property(property="id_rombel", type="integer", example=1),
-     *                         @OA\Property(property="nama_rombel", type="string", example="X TKJ 1"),
-     *                         @OA\Property(property="id_jurusan", type="integer", example=1)
-     *                     ))
-     *                 )
-     *             )
-     *         )
+     *     @OA\Response(response=200, description="Daftar jurusan berhasil diambil",
+     *         @OA\JsonContent(ref="#/components/schemas/JurusanListResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden")
@@ -43,12 +84,10 @@ class JurusanController extends Controller
      */
     public function index(): JsonResponse
     {
-        $data = Jurusan::with('rombel')->get();
-
         return response()->json([
             'status'  => true,
             'message' => 'Daftar jurusan berhasil diambil.',
-            'data'    => JurusanResource::collection($data),
+            'data'    => JurusanResource::collection(Jurusan::all()),
         ]);
     }
 
@@ -60,24 +99,11 @@ class JurusanController extends Controller
      *     summary="Tambah jurusan baru",
      *     description="Menyimpan data jurusan baru.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"nama_jurusan"},
-     *             @OA\Property(property="nama_jurusan", type="string", maxLength=100, example="Teknik Komputer dan Jaringan")
-     *         )
+     *     @OA\RequestBody(required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/StoreJurusanRequest")
      *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Jurusan berhasil ditambahkan",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Jurusan berhasil ditambahkan."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_jurusan", type="integer", example=1),
-     *                 @OA\Property(property="nama_jurusan", type="string", example="Teknik Komputer dan Jaringan")
-     *             )
-     *         )
+     *     @OA\Response(response=201, description="Jurusan berhasil ditambahkan",
+     *         @OA\JsonContent(ref="#/components/schemas/JurusanSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -101,25 +127,11 @@ class JurusanController extends Controller
      *     operationId="showJurusan",
      *     tags={"Jurusan"},
      *     summary="Detail jurusan",
-     *     description="Mengambil detail satu jurusan beserta rombel dan kelas.",
+     *     description="Mengambil detail satu jurusan berdasarkan ID.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID jurusan", @OA\Schema(type="string", example="1")),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Detail jurusan berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Detail jurusan berhasil diambil."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_jurusan", type="integer", example=1),
-     *                 @OA\Property(property="nama_jurusan", type="string", example="Teknik Komputer dan Jaringan"),
-     *                 @OA\Property(property="rombel", type="array", @OA\Items(type="object",
-     *                     @OA\Property(property="id_rombel", type="integer", example=1),
-     *                     @OA\Property(property="nama_rombel", type="string", example="X TKJ 1"),
-     *                     @OA\Property(property="id_jurusan", type="integer", example=1)
-     *                 ))
-     *             )
-     *         )
+     *     @OA\Response(response=200, description="Detail jurusan berhasil diambil",
+     *         @OA\JsonContent(ref="#/components/schemas/JurusanSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -128,7 +140,7 @@ class JurusanController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $jurusan = Jurusan::with('rombel.kelas')->find($id);
+        $jurusan = Jurusan::find($id);
 
         if (!$jurusan) {
             return response()->json([
@@ -153,23 +165,11 @@ class JurusanController extends Controller
      *     description="Memperbarui data jurusan berdasarkan ID.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID jurusan", @OA\Schema(type="string", example="1")),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="nama_jurusan", type="string", maxLength=100, example="Rekayasa Perangkat Lunak")
-     *         )
+     *     @OA\RequestBody(required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateJurusanRequest")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Jurusan berhasil diperbarui",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Jurusan berhasil diperbarui."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_jurusan", type="integer", example=1),
-     *                 @OA\Property(property="nama_jurusan", type="string", example="Rekayasa Perangkat Lunak")
-     *             )
-     *         )
+     *     @OA\Response(response=200, description="Jurusan berhasil diperbarui",
+     *         @OA\JsonContent(ref="#/components/schemas/JurusanSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -206,13 +206,8 @@ class JurusanController extends Controller
      *     description="Menghapus data jurusan berdasarkan ID.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID jurusan", @OA\Schema(type="string", example="1")),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Jurusan berhasil dihapus",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Jurusan berhasil dihapus.")
-     *         )
+     *     @OA\Response(response=200, description="Jurusan berhasil dihapus",
+     *         @OA\JsonContent(ref="#/components/schemas/JurusanDeleteResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),

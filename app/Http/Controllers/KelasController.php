@@ -8,6 +8,68 @@ use App\Http\Resources\KelasResource;
 use App\Models\Kelas;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * ============================================================
+ *  SCHEMA DEFINITIONS – Kelas Module
+ * ============================================================
+ *
+ * @OA\Schema(
+ *     schema="KelasResource",
+ *     type="object",
+ *     description="Representasi data kelas",
+ *     @OA\Property(property="id_kelas", type="integer", example=1),
+ *     @OA\Property(property="nama_kelas", type="string", example="Kelas A"),
+ *     @OA\Property(property="id_rombel", type="integer", example=1),
+ *     @OA\Property(property="rombel", type="object", nullable=true,
+ *         @OA\Property(property="id_rombel", type="integer", example=1),
+ *         @OA\Property(property="nama_rombel", type="string", example="X TKJ 1"),
+ *         @OA\Property(property="id_jurusan", type="integer", example=1)
+ *     )
+ * )
+ *
+ * @OA\Schema(
+ *     schema="StoreKelasRequest",
+ *     type="object",
+ *     required={"nama_kelas","id_rombel"},
+ *     description="Payload untuk menambah kelas baru",
+ *     @OA\Property(property="nama_kelas", type="string", maxLength=100, example="Kelas A"),
+ *     @OA\Property(property="id_rombel", type="integer", example=1)
+ * )
+ *
+ * @OA\Schema(
+ *     schema="UpdateKelasRequest",
+ *     type="object",
+ *     description="Payload untuk memperbarui kelas",
+ *     @OA\Property(property="nama_kelas", type="string", maxLength=100, example="Kelas B"),
+ *     @OA\Property(property="id_rombel", type="integer", example=2)
+ * )
+ *
+ * @OA\Schema(
+ *     schema="KelasListResponse",
+ *     type="object",
+ *     description="Response wrapper untuk daftar kelas",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Daftar kelas berhasil diambil."),
+ *     @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/KelasResource"))
+ * )
+ *
+ * @OA\Schema(
+ *     schema="KelasSingleResponse",
+ *     type="object",
+ *     description="Response wrapper untuk satu kelas",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Detail kelas berhasil diambil."),
+ *     @OA\Property(property="data", ref="#/components/schemas/KelasResource")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="KelasDeleteResponse",
+ *     type="object",
+ *     description="Response wrapper untuk penghapusan kelas",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Kelas berhasil dihapus.")
+ * )
+ */
 class KelasController extends Controller
 {
     /**
@@ -20,25 +82,8 @@ class KelasController extends Controller
      *     summary="Daftar semua kelas",
      *     description="Mengambil daftar semua kelas beserta relasi rombel dan jurusan.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Daftar kelas berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Daftar kelas berhasil diambil."),
-     *             @OA\Property(property="data", type="array",
-     *                 @OA\Items(type="object",
-     *                     @OA\Property(property="id_kelas", type="integer", example=1),
-     *                     @OA\Property(property="nama_kelas", type="string", example="Kelas A"),
-     *                     @OA\Property(property="id_rombel", type="integer", example=1),
-     *                     @OA\Property(property="rombel", type="object", nullable=true,
-     *                         @OA\Property(property="id_rombel", type="integer", example=1),
-     *                         @OA\Property(property="nama_rombel", type="string", example="X TKJ 1"),
-     *                         @OA\Property(property="id_jurusan", type="integer", example=1)
-     *                     )
-     *                 )
-     *             )
-     *         )
+     *     @OA\Response(response=200, description="Daftar kelas berhasil diambil",
+     *         @OA\JsonContent(ref="#/components/schemas/KelasListResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden")
@@ -65,31 +110,11 @@ class KelasController extends Controller
      *     summary="Tambah kelas baru",
      *     description="Menyimpan data kelas baru.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"nama_kelas","id_rombel"},
-     *             @OA\Property(property="nama_kelas", type="string", maxLength=100, example="Kelas A"),
-     *             @OA\Property(property="id_rombel", type="integer", example=1)
-     *         )
+     *     @OA\RequestBody(required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/StoreKelasRequest")
      *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Kelas berhasil ditambahkan",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Kelas berhasil ditambahkan."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_kelas", type="integer", example=1),
-     *                 @OA\Property(property="nama_kelas", type="string", example="Kelas A"),
-     *                 @OA\Property(property="id_rombel", type="integer", example=1),
-     *                 @OA\Property(property="rombel", type="object", nullable=true,
-     *                     @OA\Property(property="id_rombel", type="integer", example=1),
-     *                     @OA\Property(property="nama_rombel", type="string", example="X TKJ 1"),
-     *                     @OA\Property(property="id_jurusan", type="integer", example=1)
-     *                 )
-     *             )
-     *         )
+     *     @OA\Response(response=201, description="Kelas berhasil ditambahkan",
+     *         @OA\JsonContent(ref="#/components/schemas/KelasSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -119,23 +144,8 @@ class KelasController extends Controller
      *     description="Mengambil detail satu kelas beserta rombel dan jurusan.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID kelas", @OA\Schema(type="string", example="1")),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Detail kelas berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Detail kelas berhasil diambil."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_kelas", type="integer", example=1),
-     *                 @OA\Property(property="nama_kelas", type="string", example="Kelas A"),
-     *                 @OA\Property(property="id_rombel", type="integer", example=1),
-     *                 @OA\Property(property="rombel", type="object", nullable=true,
-     *                     @OA\Property(property="id_rombel", type="integer", example=1),
-     *                     @OA\Property(property="nama_rombel", type="string", example="X TKJ 1"),
-     *                     @OA\Property(property="id_jurusan", type="integer", example=1)
-     *                 )
-     *             )
-     *         )
+     *     @OA\Response(response=200, description="Detail kelas berhasil diambil",
+     *         @OA\JsonContent(ref="#/components/schemas/KelasSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -171,30 +181,11 @@ class KelasController extends Controller
      *     description="Memperbarui data kelas berdasarkan ID.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID kelas", @OA\Schema(type="string", example="1")),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="nama_kelas", type="string", maxLength=100, example="Kelas B"),
-     *             @OA\Property(property="id_rombel", type="integer", example=2)
-     *         )
+     *     @OA\RequestBody(required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateKelasRequest")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Kelas berhasil diperbarui",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Kelas berhasil diperbarui."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_kelas", type="integer", example=1),
-     *                 @OA\Property(property="nama_kelas", type="string", example="Kelas B"),
-     *                 @OA\Property(property="id_rombel", type="integer", example=2),
-     *                 @OA\Property(property="rombel", type="object", nullable=true,
-     *                     @OA\Property(property="id_rombel", type="integer", example=2),
-     *                     @OA\Property(property="nama_rombel", type="string", example="XI TKJ 2"),
-     *                     @OA\Property(property="id_jurusan", type="integer", example=1)
-     *                 )
-     *             )
-     *         )
+     *     @OA\Response(response=200, description="Kelas berhasil diperbarui",
+     *         @OA\JsonContent(ref="#/components/schemas/KelasSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -234,13 +225,8 @@ class KelasController extends Controller
      *     description="Menghapus data kelas berdasarkan ID.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID kelas", @OA\Schema(type="string", example="1")),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Kelas berhasil dihapus",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Kelas berhasil dihapus.")
-     *         )
+     *     @OA\Response(response=200, description="Kelas berhasil dihapus",
+     *         @OA\JsonContent(ref="#/components/schemas/KelasDeleteResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),

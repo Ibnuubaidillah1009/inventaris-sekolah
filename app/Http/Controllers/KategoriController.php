@@ -8,6 +8,67 @@ use App\Http\Resources\KategoriResource;
 use App\Models\Kategori;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * ============================================================
+ *  SCHEMA DEFINITIONS – Kategori Module
+ * ============================================================
+ *
+ * @OA\Schema(
+ *     schema="KategoriResource",
+ *     type="object",
+ *     description="Representasi data kategori barang",
+ *     @OA\Property(property="id_kategori", type="integer", example=1),
+ *     @OA\Property(property="nama_kategori", type="string", example="Elektronik"),
+ *     @OA\Property(property="keterangan", type="string", example="Barang-barang elektronik")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="StoreKategoriRequest",
+ *     type="object",
+ *     required={"nama_kategori"},
+ *     description="Payload untuk menambah kategori baru",
+ *     @OA\Property(property="nama_kategori", type="string", maxLength=100, example="Elektronik"),
+ *     @OA\Property(property="keterangan", type="string", example="Barang-barang elektronik")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="UpdateKategoriRequest",
+ *     type="object",
+ *     description="Payload untuk memperbarui kategori",
+ *     @OA\Property(property="nama_kategori", type="string", maxLength=100, example="Furnitur"),
+ *     @OA\Property(property="keterangan", type="string", example="Perabotan kantor")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="KategoriListResponse",
+ *     type="object",
+ *     description="Response wrapper untuk daftar kategori",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Daftar kategori berhasil diambil."),
+ *     @OA\Property(
+ *         property="data",
+ *         type="array",
+ *         @OA\Items(ref="#/components/schemas/KategoriResource")
+ *     )
+ * )
+ *
+ * @OA\Schema(
+ *     schema="KategoriSingleResponse",
+ *     type="object",
+ *     description="Response wrapper untuk satu kategori",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Detail kategori berhasil diambil."),
+ *     @OA\Property(property="data", ref="#/components/schemas/KategoriResource")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="KategoriDeleteResponse",
+ *     type="object",
+ *     description="Response wrapper untuk penghapusan kategori",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Kategori berhasil dihapus.")
+ * )
+ */
 class KategoriController extends Controller
 {
     /**
@@ -19,17 +80,7 @@ class KategoriController extends Controller
      *     description="Mengambil daftar semua kategori barang.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(response=200, description="Daftar kategori berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Daftar kategori berhasil diambil."),
-     *             @OA\Property(property="data", type="array",
-     *                 @OA\Items(type="object",
-     *                     @OA\Property(property="id_kategori", type="integer", example=1),
-     *                     @OA\Property(property="nama_kategori", type="string", example="Elektronik"),
-                     @OA\Property(property="keterangan", type="string", example="Barang-barang elektronik")
-     *                 )
-     *             )
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/KategoriListResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden")
@@ -53,22 +104,10 @@ class KategoriController extends Controller
      *     description="Menyimpan data kategori barang baru.",
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(required=true,
-     *         @OA\JsonContent(
-     *             required={"nama_kategori"},
-     *             @OA\Property(property="nama_kategori", type="string", maxLength=100, example="Elektronik"),
-             @OA\Property(property="keterangan", type="string", example="Barang-barang elektronik")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/StoreKategoriRequest")
      *     ),
      *     @OA\Response(response=201, description="Kategori berhasil ditambahkan",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Kategori berhasil ditambahkan."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_kategori", type="integer", example=1),
-     *                 @OA\Property(property="nama_kategori", type="string", example="Elektronik"),
-     *                 @OA\Property(property="keterangan", type="string", example="Barang-barang elektronik")
-     *             )
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/KategoriSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -96,15 +135,7 @@ class KategoriController extends Controller
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID kategori", @OA\Schema(type="string", example="1")),
      *     @OA\Response(response=200, description="Detail kategori berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Detail kategori berhasil diambil."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_kategori", type="integer", example=1),
-     *                 @OA\Property(property="nama_kategori", type="string", example="Elektronik"),
-     *                 @OA\Property(property="keterangan", type="string", example="Barang-barang elektronik")
-     *             )
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/KategoriSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -115,7 +146,7 @@ class KategoriController extends Controller
     {
         $kategori = Kategori::find($id);
 
-        if (!$kategori) {
+        if (!$kategori)  {
             return response()->json([
                 'status'  => false,
                 'message' => 'Kategori tidak ditemukan.',
@@ -139,21 +170,10 @@ class KategoriController extends Controller
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID kategori", @OA\Schema(type="string", example="1")),
      *     @OA\RequestBody(required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="nama_kategori", type="string", maxLength=100, example="Furnitur"),
-             @OA\Property(property="keterangan", type="string", example="Perabotan kantor")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateKategoriRequest")
      *     ),
      *     @OA\Response(response=200, description="Kategori berhasil diperbarui",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Kategori berhasil diperbarui."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_kategori", type="integer", example=1),
-     *                 @OA\Property(property="nama_kategori", type="string", example="Furnitur"),
-                 @OA\Property(property="keterangan", type="string", example="Perabotan kantor")
-     *             )
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/KategoriSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -191,10 +211,7 @@ class KategoriController extends Controller
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID kategori", @OA\Schema(type="string", example="1")),
      *     @OA\Response(response=200, description="Kategori berhasil dihapus",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Kategori berhasil dihapus.")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/KategoriDeleteResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),

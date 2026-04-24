@@ -9,127 +9,70 @@ use App\Models\Mutasi;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @OA\Schema(schema="MutasiResource", type="object",
+ *     @OA\Property(property="id_mutasi", type="integer", example=1),
+ *     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+ *     @OA\Property(property="aset", type="object", nullable=true),
+ *     @OA\Property(property="id_ruang_asal", type="integer", example=1),
+ *     @OA\Property(property="ruang_asal", type="object", nullable=true),
+ *     @OA\Property(property="id_ruang_tujuan", type="integer", example=3),
+ *     @OA\Property(property="ruang_tujuan", type="object", nullable=true),
+ *     @OA\Property(property="tanggal_mutasi", type="string", format="date", example="2026-04-18"),
+ *     @OA\Property(property="id_petugas", type="integer", example=1),
+ *     @OA\Property(property="petugas", type="object", nullable=true),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Pindah ke lab baru")
+ * )
+ * @OA\Schema(schema="StoreMutasiRequest", type="object", required={"kode_barang","id_ruang_tujuan","tanggal_mutasi"},
+ *     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+ *     @OA\Property(property="id_ruang_tujuan", type="integer", example=3),
+ *     @OA\Property(property="tanggal_mutasi", type="string", format="date", example="2026-04-18"),
+ *     @OA\Property(property="alasan_mutasi", type="string", nullable=true, example="Pindah ke lab baru")
+ * )
+ * @OA\Schema(schema="MutasiListResponse", type="object",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Daftar mutasi aset berhasil diambil."),
+ *     @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/MutasiResource"))
+ * )
+ * @OA\Schema(schema="MutasiSingleResponse", type="object",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Detail mutasi berhasil diambil."),
+ *     @OA\Property(property="data", ref="#/components/schemas/MutasiResource")
+ * )
+ * @OA\Schema(schema="MutasiDeleteResponse", type="object",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Data mutasi berhasil dihapus.")
+ * )
+ */
 class MutasiController extends Controller
 {
     /**
-     * Tampilkan daftar semua mutasi aset.
-     * Eager load: aset → masterBarang, ruangAsal → lokasi, ruangTujuan → lokasi, penanggungJawab
-     *
-     * @OA\Get(
-     *     path="/mutasi",
-     *     operationId="indexMutasi",
-     *     tags={"Mutasi"},
-     *     summary="Daftar semua mutasi aset",
-     *     description="Mengambil daftar semua mutasi perpindahan aset antar ruang.",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(response=200, description="Daftar mutasi aset berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Daftar mutasi aset berhasil diambil."),
-     *             @OA\Property(property="data", type="array",
-     *                 @OA\Items(type="object",
-     *                     @OA\Property(property="id_mutasi", type="integer", example=1),
-     *                     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
-     *                     @OA\Property(property="aset", type="object", nullable=true),
-     *                     @OA\Property(property="id_ruang_asal", type="integer", example=1),
-     *                     @OA\Property(property="ruang_asal", type="object", nullable=true),
-     *                     @OA\Property(property="id_ruang_tujuan", type="integer", example=3),
-     *                     @OA\Property(property="ruang_tujuan", type="object", nullable=true),
-     *                     @OA\Property(property="tanggal_mutasi", type="string", format="date", example="2026-04-18"),
-     *                     @OA\Property(property="id_petugas", type="integer", example=1),
-     *                     @OA\Property(property="petugas", type="object", nullable=true),
-     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Pindah ke lab baru")
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(response=401, description="Unauthenticated"),
-     *     @OA\Response(response=403, description="Forbidden")
+     * @OA\Get(path="/mutasi", operationId="indexMutasi", tags={"Mutasi"}, summary="Daftar semua mutasi aset", security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="OK", @OA\JsonContent(ref="#/components/schemas/MutasiListResponse")),
+     *     @OA\Response(response=401, description="Unauthenticated")
      * )
      */
     public function index(): JsonResponse
     {
-        $data = Mutasi::with([
-            'aset.masterBarang',
-            'ruangAsal.lokasi',
-            'ruangTujuan.lokasi',
-            'penanggungJawab',
-        ])->orderByDesc('id_mutasi')->get();
-
-        return response()->json([
-            'status'  => true,
-            'message' => 'Daftar mutasi aset berhasil diambil.',
-            'data'    => MutasiResource::collection($data),
-        ]);
+        $data = Mutasi::with(['aset.masterBarang', 'ruangAsal.lokasi', 'ruangTujuan.lokasi', 'penanggungJawab'])->orderByDesc('id_mutasi')->get();
+        return response()->json(['status' => true, 'message' => 'Daftar mutasi aset berhasil diambil.', 'data' => MutasiResource::collection($data)]);
     }
 
     /**
-     * Simpan mutasi aset baru menggunakan DB::transaction().
-     *
-     * Proses:
-     * 1. Ambil data aset untuk mendapatkan id_ruang asal saat ini.
-     * 2. Insert log ke tabel mutasi.
-     * 3. Update kolom id_ruang pada tabel aset menjadi ruang tujuan baru.
-     *
-     * Validasi ketersediaan aset dilakukan di StoreMutasiRequest::withValidator().
-     *
-     * @OA\Post(
-     *     path="/mutasi",
-     *     operationId="storeMutasi",
-     *     tags={"Mutasi"},
-     *     summary="Buat mutasi aset baru",
-     *     description="Memindahkan aset dari ruang asal ke ruang tujuan. Ruang asal diambil otomatis dari data aset saat ini.",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\RequestBody(required=true,
-     *         @OA\JsonContent(
-     *             required={"kode_barang","id_ruang_tujuan","tanggal_mutasi"},
-     *             @OA\Property(property="kode_barang", type="string", example="BRG-001"),
-     *             @OA\Property(property="id_ruang_tujuan", type="integer", example=3),
-     *             @OA\Property(property="tanggal_mutasi", type="string", format="date", example="2026-04-18"),
-     *             @OA\Property(property="alasan_mutasi", type="string", nullable=true, example="Pindah ke lab baru")
-     *         )
-     *     ),
-     *     @OA\Response(response=201, description="Mutasi aset berhasil disimpan",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Mutasi aset berhasil disimpan."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_mutasi", type="integer", example=1),
-     *                 @OA\Property(property="kode_barang", type="string", example="BRG-001"),
-     *                 @OA\Property(property="aset", type="object", nullable=true),
-     *                 @OA\Property(property="id_ruang_asal", type="integer", example=1),
-     *                 @OA\Property(property="ruang_asal", type="object", nullable=true),
-     *                 @OA\Property(property="id_ruang_tujuan", type="integer", example=3),
-     *                 @OA\Property(property="ruang_tujuan", type="object", nullable=true),
-     *                 @OA\Property(property="tanggal_mutasi", type="string", format="date", example="2026-04-18"),
-     *                 @OA\Property(property="id_petugas", type="integer", example=1),
-     *                 @OA\Property(property="petugas", type="object", nullable=true),
-     *                 @OA\Property(property="keterangan", type="string", nullable=true, example="Pindah ke lab baru")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(response=401, description="Unauthenticated"),
-     *     @OA\Response(response=403, description="Forbidden"),
+     * @OA\Post(path="/mutasi", operationId="storeMutasi", tags={"Mutasi"}, summary="Buat mutasi aset baru", security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/StoreMutasiRequest")),
+     *     @OA\Response(response=201, description="Created", @OA\JsonContent(ref="#/components/schemas/MutasiSingleResponse")),
      *     @OA\Response(response=422, description="Validasi gagal"),
-     *     @OA\Response(response=500, description="Gagal menyimpan mutasi aset")
+     *     @OA\Response(response=500, description="Gagal menyimpan")
      * )
      */
     public function store(StoreMutasiRequest $request): JsonResponse
     {
         $validated = $request->validated();
-
         try {
             $mutasi = DB::transaction(function () use ($validated, $request) {
-
-                // ──────────────────────────────────────────────────────
-                // 1. Ambil data aset untuk mendapatkan ruang asal
-                // ──────────────────────────────────────────────────────
                 $aset = Aset::findOrFail($validated['kode_barang']);
                 $idRuangAsal = $aset->id_ruang;
-
-                // ──────────────────────────────────────────────────────
-                // 2. Insert log mutasi
-                // ──────────────────────────────────────────────────────
                 $mutasi = Mutasi::create([
                     'kode_barang'         => $validated['kode_barang'],
                     'id_ruang_asal'       => $idRuangAsal,
@@ -138,147 +81,47 @@ class MutasiController extends Controller
                     'id_penanggung_jawab' => $request->user()->id_pengguna,
                     'alasan_mutasi'       => $validated['alasan_mutasi'] ?? null,
                 ]);
-
-                // ──────────────────────────────────────────────────────
-                // 3. Update id_ruang pada aset menjadi ruang tujuan
-                // ──────────────────────────────────────────────────────
-                $aset->update([
-                    'id_ruang' => $validated['id_ruang_tujuan'],
-                ]);
-
+                $aset->update(['id_ruang' => $validated['id_ruang_tujuan']]);
                 return $mutasi;
             });
-
-            // Eager load untuk response
-            $mutasi->load([
-                'aset.masterBarang',
-                'ruangAsal.lokasi',
-                'ruangTujuan.lokasi',
-                'penanggungJawab',
-            ]);
-
-            return response()->json([
-                'status'  => true,
-                'message' => 'Mutasi aset berhasil disimpan.',
-                'data'    => new MutasiResource($mutasi),
-            ], 201);
-
+            $mutasi->load(['aset.masterBarang', 'ruangAsal.lokasi', 'ruangTujuan.lokasi', 'penanggungJawab']);
+            return response()->json(['status' => true, 'message' => 'Mutasi aset berhasil disimpan.', 'data' => new MutasiResource($mutasi)], 201);
         } catch (\Exception $e) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'Gagal menyimpan mutasi aset.',
-                'error'   => $e->getMessage(),
-            ], 500);
+            return response()->json(['status' => false, 'message' => 'Gagal menyimpan mutasi aset.', 'error' => $e->getMessage()], 500);
         }
     }
 
     /**
-     * Tampilkan detail satu mutasi aset.
-     *
-     * @OA\Get(
-     *     path="/mutasi/{id}",
-     *     operationId="showMutasi",
-     *     tags={"Mutasi"},
-     *     summary="Detail mutasi aset",
-     *     description="Mengambil detail satu mutasi aset beserta relasi aset, ruang asal, ruang tujuan, dan penanggung jawab.",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="id", in="path", required=true, description="ID mutasi", @OA\Schema(type="string", example="1")),
-     *     @OA\Response(response=200, description="Detail mutasi berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Detail mutasi berhasil diambil."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_mutasi", type="integer", example=1),
-     *                 @OA\Property(property="kode_barang", type="string", example="BRG-001"),
-     *                 @OA\Property(property="aset", type="object", nullable=true),
-     *                 @OA\Property(property="id_ruang_asal", type="integer", example=1),
-     *                 @OA\Property(property="ruang_asal", type="object", nullable=true),
-     *                 @OA\Property(property="id_ruang_tujuan", type="integer", example=3),
-     *                 @OA\Property(property="ruang_tujuan", type="object", nullable=true),
-     *                 @OA\Property(property="tanggal_mutasi", type="string", format="date", example="2026-04-18"),
-     *                 @OA\Property(property="id_petugas", type="integer", example=1),
-     *                 @OA\Property(property="petugas", type="object", nullable=true),
-     *                 @OA\Property(property="keterangan", type="string", nullable=true, example="Pindah ke lab baru")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(response=401, description="Unauthenticated"),
-     *     @OA\Response(response=403, description="Forbidden"),
-     *     @OA\Response(response=404, description="Mutasi tidak ditemukan")
+     * @OA\Get(path="/mutasi/{id}", operationId="showMutasi", tags={"Mutasi"}, summary="Detail mutasi aset", security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="string", example="1")),
+     *     @OA\Response(response=200, description="OK", @OA\JsonContent(ref="#/components/schemas/MutasiSingleResponse")),
+     *     @OA\Response(response=404, description="Tidak ditemukan")
      * )
      */
     public function show(string $id): JsonResponse
     {
-        $mutasi = Mutasi::with([
-            'aset.masterBarang',
-            'ruangAsal.lokasi',
-            'ruangTujuan.lokasi',
-            'penanggungJawab',
-        ])->find($id);
-
-        if (!$mutasi) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'Mutasi tidak ditemukan.',
-            ], 404);
-        }
-
-        return response()->json([
-            'status'  => true,
-            'message' => 'Detail mutasi berhasil diambil.',
-            'data'    => new MutasiResource($mutasi),
-        ]);
+        $mutasi = Mutasi::with(['aset.masterBarang', 'ruangAsal.lokasi', 'ruangTujuan.lokasi', 'penanggungJawab'])->find($id);
+        if (!$mutasi) { return response()->json(['status' => false, 'message' => 'Mutasi tidak ditemukan.'], 404); }
+        return response()->json(['status' => true, 'message' => 'Detail mutasi berhasil diambil.', 'data' => new MutasiResource($mutasi)]);
     }
 
     /**
-     * Hapus data mutasi.
-     * Catatan: Penghapusan log mutasi ini TIDAK mengembalikan posisi aset ke ruang asal.
-     *
-     * @OA\Delete(
-     *     path="/mutasi/{id}",
-     *     operationId="destroyMutasi",
-     *     tags={"Mutasi"},
-     *     summary="Hapus data mutasi",
-     *     description="Menghapus log data mutasi. Perhatian: penghapusan ini TIDAK mengembalikan posisi aset ke ruang asal.",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="id", in="path", required=true, description="ID mutasi", @OA\Schema(type="string", example="1")),
-     *     @OA\Response(response=200, description="Data mutasi berhasil dihapus",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Data mutasi berhasil dihapus.")
-     *         )
-     *     ),
-     *     @OA\Response(response=401, description="Unauthenticated"),
-     *     @OA\Response(response=403, description="Forbidden"),
-     *     @OA\Response(response=404, description="Mutasi tidak ditemukan"),
-     *     @OA\Response(response=500, description="Gagal menghapus data mutasi")
+     * @OA\Delete(path="/mutasi/{id}", operationId="destroyMutasi", tags={"Mutasi"}, summary="Hapus data mutasi", security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="string", example="1")),
+     *     @OA\Response(response=200, description="OK", @OA\JsonContent(ref="#/components/schemas/MutasiDeleteResponse")),
+     *     @OA\Response(response=404, description="Tidak ditemukan"),
+     *     @OA\Response(response=500, description="Gagal menghapus")
      * )
      */
     public function destroy(string $id): JsonResponse
     {
         $mutasi = Mutasi::find($id);
-
-        if (!$mutasi) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'Mutasi tidak ditemukan.',
-            ], 404);
-        }
-
+        if (!$mutasi) { return response()->json(['status' => false, 'message' => 'Mutasi tidak ditemukan.'], 404); }
         try {
             $mutasi->delete();
-
-            return response()->json([
-                'status'  => true,
-                'message' => 'Data mutasi berhasil dihapus.',
-            ]);
-
+            return response()->json(['status' => true, 'message' => 'Data mutasi berhasil dihapus.']);
         } catch (\Exception $e) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'Gagal menghapus data mutasi.',
-                'error'   => $e->getMessage(),
-            ], 500);
+            return response()->json(['status' => false, 'message' => 'Gagal menghapus data mutasi.', 'error' => $e->getMessage()], 500);
         }
     }
 }

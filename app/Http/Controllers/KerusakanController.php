@@ -9,6 +9,79 @@ use App\Models\Kerusakan;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * ============================================================
+ *  SCHEMA DEFINITIONS – Kerusakan Module
+ * ============================================================
+ *
+ * @OA\Schema(
+ *     schema="PerbaikanItemResource",
+ *     type="object",
+ *     description="Representasi data item perbaikan di dalam kerusakan",
+ *     @OA\Property(property="id_perbaikan", type="integer", example=1),
+ *     @OA\Property(property="id_kerusakan", type="integer", example=1),
+ *     @OA\Property(property="tanggal_perbaikan", type="string", format="date", nullable=true, example="2026-04-18"),
+ *     @OA\Property(property="tanggal_selesai", type="string", format="date", nullable=true, example="2026-04-20"),
+ *     @OA\Property(property="pelaksana", type="string", nullable=true, example="Budi Santoso"),
+ *     @OA\Property(property="biaya", type="number", nullable=true, example=250000),
+ *     @OA\Property(property="status_perbaikan", type="string", example="Selesai"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Ganti layar LCD")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="KerusakanResource",
+ *     type="object",
+ *     description="Representasi data laporan kerusakan",
+ *     @OA\Property(property="id_kerusakan", type="integer", example=1),
+ *     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+ *     @OA\Property(property="aset", type="object", nullable=true),
+ *     @OA\Property(property="tanggal_kerusakan", type="string", format="date", example="2026-04-10"),
+ *     @OA\Property(property="jenis_kerusakan", type="string", example="Ringan"),
+ *     @OA\Property(property="deskripsi", type="string", nullable=true, example="Layar retak"),
+ *     @OA\Property(property="id_pelapor", type="integer", example=1),
+ *     @OA\Property(property="pelapor", type="object", nullable=true),
+ *     @OA\Property(property="status_kerusakan", type="string", example="Dilaporkan"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Perlu segera diperbaiki"),
+ *     @OA\Property(property="perbaikan", type="array", @OA\Items(ref="#/components/schemas/PerbaikanItemResource"))
+ * )
+ *
+ * @OA\Schema(
+ *     schema="StoreKerusakanRequest",
+ *     type="object",
+ *     required={"kode_barang","tanggal_lapor","deskripsi_kerusakan","tingkat_kerusakan"},
+ *     description="Payload untuk membuat laporan kerusakan baru",
+ *     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
+ *     @OA\Property(property="tanggal_lapor", type="string", format="date", example="2026-04-18"),
+ *     @OA\Property(property="deskripsi_kerusakan", type="string", example="Layar monitor berkedip-kedip"),
+ *     @OA\Property(property="tingkat_kerusakan", type="string", enum={"Ringan","Sedang","Berat"}, example="Ringan")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="KerusakanListResponse",
+ *     type="object",
+ *     description="Response wrapper untuk daftar kerusakan",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Daftar kerusakan berhasil diambil."),
+ *     @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/KerusakanResource"))
+ * )
+ *
+ * @OA\Schema(
+ *     schema="KerusakanSingleResponse",
+ *     type="object",
+ *     description="Response wrapper untuk satu kerusakan",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Detail kerusakan berhasil diambil."),
+ *     @OA\Property(property="data", ref="#/components/schemas/KerusakanResource")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="KerusakanDeleteResponse",
+ *     type="object",
+ *     description="Response wrapper untuk penghapusan kerusakan",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Data kerusakan berhasil dihapus.")
+ * )
+ */
 class KerusakanController extends Controller
 {
     /**
@@ -23,34 +96,7 @@ class KerusakanController extends Controller
      *     description="Mengambil daftar semua laporan kerusakan aset beserta relasi aset, pelapor, dan perbaikan.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(response=200, description="Daftar kerusakan berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Daftar kerusakan berhasil diambil."),
-     *             @OA\Property(property="data", type="array",
-     *                 @OA\Items(type="object",
-     *                     @OA\Property(property="id_kerusakan", type="integer", example=1),
-     *                     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
-     *                     @OA\Property(property="aset", type="object", nullable=true),
-     *                     @OA\Property(property="tanggal_kerusakan", type="string", format="date", example="2026-04-10"),
-     *                     @OA\Property(property="jenis_kerusakan", type="string", example="Ringan"),
-     *                     @OA\Property(property="deskripsi", type="string", nullable=true, example="Layar retak"),
-     *                     @OA\Property(property="id_pelapor", type="integer", example=1),
-     *                     @OA\Property(property="pelapor", type="object", nullable=true),
-     *                     @OA\Property(property="status_kerusakan", type="string", example="Dilaporkan"),
-     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Perlu segera diperbaiki"),
-     *                     @OA\Property(property="perbaikan", type="array", @OA\Items(type="object",
-     *                     @OA\Property(property="id_perbaikan", type="integer", example=1),
-     *                     @OA\Property(property="id_kerusakan", type="integer", example=1),
-     *                     @OA\Property(property="tanggal_perbaikan", type="string", format="date", nullable=true, example="2026-04-18"),
-     *                     @OA\Property(property="tanggal_selesai", type="string", format="date", nullable=true, example="2026-04-20"),
-     *                     @OA\Property(property="pelaksana", type="string", nullable=true, example="Budi Santoso"),
-     *                     @OA\Property(property="biaya", type="number", nullable=true, example=250000),
-     *                     @OA\Property(property="status_perbaikan", type="string", example="Selesai"),
-     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Ganti layar LCD")
-     *                 ))
-     *                 )
-     *             )
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/KerusakanListResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden")
@@ -88,41 +134,10 @@ class KerusakanController extends Controller
      *     description="Menyimpan laporan kerusakan aset. Kondisi aset otomatis diubah menjadi 'Rusak Berat' dan status 'Non-Aktif'. ID pelapor diambil dari user yang login.",
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(required=true,
-     *         @OA\JsonContent(
-     *             required={"kode_barang","tanggal_lapor","deskripsi_kerusakan","tingkat_kerusakan"},
-     *             @OA\Property(property="kode_barang", type="string", example="BRG-001"),
-     *             @OA\Property(property="tanggal_lapor", type="string", format="date", example="2026-04-18"),
-     *             @OA\Property(property="deskripsi_kerusakan", type="string", example="Layar monitor berkedip-kedip"),
-     *             @OA\Property(property="tingkat_kerusakan", type="string", enum={"Ringan","Sedang","Berat"}, example="Ringan")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/StoreKerusakanRequest")
      *     ),
      *     @OA\Response(response=201, description="Laporan kerusakan berhasil disimpan",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Laporan kerusakan berhasil disimpan."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_kerusakan", type="integer", example=1),
-     *                 @OA\Property(property="kode_barang", type="string", example="BRG-001"),
-     *                 @OA\Property(property="aset", type="object", nullable=true),
-     *                 @OA\Property(property="tanggal_kerusakan", type="string", format="date", example="2026-04-10"),
-     *                 @OA\Property(property="jenis_kerusakan", type="string", example="Ringan"),
-     *                 @OA\Property(property="deskripsi", type="string", nullable=true, example="Layar retak"),
-     *                 @OA\Property(property="id_pelapor", type="integer", example=1),
-     *                 @OA\Property(property="pelapor", type="object", nullable=true),
-     *                 @OA\Property(property="status_kerusakan", type="string", example="Menunggu Pemeriksaan"),
-     *                 @OA\Property(property="keterangan", type="string", nullable=true, example=null),
-     *                 @OA\Property(property="perbaikan", type="array", @OA\Items(type="object",
-     *                     @OA\Property(property="id_perbaikan", type="integer", example=1),
-     *                     @OA\Property(property="id_kerusakan", type="integer", example=1),
-     *                     @OA\Property(property="tanggal_perbaikan", type="string", format="date", nullable=true, example="2026-04-18"),
-     *                     @OA\Property(property="tanggal_selesai", type="string", format="date", nullable=true, example="2026-04-20"),
-     *                     @OA\Property(property="pelaksana", type="string", nullable=true, example="Budi Santoso"),
-     *                     @OA\Property(property="biaya", type="number", nullable=true, example=250000),
-     *                     @OA\Property(property="status_perbaikan", type="string", example="Selesai"),
-     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Ganti layar LCD")
-     *                 ))
-     *             )
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/KerusakanSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -193,32 +208,7 @@ class KerusakanController extends Controller
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID kerusakan", @OA\Schema(type="string", example="1")),
      *     @OA\Response(response=200, description="Detail kerusakan berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Detail kerusakan berhasil diambil."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_kerusakan", type="integer", example=1),
-     *                 @OA\Property(property="kode_barang", type="string", example="BRG-001"),
-     *                 @OA\Property(property="aset", type="object", nullable=true),
-     *                 @OA\Property(property="tanggal_kerusakan", type="string", format="date", example="2026-04-10"),
-     *                 @OA\Property(property="jenis_kerusakan", type="string", example="Ringan"),
-     *                 @OA\Property(property="deskripsi", type="string", nullable=true, example="Layar retak"),
-     *                 @OA\Property(property="id_pelapor", type="integer", example=1),
-     *                 @OA\Property(property="pelapor", type="object", nullable=true),
-     *                 @OA\Property(property="status_kerusakan", type="string", example="Dilaporkan"),
-     *                 @OA\Property(property="keterangan", type="string", nullable=true, example="Perlu segera diperbaiki"),
-     *                 @OA\Property(property="perbaikan", type="array", @OA\Items(type="object",
-     *                     @OA\Property(property="id_perbaikan", type="integer", example=1),
-     *                     @OA\Property(property="id_kerusakan", type="integer", example=1),
-     *                     @OA\Property(property="tanggal_perbaikan", type="string", format="date", nullable=true, example="2026-04-18"),
-     *                     @OA\Property(property="tanggal_selesai", type="string", format="date", nullable=true, example="2026-04-20"),
-     *                     @OA\Property(property="pelaksana", type="string", nullable=true, example="Budi Santoso"),
-     *                     @OA\Property(property="biaya", type="number", nullable=true, example=250000),
-     *                     @OA\Property(property="status_perbaikan", type="string", example="Selesai"),
-     *                     @OA\Property(property="keterangan", type="string", nullable=true, example="Ganti layar LCD")
-     *                 ))
-     *             )
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/KerusakanSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -259,10 +249,7 @@ class KerusakanController extends Controller
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID kerusakan", @OA\Schema(type="string", example="1")),
      *     @OA\Response(response=200, description="Data kerusakan berhasil dihapus",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Data kerusakan berhasil dihapus.")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/KerusakanDeleteResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),

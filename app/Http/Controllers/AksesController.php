@@ -8,6 +8,72 @@ use App\Http\Resources\AksesResource;
 use App\Models\Akses;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * ============================================================
+ *  SCHEMA DEFINITIONS – Akses Module
+ * ============================================================
+ *
+ * @OA\Schema(
+ *     schema="AksesResource",
+ *     type="object",
+ *     description="Representasi data modul akses / permission",
+ *     @OA\Property(property="id_akses", type="integer", example=1),
+ *     @OA\Property(property="nama_modul", type="string", example="inventaris"),
+ *     @OA\Property(property="hak_buat", type="boolean", example=true),
+ *     @OA\Property(property="hak_baca", type="boolean", example=true),
+ *     @OA\Property(property="hak_ubah", type="boolean", example=true),
+ *     @OA\Property(property="hak_hapus", type="boolean", example=false)
+ * )
+ *
+ * @OA\Schema(
+ *     schema="StoreAksesRequest",
+ *     type="object",
+ *     required={"nama_modul"},
+ *     description="Payload untuk menambah modul akses baru",
+ *     @OA\Property(property="nama_modul", type="string", maxLength=100, example="inventaris"),
+ *     @OA\Property(property="hak_buat", type="boolean", example=true),
+ *     @OA\Property(property="hak_baca", type="boolean", example=true),
+ *     @OA\Property(property="hak_ubah", type="boolean", example=true),
+ *     @OA\Property(property="hak_hapus", type="boolean", example=false)
+ * )
+ *
+ * @OA\Schema(
+ *     schema="UpdateAksesRequest",
+ *     type="object",
+ *     description="Payload untuk memperbarui modul akses",
+ *     @OA\Property(property="nama_modul", type="string", maxLength=100, example="inventaris"),
+ *     @OA\Property(property="hak_buat", type="boolean", example=true),
+ *     @OA\Property(property="hak_baca", type="boolean", example=true),
+ *     @OA\Property(property="hak_ubah", type="boolean", example=false),
+ *     @OA\Property(property="hak_hapus", type="boolean", example=false)
+ * )
+ *
+ * @OA\Schema(
+ *     schema="AksesListResponse",
+ *     type="object",
+ *     description="Response wrapper untuk daftar akses",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Daftar akses berhasil diambil."),
+ *     @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/AksesResource"))
+ * )
+ *
+ * @OA\Schema(
+ *     schema="AksesSingleResponse",
+ *     type="object",
+ *     description="Response wrapper untuk satu akses",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Detail akses berhasil diambil."),
+ *     @OA\Property(property="data", ref="#/components/schemas/AksesResource")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="AksesDeleteResponse",
+ *     type="object",
+ *     description="Response wrapper untuk penghapusan akses",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Akses berhasil dihapus.")
+ * )
+ */
 class AksesController extends Controller
 {
     /**
@@ -20,23 +86,8 @@ class AksesController extends Controller
      *     summary="Daftar semua modul akses",
      *     description="Mengambil daftar semua modul akses / permission.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Daftar akses berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Daftar akses berhasil diambil."),
-     *             @OA\Property(property="data", type="array",
-     *                 @OA\Items(type="object",
-     *                     @OA\Property(property="id_akses", type="integer", example=1),
-     *                     @OA\Property(property="nama_modul", type="string", example="inventaris"),
-     *                     @OA\Property(property="hak_buat", type="boolean", example=true),
-     *                     @OA\Property(property="hak_baca", type="boolean", example=true),
-     *                     @OA\Property(property="hak_ubah", type="boolean", example=true),
-     *                     @OA\Property(property="hak_hapus", type="boolean", example=false)
-     *                 )
-     *             )
-     *         )
+     *     @OA\Response(response=200, description="Daftar akses berhasil diambil",
+     *         @OA\JsonContent(ref="#/components/schemas/AksesListResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden — tidak memiliki hak akses")
@@ -63,32 +114,11 @@ class AksesController extends Controller
      *     summary="Tambah modul akses baru",
      *     description="Menyimpan data modul akses baru beserta hak CRUD-nya.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"nama_modul"},
-     *             @OA\Property(property="nama_modul", type="string", maxLength=100, example="inventaris"),
-     *             @OA\Property(property="hak_buat", type="boolean", example=true),
-     *             @OA\Property(property="hak_baca", type="boolean", example=true),
-     *             @OA\Property(property="hak_ubah", type="boolean", example=true),
-     *             @OA\Property(property="hak_hapus", type="boolean", example=false)
-     *         )
+     *     @OA\RequestBody(required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/StoreAksesRequest")
      *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Akses berhasil ditambahkan",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Akses berhasil ditambahkan."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_akses", type="integer", example=1),
-     *                 @OA\Property(property="nama_modul", type="string", example="inventaris"),
-     *                 @OA\Property(property="hak_buat", type="boolean", example=true),
-     *                 @OA\Property(property="hak_baca", type="boolean", example=true),
-     *                 @OA\Property(property="hak_ubah", type="boolean", example=true),
-     *                 @OA\Property(property="hak_hapus", type="boolean", example=false)
-     *             )
-     *         )
+     *     @OA\Response(response=201, description="Akses berhasil ditambahkan",
+     *         @OA\JsonContent(ref="#/components/schemas/AksesSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -116,28 +146,9 @@ class AksesController extends Controller
      *     summary="Detail modul akses",
      *     description="Mengambil detail satu modul akses berdasarkan ID.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         description="ID akses",
-     *         @OA\Schema(type="string", example="1")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Detail akses berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Detail akses berhasil diambil."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_akses", type="integer", example=1),
-     *                 @OA\Property(property="nama_modul", type="string", example="inventaris"),
-     *                 @OA\Property(property="hak_buat", type="boolean", example=true),
-     *                 @OA\Property(property="hak_baca", type="boolean", example=true),
-     *                 @OA\Property(property="hak_ubah", type="boolean", example=true),
-     *                 @OA\Property(property="hak_hapus", type="boolean", example=false)
-     *             )
-     *         )
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID akses", @OA\Schema(type="string", example="1")),
+     *     @OA\Response(response=200, description="Detail akses berhasil diambil",
+     *         @OA\JsonContent(ref="#/components/schemas/AksesSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -172,38 +183,12 @@ class AksesController extends Controller
      *     summary="Update modul akses",
      *     description="Memperbarui data modul akses berdasarkan ID.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         description="ID akses",
-     *         @OA\Schema(type="string", example="1")
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID akses", @OA\Schema(type="string", example="1")),
+     *     @OA\RequestBody(required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateAksesRequest")
      *     ),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="nama_modul", type="string", maxLength=100, example="inventaris"),
-     *             @OA\Property(property="hak_buat", type="boolean", example=true),
-     *             @OA\Property(property="hak_baca", type="boolean", example=true),
-     *             @OA\Property(property="hak_ubah", type="boolean", example=false),
-     *             @OA\Property(property="hak_hapus", type="boolean", example=false)
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Akses berhasil diperbarui",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Akses berhasil diperbarui."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_akses", type="integer", example=1),
-     *                 @OA\Property(property="nama_modul", type="string", example="inventaris"),
-     *                 @OA\Property(property="hak_buat", type="boolean", example=true),
-     *                 @OA\Property(property="hak_baca", type="boolean", example=true),
-     *                 @OA\Property(property="hak_ubah", type="boolean", example=false),
-     *                 @OA\Property(property="hak_hapus", type="boolean", example=false)
-     *             )
-     *         )
+     *     @OA\Response(response=200, description="Akses berhasil diperbarui",
+     *         @OA\JsonContent(ref="#/components/schemas/AksesSingleResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
@@ -241,20 +226,9 @@ class AksesController extends Controller
      *     summary="Hapus modul akses",
      *     description="Menghapus data modul akses berdasarkan ID.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         description="ID akses",
-     *         @OA\Schema(type="string", example="1")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Akses berhasil dihapus",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Akses berhasil dihapus.")
-     *         )
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID akses", @OA\Schema(type="string", example="1")),
+     *     @OA\Response(response=200, description="Akses berhasil dihapus",
+     *         @OA\JsonContent(ref="#/components/schemas/AksesDeleteResponse")
      *     ),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=403, description="Forbidden"),
