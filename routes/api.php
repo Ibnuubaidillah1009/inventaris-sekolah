@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AksesController;
 use App\Http\Controllers\AsetController;
+use App\Http\Controllers\AsetKondisiController;
+use App\Http\Controllers\AsetStatusController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KategoriController;
@@ -285,6 +287,34 @@ Route::middleware('auth:sanctum')->group(function () {
             ->middleware('cek.hak.akses:aset,hak_ubah');
         Route::delete('/{aset}', [AsetController::class, 'destroy'])
             ->middleware('cek.hak.akses:aset,hak_hapus');
+    });
+
+    // Kondisi Barang
+    Route::prefix('aset-kondisi')->group(function () {
+        Route::get('/', [AsetKondisiController::class, 'index'])
+            ->middleware('cek.hak.akses:kondisi,hak_baca');
+        Route::post('/', [AsetKondisiController::class, 'store'])
+            ->middleware('cek.hak.akses:kondisi,hak_buat');
+        Route::get('/{kondisi}', [AsetKondisiController::class, 'show'])
+            ->middleware('cek.hak.akses:kondisi,hak_baca');
+        Route::put('/{kondisi}', [AsetKondisiController::class, 'update'])
+            ->middleware('cek.hak.akses:kondisi,hak_ubah');
+        Route::delete('/{kondisi}', [AsetKondisiController::class, 'destroy'])
+            ->middleware('cek.hak.akses:kondisi,hak_hapus');
+    });
+
+    // Status Barang
+    Route::prefix('aset-status')->group(function () {
+        Route::get('/', [AsetStatusController::class, 'index'])
+            ->middleware('cek.hak.akses:status_barang,hak_baca');
+        Route::post('/', [AsetStatusController::class, 'store'])
+            ->middleware('cek.hak.akses:status_barang,hak_buat');
+        Route::get('/{statusBarang}', [AsetStatusController::class, 'show'])
+            ->middleware('cek.hak.akses:status_barang,hak_baca');
+        Route::put('/{statusBarang}', [AsetStatusController::class, 'update'])
+            ->middleware('cek.hak.akses:status_barang,hak_ubah');
+        Route::delete('/{statusBarang}', [AsetStatusController::class, 'destroy'])
+            ->middleware('cek.hak.akses:status_barang,hak_hapus');
     });
 
     // =================================================================

@@ -18,6 +18,10 @@ class MasterBarangResource extends JsonResource
             'merek'            => new MerekResource($this->whenLoaded('merek')),
             'id_satuan'        => $this->id_satuan,
             'satuan'           => new SatuanResource($this->whenLoaded('satuan')),
+            'jenis_barang'     => $this->jenis_barang,
+            'stok_minimal'     => $this->stok_minimal,
+            'stok_aktual'      => $this->stok_aktual,
+            'keterangan'       => $this->keterangan,
         ];
     }
 }

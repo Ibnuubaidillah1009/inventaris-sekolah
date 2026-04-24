@@ -27,6 +27,7 @@ class RuangController extends Controller
      *                     @OA\Property(property="id_ruang", type="integer", example=1),
      *                     @OA\Property(property="nama_ruang", type="string", example="Lab Komputer 1"),
      *                     @OA\Property(property="id_lokasi", type="integer", example=1),
+                     @OA\Property(property="keterangan", type="string", example="Ruangan ber-AC"),
      *                     @OA\Property(property="lokasi", type="object", nullable=true,
      *                         @OA\Property(property="id_lokasi", type="integer", example=1),
      *                         @OA\Property(property="nama_lokasi", type="string", example="Gedung A"),
@@ -63,7 +64,8 @@ class RuangController extends Controller
      *         @OA\JsonContent(
      *             required={"nama_ruang","id_lokasi"},
      *             @OA\Property(property="nama_ruang", type="string", maxLength=100, example="Lab Komputer 1"),
-     *             @OA\Property(property="id_lokasi", type="integer", example=1)
+     *             @OA\Property(property="id_lokasi", type="integer", example=1),
+             @OA\Property(property="keterangan", type="string", example="Ruangan ber-AC")
      *         )
      *     ),
      *     @OA\Response(response=201, description="Ruang berhasil ditambahkan",
@@ -74,6 +76,7 @@ class RuangController extends Controller
      *                 @OA\Property(property="id_ruang", type="integer", example=1),
      *                 @OA\Property(property="nama_ruang", type="string", example="Lab Komputer 1"),
      *                 @OA\Property(property="id_lokasi", type="integer", example=1),
+                 @OA\Property(property="keterangan", type="string", example="Ruangan ber-AC"),
      *                 @OA\Property(property="lokasi", type="object", nullable=true,
      *                     @OA\Property(property="id_lokasi", type="integer", example=1),
      *                     @OA\Property(property="nama_lokasi", type="string", example="Gedung A"),
@@ -116,6 +119,7 @@ class RuangController extends Controller
      *                 @OA\Property(property="id_ruang", type="integer", example=1),
      *                 @OA\Property(property="nama_ruang", type="string", example="Lab Komputer 1"),
      *                 @OA\Property(property="id_lokasi", type="integer", example=1),
+                 @OA\Property(property="keterangan", type="string", example="Ruangan ber-AC"),
      *                 @OA\Property(property="lokasi", type="object", nullable=true,
      *                     @OA\Property(property="id_lokasi", type="integer", example=1),
      *                     @OA\Property(property="nama_lokasi", type="string", example="Gedung A"),
@@ -159,7 +163,8 @@ class RuangController extends Controller
      *     @OA\RequestBody(required=true,
      *         @OA\JsonContent(
      *             @OA\Property(property="nama_ruang", type="string", maxLength=100, example="Lab Komputer 2"),
-     *             @OA\Property(property="id_lokasi", type="integer", example=1)
+     *             @OA\Property(property="id_lokasi", type="integer", example=1),
+     *             @OA\Property(property="keterangan", type="string", example="Ruangan ber-AC")
      *         )
      *     ),
      *     @OA\Response(response=200, description="Ruang berhasil diperbarui",
@@ -170,6 +175,7 @@ class RuangController extends Controller
      *                 @OA\Property(property="id_ruang", type="integer", example=1),
      *                 @OA\Property(property="nama_ruang", type="string", example="Lab Komputer 2"),
      *                 @OA\Property(property="id_lokasi", type="integer", example=1),
+                 @OA\Property(property="keterangan", type="string", example="Ruangan ber-AC"),
      *                 @OA\Property(property="lokasi", type="object", nullable=true,
      *                     @OA\Property(property="id_lokasi", type="integer", example=1),
      *                     @OA\Property(property="nama_lokasi", type="string", example="Gedung A"),

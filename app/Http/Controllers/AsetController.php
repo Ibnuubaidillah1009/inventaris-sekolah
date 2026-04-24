@@ -32,7 +32,8 @@ class AsetController extends Controller
      *                     @OA\Property(property="id_ruang", type="integer", nullable=true, example=1),
      *                     @OA\Property(property="nama_ruang", type="string", nullable=true, example="Lab Komputer 1"),
      *                     @OA\Property(property="nilai_residu", type="number", nullable=true, example=500000),
-     *                     @OA\Property(property="kondisi_barang", type="string", example="Baik")
+     *                     @OA\Property(property="kondisi_barang", type="string", example="Baik"),
+                        @OA\Property(property="keterangan", type="string", example="Barang dalam kondisi terawat")
      *                 )
      *             )
      *         )
@@ -48,6 +49,8 @@ class AsetController extends Controller
             'masterBarang.merek',
             'masterBarang.satuan',
             'ruang.lokasi',
+            'kondisi',
+            'statusBarang',
         ])->get();
 
         return response()->json([
@@ -77,7 +80,8 @@ class AsetController extends Controller
      *             @OA\Property(property="kondisi_barang", type="string", enum={"Baik","Rusak Ringan","Rusak Berat"}, example="Baik"),
      *             @OA\Property(property="nilai_residu", type="number", nullable=true, example=500000),
      *             @OA\Property(property="status_ketersediaan", type="string", enum={"Tersedia","Dipinjam","Non-Aktif","Dihapus"}, example="Tersedia"),
-     *             @OA\Property(property="gambar", type="string", nullable=true, example="https://example.com/image.jpg")
+     *             @OA\Property(property="gambar", type="string", nullable=true, example="https://example.com/image.jpg"),
+             @OA\Property(property="keterangan", type="string", example="Barang dalam kondisi terawat")
      *         )
      *     ),
      *     @OA\Response(response=201, description="Aset berhasil ditambahkan",
@@ -91,7 +95,8 @@ class AsetController extends Controller
      *                 @OA\Property(property="id_ruang", type="integer", nullable=true, example=1),
      *                 @OA\Property(property="nama_ruang", type="string", nullable=true, example="Lab Komputer 1"),
      *                 @OA\Property(property="nilai_residu", type="number", nullable=true, example=500000),
-     *                 @OA\Property(property="kondisi_barang", type="string", example="Baik")
+     *                 @OA\Property(property="kondisi_barang", type="string", example="Baik"),
+                 @OA\Property(property="keterangan", type="string", example="Barang dalam kondisi terawat")
      *             )
      *         )
      *     ),
@@ -108,6 +113,8 @@ class AsetController extends Controller
             'masterBarang.merek',
             'masterBarang.satuan',
             'ruang.lokasi',
+            'kondisi',
+            'statusBarang',
         ]);
 
         return response()->json([
@@ -140,6 +147,7 @@ class AsetController extends Controller
      *                 @OA\Property(property="nama_ruang", type="string", nullable=true, example="Lab Komputer 1"),
      *                 @OA\Property(property="nilai_residu", type="number", nullable=true, example=500000),
      *                 @OA\Property(property="kondisi_barang", type="string", example="Baik"),
+                 @OA\Property(property="keterangan", type="string", example="Barang dalam kondisi terawat"),
      *                 @OA\Property(property="aset_bangunan", type="object", nullable=true),
      *                 @OA\Property(property="aset_tanah", type="object", nullable=true)
      *             )
@@ -157,6 +165,8 @@ class AsetController extends Controller
             'masterBarang.merek',
             'masterBarang.satuan',
             'ruang.lokasi',
+            'kondisi',
+            'statusBarang',
             'asetBangunan',
             'asetTanah',
         ])->find($id);
@@ -195,7 +205,8 @@ class AsetController extends Controller
      *             @OA\Property(property="kondisi_barang", type="string", enum={"Baik","Rusak Ringan","Rusak Berat"}, example="Baik"),
      *             @OA\Property(property="nilai_residu", type="number", nullable=true, example=400000),
      *             @OA\Property(property="status_ketersediaan", type="string", enum={"Tersedia","Dipinjam","Non-Aktif","Dihapus"}, example="Tersedia"),
-     *             @OA\Property(property="gambar", type="string", nullable=true, example="https://example.com/image.jpg")
+     *             @OA\Property(property="gambar", type="string", nullable=true, example="https://example.com/image.jpg"),
+             @OA\Property(property="keterangan", type="string", example="Barang dalam kondisi terawat")
      *         )
      *     ),
      *     @OA\Response(response=200, description="Aset berhasil diperbarui",
@@ -209,7 +220,8 @@ class AsetController extends Controller
      *                 @OA\Property(property="id_ruang", type="integer", nullable=true, example=2),
      *                 @OA\Property(property="nama_ruang", type="string", nullable=true, example="Lab Komputer 2"),
      *                 @OA\Property(property="nilai_residu", type="number", nullable=true, example=400000),
-     *                 @OA\Property(property="kondisi_barang", type="string", example="Baik")
+     *                 @OA\Property(property="kondisi_barang", type="string", example="Baik"),
+                 @OA\Property(property="keterangan", type="string", example="Barang dalam kondisi terawat")
      *             )
      *         )
      *     ),
@@ -236,6 +248,8 @@ class AsetController extends Controller
             'masterBarang.merek',
             'masterBarang.satuan',
             'ruang.lokasi',
+            'kondisi',
+            'statusBarang',
         ]);
 
         return response()->json([

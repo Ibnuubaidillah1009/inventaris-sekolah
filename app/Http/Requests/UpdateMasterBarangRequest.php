@@ -16,10 +16,13 @@ class UpdateMasterBarangRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_barang' => ['sometimes', 'required', 'string', 'max:255'],
-            'id_kategori' => ['sometimes', 'required', 'integer', 'exists:kategori,id_kategori'],
-            'id_merek'    => ['sometimes', 'required', 'integer', 'exists:merek,id_merek'],
-            'id_satuan'   => ['sometimes', 'required', 'integer', 'exists:satuan,id_satuan'],
+            'nama_barang'  => ['sometimes', 'required', 'string', 'max:255'],
+            'id_kategori'  => ['sometimes', 'required', 'integer', 'exists:kategori,id_kategori'],
+            'id_merek'     => ['sometimes', 'required', 'integer', 'exists:merek,id_merek'],
+            'id_satuan'    => ['sometimes', 'required', 'integer', 'exists:satuan,id_satuan'],
+            'jenis_barang' => ['sometimes', 'required', 'string', 'in:Inventaris,Consumable'],
+            'stok_minimal' => ['sometimes', 'required', 'integer', 'min:0'],
+            'keterangan'   => ['nullable', 'string'],
         ];
     }
 

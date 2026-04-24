@@ -15,10 +15,9 @@ class UpdateKategoriRequest extends FormRequest
 
     public function rules(): array
     {
-        $id = $this->route('kategori');
-
         return [
-            'nama_kategori' => ['sometimes', 'required', 'string', 'max:100', "unique:kategori,nama_kategori,{$id},id_kategori"],
+            'nama_kategori' => ['sometimes', 'required', 'string', 'max:100'],
+            'keterangan'    => ['nullable', 'string'],
         ];
     }
 

@@ -17,89 +17,44 @@ class Aset extends Model
         'id_master_barang',
         'id_ruang',
         'tanggal_registrasi',
-        'kondisi_barang',
+        'id_status',
         'nilai_residu',
-        'status_ketersediaan',
+        'id_kondisi',
         'gambar',
+        'keterangan',
     ];
 
     // =========================================================================
     // RELASI
     // =========================================================================
 
-    /**
-     * Relasi: Aset belongsTo MasterBarang.
-     */
     public function masterBarang()
     {
         return $this->belongsTo(MasterBarang::class, 'id_master_barang', 'id_master_barang');
     }
 
-    /**
-     * Relasi: Aset belongsTo Ruang.
-     */
     public function ruang()
     {
         return $this->belongsTo(Ruang::class, 'id_ruang', 'id_ruang');
     }
 
-    /**
-     * Relasi: Aset hasOne AsetBangunan (jika tipe aset adalah bangunan).
-     */
     public function asetBangunan()
     {
-        return $this->hasOne(AsetBangunan::class, 'id_aset', 'id_aset');
+        return $this->hasOne(AsetBangunan::class, 'kode_barang', 'kode_barang');
     }
 
-    /**
-     * Relasi: Aset hasOne AsetTanah (jika tipe aset adalah tanah).
-     */
     public function asetTanah()
     {
-        return $this->hasOne(AsetTanah::class, 'id_aset', 'id_aset');
+        return $this->hasOne(AsetTanah::class, 'kode_barang', 'kode_barang');
     }
 
-    /**
-     * Relasi: Aset hasMany DetailPeminjaman.
-     */
-    public function detailPeminjaman()
+    public function kondisi()
     {
-        return $this->hasMany(DetailPeminjaman::class, 'kode_barang', 'kode_barang');
+        return $this->belongsTo(Kondisi::class, 'id_kondisi', 'id_kondisi');
     }
 
-    /**
-     * Relasi: Aset hasMany Mutasi.
-     */
-    public function mutasi()
+    public function statusBarang()
     {
-        return $this->hasMany(Mutasi::class, 'kode_barang', 'kode_barang');
-    }
-
-    /**
-     * Relasi: Aset hasMany Kerusakan.
-     */
-    public function kerusakan()
-    {
-        return $this->hasMany(Kerusakan::class, 'kode_barang', 'kode_barang');
-    }
-
-    /**
-     * Relasi: Aset hasMany PenghapusanAset.
-     */
-    public function penghapusanAset()
-    {
-        return $this->hasMany(PenghapusanAset::class, 'kode_barang', 'kode_barang');
-    }
-
-    // =========================================================================
-    // SCOPES
-    // =========================================================================
-
-    /**
-     * Scope: hanya aset yang tersedia dan kondisi baik.
-     */
-    public function scopeTersedia($query)
-    {
-        return $query->where('status_ketersediaan', 'Tersedia')->where('kondisi_barang', 'Baik');
+        return $this->belongsTo(StatusBarang::class, 'id_status', 'id_status');
     }
 }

@@ -5,14 +5,13 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LokasiResource extends JsonResource
+class StatusBarangResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
         return [
-            'id_lokasi'   => $this->id_lokasi,
-            'nama_lokasi' => $this->nama_lokasi,
-            'alamat'      => $this->alamat,
+            'id_status'  => $this->id_status,
+            'nama_status' => $this->nama_status,
             'keterangan'  => $this->keterangan,
         ];
     }

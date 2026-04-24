@@ -17,6 +17,7 @@ class StoreKategoriRequest extends FormRequest
     {
         return [
             'nama_kategori' => ['required', 'string', 'max:100', 'unique:kategori,nama_kategori'],
+            'keterangan' => ['nullable', 'string'],
         ];
     }
 

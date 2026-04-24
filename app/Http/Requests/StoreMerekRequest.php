@@ -17,14 +17,7 @@ class StoreMerekRequest extends FormRequest
     {
         return [
             'nama_merek' => ['required', 'string', 'max:100', 'unique:merek,nama_merek'],
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'nama_merek.required' => 'Nama merek wajib diisi.',
-            'nama_merek.unique'   => 'Nama merek sudah ada.',
+            'keterangan' => ['nullable', 'string'],
         ];
     }
 

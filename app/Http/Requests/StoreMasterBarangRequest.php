@@ -16,23 +16,22 @@ class StoreMasterBarangRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_barang' => ['required', 'string', 'max:255'],
-            'id_kategori' => ['required', 'integer', 'exists:kategori,id_kategori'],
-            'id_merek'    => ['required', 'integer', 'exists:merek,id_merek'],
-            'id_satuan'   => ['required', 'integer', 'exists:satuan,id_satuan'],
+            'nama_barang'  => ['required', 'string', 'max:255'],
+            'id_kategori'  => ['required', 'integer', 'exists:kategori,id_kategori'],
+            'id_merek'     => ['required', 'integer', 'exists:merek,id_merek'],
+            'id_satuan'    => ['required', 'integer', 'exists:satuan,id_satuan'],
+            'jenis_barang' => ['required', 'string', 'in:Inventaris,Consumable'],
+            'stok_minimal' => ['required', 'integer', 'min:0'],
+            'keterangan'   => ['nullable', 'string'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'nama_barang.required' => 'Nama barang wajib diisi.',
-            'id_kategori.required' => 'Kategori wajib dipilih.',
-            'id_kategori.exists'   => 'Kategori tidak ditemukan.',
-            'id_merek.required'    => 'Merek wajib dipilih.',
-            'id_merek.exists'      => 'Merek tidak ditemukan.',
-            'id_satuan.required'   => 'Satuan wajib dipilih.',
-            'id_satuan.exists'     => 'Satuan tidak ditemukan.',
+            'id_kategori.exists' => 'Kategori tidak ditemukan.',
+            'id_merek.exists'    => 'Merek tidak ditemukan.',
+            'id_satuan.exists'   => 'Satuan tidak ditemukan.',
         ];
     }
 

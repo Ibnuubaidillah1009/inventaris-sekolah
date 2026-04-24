@@ -10,15 +10,20 @@ class AsetResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'kode_barang'          => $this->kode_barang,
-            'id_master_barang' => $this->id_master_barang,
-            'master_barang'    => new MasterBarangResource($this->whenLoaded('masterBarang')),
-            'id_ruang'         => $this->id_ruang,
-            'nama_ruang'       => $this->ruang->nama_ruang,
-            'nilai_residu'     => $this->nilai_residu,
-            'kondisi_barang'   => $this->kondisi_barang,
-            'aset_bangunan'    => new AsetBangunanResource($this->whenLoaded('asetBangunan')),
-            'aset_tanah'       => new AsetTanahResource($this->whenLoaded('asetTanah')),
+            'kode_barang'         => $this->kode_barang,
+            'id_master_barang'    => $this->id_master_barang,
+            'master_barang'       => new MasterBarangResource($this->whenLoaded('masterBarang')),
+            'id_ruang'            => $this->id_ruang,
+            'ruang'               => new RuangResource($this->whenLoaded('ruang')),
+            'tanggal_registrasi'  => $this->tanggal_registrasi,
+            'id_kondisi'          => $this->id_kondisi,
+            'kondisi'             => new KondisiResource($this->whenLoaded('kondisi')),
+            'nilai_residu'        => $this->nilai_residu,
+            'id_status'           => $this->id_status,
+            'status_barang'       => new StatusBarangResource($this->whenLoaded('statusBarang')),
+            'gambar'              => $this->gambar,
+            'keterangan'          => $this->keterangan,
         ];
     }
 }
+

@@ -11,81 +11,59 @@ use Illuminate\Http\JsonResponse;
 class LokasiController extends Controller
 {
     /**
+     * Tampilkan daftar all lokasi.
+     *
      * @OA\Get(
      *     path="/lokasi",
      *     operationId="indexLokasi",
      *     tags={"Lokasi"},
-     *     summary="Daftar semua lokasi",
-     *     description="Mengambil daftar semua lokasi beserta relasi ruang.",
+     *     summary="Daftar lokasi",
+     *     description="Mengambil daftar semua lokasi.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(response=200, description="Daftar lokasi berhasil diambil",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Daftar lokasi berhasil diambil."),
-     *             @OA\Property(property="data", type="array",
-     *                 @OA\Items(type="object",
-     *                     @OA\Property(property="id_lokasi", type="integer", example=1),
-     *                     @OA\Property(property="nama_lokasi", type="string", example="Gedung A"),
-     *                     @OA\Property(property="alamat", type="string", nullable=true, example="Jl. Pendidikan No. 1"),
-     *                     @OA\Property(property="ruang", type="array", @OA\Items(type="object",
-     *                         @OA\Property(property="id_ruang", type="integer", example=1),
-     *                         @OA\Property(property="nama_ruang", type="string", example="Lab Komputer 1"),
-     *                         @OA\Property(property="id_lokasi", type="integer", example=1)
-     *                     ))
-     *                 )
-     *             )
+     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
-     *     ),
-     *     @OA\Response(response=401, description="Unauthenticated"),
-     *     @OA\Response(response=403, description="Forbidden")
+     *     )
      * )
      */
     public function index(): JsonResponse
     {
-        $data = Lokasi::with('ruang')->get();
-
+        $lokasi = Lokasi::all();
         return response()->json([
             'status'  => true,
             'message' => 'Daftar lokasi berhasil diambil.',
-            'data'    => LokasiResource::collection($data),
+            'data'    => LokasiResource::collection($lokasi),
         ]);
     }
 
     /**
+     * Simpan lokasi baru.
+     *
      * @OA\Post(
      *     path="/lokasi",
      *     operationId="storeLokasi",
      *     tags={"Lokasi"},
-     *     summary="Tambah lokasi baru",
-     *     description="Menyimpan data lokasi / gedung baru.",
+     *     summary="Tambah lokasi",
+     *     description="Menyimpan data lokasi baru.",
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(required=true,
      *         @OA\JsonContent(
      *             required={"nama_lokasi"},
-     *             @OA\Property(property="nama_lokasi", type="string", maxLength=255, example="Gedung A"),
-     *             @OA\Property(property="alamat", type="string", nullable=true, example="Jl. Pendidikan No. 1")
+     *             @OA\Property(property="nama_lokasi", type="string", example="Gedung A"),
+     *             @OA\Property(property="alamat", type="string", example="Jl. Pendidikan No.1"),
+     *             @OA\Property(property="keterangan", type="string", example="Utama")
      *         )
      *     ),
-     *     @OA\Response(response=201, description="Lokasi berhasil ditambahkan",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Lokasi berhasil ditambahkan."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_lokasi", type="integer", example=1),
-     *                 @OA\Property(property="nama_lokasi", type="string", example="Gedung A"),
-     *                 @OA\Property(property="alamat", type="string", nullable=true, example="Jl. Pendidikan No. 1")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(response=401, description="Unauthenticated"),
-     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=201, description="Lokasi berhasil ditambahkan"),
      *     @OA\Response(response=422, description="Validasi gagal")
      * )
      */
     public function store(StoreLokasiRequest $request): JsonResponse
     {
         $lokasi = Lokasi::create($request->validated());
-
         return response()->json([
             'status'  => true,
             'message' => 'Lokasi berhasil ditambahkan.',
@@ -94,46 +72,26 @@ class LokasiController extends Controller
     }
 
     /**
+     * Tampilkan detail lokasi.
+     *
      * @OA\Get(
      *     path="/lokasi/{id}",
      *     operationId="showLokasi",
      *     tags={"Lokasi"},
      *     summary="Detail lokasi",
-     *     description="Mengambil detail satu lokasi beserta daftar ruang.",
+     *     description="Mengambil detail satu lokasi.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="id", in="path", required=true, description="ID lokasi", @OA\Schema(type="string", example="1")),
-     *     @OA\Response(response=200, description="Detail lokasi berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Detail lokasi berhasil diambil."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_lokasi", type="integer", example=1),
-     *                 @OA\Property(property="nama_lokasi", type="string", example="Gedung A"),
-     *                 @OA\Property(property="alamat", type="string", nullable=true, example="Jl. Pendidikan No. 1"),
-     *                 @OA\Property(property="ruang", type="array", @OA\Items(type="object",
-     *                     @OA\Property(property="id_ruang", type="integer", example=1),
-     *                     @OA\Property(property="nama_ruang", type="string", example="Lab Komputer 1"),
-     *                     @OA\Property(property="id_lokasi", type="integer", example=1)
-     *                 ))
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(response=401, description="Unauthenticated"),
-     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID lokasi", @OA\Schema(type="integer", example=1)),
+     *     @OA\Response(response=200, description="Detail lokasi berhasil diambil"),
      *     @OA\Response(response=404, description="Lokasi tidak ditemukan")
      * )
      */
-    public function show(string $id): JsonResponse
+    public function show(int $id): JsonResponse
     {
         $lokasi = Lokasi::with('ruang')->find($id);
-
         if (!$lokasi) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'Lokasi tidak ditemukan.',
-            ], 404);
+            return response()->json(['status' => false, 'message' => 'Lokasi tidak ditemukan.'], 404);
         }
-
         return response()->json([
             'status'  => true,
             'message' => 'Detail lokasi berhasil diambil.',
@@ -142,50 +100,33 @@ class LokasiController extends Controller
     }
 
     /**
+     * Update lokasi.
+     *
      * @OA\Put(
      *     path="/lokasi/{id}",
      *     operationId="updateLokasi",
      *     tags={"Lokasi"},
      *     summary="Update lokasi",
-     *     description="Memperbarui data lokasi berdasarkan ID.",
+     *     description="Memperbarui data lokasi.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="id", in="path", required=true, description="ID lokasi", @OA\Schema(type="string", example="1")),
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID lokasi", @OA\Schema(type="integer", example=1)),
      *     @OA\RequestBody(required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="nama_lokasi", type="string", maxLength=255, example="Gedung B"),
-     *             @OA\Property(property="alamat", type="string", nullable=true, example="Jl. Pendidikan No. 2")
+     *             @OA\Property(property="nama_lokasi", type="string", example="Gedung A Updated"),
+     *             @OA\Property(property="keterangan", type="string", example="Updated info")
      *         )
      *     ),
-     *     @OA\Response(response=200, description="Lokasi berhasil diperbarui",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Lokasi berhasil diperbarui."),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id_lokasi", type="integer", example=1),
-     *                 @OA\Property(property="nama_lokasi", type="string", example="Gedung B"),
-     *                 @OA\Property(property="alamat", type="string", nullable=true, example="Jl. Pendidikan No. 2")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(response=401, description="Unauthenticated"),
-     *     @OA\Response(response=403, description="Forbidden"),
-     *     @OA\Response(response=404, description="Lokasi tidak ditemukan"),
-     *     @OA\Response(response=422, description="Validasi gagal")
+     *     @OA\Response(response=200, description="Lokasi berhasil diperbarui"),
+     *     @OA\Response(response=404, description="Lokasi tidak ditemukan")
      * )
      */
-    public function update(UpdateLokasiRequest $request, string $id): JsonResponse
+    public function update(UpdateLokasiRequest $request, int $id): JsonResponse
     {
         $lokasi = Lokasi::find($id);
-
         if (!$lokasi) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'Lokasi tidak ditemukan.',
-            ], 404);
+            return response()->json(['status' => false, 'message' => 'Lokasi tidak ditemukan.'], 404);
         }
-
         $lokasi->update($request->validated());
-
         return response()->json([
             'status'  => true,
             'message' => 'Lokasi berhasil diperbarui.',
@@ -194,41 +135,26 @@ class LokasiController extends Controller
     }
 
     /**
+     * Hapus lokasi.
+     *
      * @OA\Delete(
      *     path="/lokasi/{id}",
      *     operationId="destroyLokasi",
      *     tags={"Lokasi"},
      *     summary="Hapus lokasi",
-     *     description="Menghapus data lokasi berdasarkan ID.",
+     *     description="Menghapus lokasi.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(name="id", in="path", required=true, description="ID lokasi", @OA\Schema(type="string", example="1")),
-     *     @OA\Response(response=200, description="Lokasi berhasil dihapus",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Lokasi berhasil dihapus.")
-     *         )
-     *     ),
-     *     @OA\Response(response=401, description="Unauthenticated"),
-     *     @OA\Response(response=403, description="Forbidden"),
-     *     @OA\Response(response=404, description="Lokasi tidak ditemukan")
+     *     @OA\Parameter(name="id", in="path", required=true, description="ID lokasi", @OA\Schema(type="integer", example=1)),
+     *     @OA\Response(response=200, description="Lokasi berhasil dihapus")
      * )
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $lokasi = Lokasi::find($id);
-
         if (!$lokasi) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'Lokasi tidak ditemukan.',
-            ], 404);
+            return response()->json(['status' => false, 'message' => 'Lokasi tidak ditemukan.'], 404);
         }
-
         $lokasi->delete();
-
-        return response()->json([
-            'status'  => true,
-            'message' => 'Lokasi berhasil dihapus.',
-        ]);
+        return response()->json(['status' => true, 'message' => 'Lokasi berhasil dihapus.']);
     }
 }

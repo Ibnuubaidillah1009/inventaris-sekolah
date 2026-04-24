@@ -16,15 +16,8 @@ class StoreSatuanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_satuan' => ['required', 'string', 'max:100', 'unique:satuan,nama_satuan'],
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'nama_satuan.required' => 'Nama satuan wajib diisi.',
-            'nama_satuan.unique'   => 'Nama satuan sudah ada.',
+            'nama_satuan' => ['required', 'string', 'max:50', 'unique:satuan,nama_satuan'],
+            'keterangan'  => ['nullable', 'string'],
         ];
     }
 

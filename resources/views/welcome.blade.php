@@ -311,6 +311,7 @@
         .nav-method.get { background: var(--green-bg); color: var(--green); }
         .nav-method.post { background: var(--blue-bg); color: var(--blue); }
         .nav-method.put { background: var(--yellow-bg); color: var(--yellow); }
+        .nav-method.patch { background: var(--orange-bg); color: var(--orange); }
         .nav-method.delete { background: var(--red-bg); color: var(--red); }
 
         .nav-path {
@@ -552,6 +553,7 @@
         .method-badge.get { background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
         .method-badge.post { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(59,130,246,0.2); }
         .method-badge.put { background: var(--yellow-bg); color: var(--yellow); border: 1px solid rgba(245,158,11,0.2); }
+        .method-badge.patch { background: var(--orange-bg); color: var(--orange); border: 1px solid rgba(249,115,22,0.2); }
         .method-badge.delete { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
 
         .endpoint-path {
@@ -1183,15 +1185,15 @@ const API_DATA = [
         endpoints: [
             // KATEGORI
             { method: "GET", path: "/api/kategori", summary: "Daftar kategori", auth: true, desc: "Mengambil semua data kategori barang.", request: null, response: { status: 200, body: { status: true, message: "Daftar kategori berhasil diambil.", data: [{ id_kategori: 1, nama_kategori: "Elektronik" }] } }, errors: [] },
-            { method: "POST", path: "/api/kategori", summary: "Tambah kategori", auth: true, desc: "Menambahkan kategori barang baru.", body: [{ name: "nama_kategori", type: "string", required: true, desc: "Nama kategori (unik)" }], request: { nama_kategori: "Furnitur" }, response: { status: 201, body: { status: true, message: "Kategori berhasil ditambahkan.", data: { id_kategori: 2, nama_kategori: "Furnitur" } } }, errors: [] },
+            { method: "POST", path: "/api/kategori", summary: "Tambah kategori", auth: true, desc: "Menambahkan kategori barang baru.", body: [{ name: "nama_kategori", type: "string", required: true, desc: "Nama kategori (unik)" }, { name: "keterangan", type: "string", required: false, desc: "Keterangan tambahan" }], request: { nama_kategori: "Furnitur", keterangan: "Barang mebel sekolah" }, response: { status: 201, body: { status: true, message: "Kategori berhasil ditambahkan.", data: { id_kategori: 2, nama_kategori: "Furnitur" } } }, errors: [] },
             { method: "GET", path: "/api/kategori/{id}", summary: "Detail kategori", auth: true, desc: "Mengambil detail satu kategori.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID kategori" }], request: null, response: { status: 200, body: { status: true, message: "Detail kategori berhasil diambil.", data: { id_kategori: 1, nama_kategori: "Elektronik" } } }, errors: [{ status: 404, body: { status: false, message: "Kategori tidak ditemukan." } }] },
-            { method: "PUT", path: "/api/kategori/{id}", summary: "Update kategori", auth: true, desc: "Memperbarui data kategori.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID kategori" }], body: [{ name: "nama_kategori", type: "string", required: true, desc: "Nama kategori" }], request: { nama_kategori: "Elektronik Updated" }, response: { status: 200, body: { status: true, message: "Kategori berhasil diperbarui." } }, errors: [] },
+            { method: "PUT", path: "/api/kategori/{id}", summary: "Update kategori", auth: true, desc: "Memperbarui data kategori.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID kategori" }], body: [{ name: "nama_kategori", type: "string", required: true, desc: "Nama kategori" }, { name: "keterangan", type: "string", required: false, desc: "Keterangan" }], request: { nama_kategori: "Elektronik Updated" }, response: { status: 200, body: { status: true, message: "Kategori berhasil diperbarui." } }, errors: [] },
             { method: "DELETE", path: "/api/kategori/{id}", summary: "Hapus kategori", auth: true, desc: "Menghapus data kategori.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID kategori" }], request: null, response: { status: 200, body: { status: true, message: "Kategori berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Kategori tidak ditemukan." } }] },
             // MEREK
             { method: "GET", path: "/api/merek", summary: "Daftar merek", auth: true, desc: "Mengambil semua data merek barang.", request: null, response: { status: 200, body: { status: true, message: "Daftar merek berhasil diambil.", data: [{ id_merek: 1, nama_merek: "Lenovo" }] } }, errors: [] },
-            { method: "POST", path: "/api/merek", summary: "Tambah merek", auth: true, desc: "Menambahkan merek barang baru.", body: [{ name: "nama_merek", type: "string", required: true, desc: "Nama merek (unik)" }], request: { nama_merek: "Epson" }, response: { status: 201, body: { status: true, message: "Merek berhasil ditambahkan." } }, errors: [] },
+            { method: "POST", path: "/api/merek", summary: "Tambah merek", auth: true, desc: "Menambahkan merek barang baru.", body: [{ name: "nama_merek", type: "string", required: true, desc: "Nama merek (unik)" }, { name: "keterangan", type: "string", required: false, desc: "Keterangan" }], request: { nama_merek: "Epson" }, response: { status: 201, body: { status: true, message: "Merek berhasil ditambahkan." } }, errors: [] },
             { method: "GET", path: "/api/merek/{id}", summary: "Detail merek", auth: true, desc: "Mengambil detail satu merek.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID merek" }], request: null, response: { status: 200, body: { status: true, message: "Detail merek berhasil diambil.", data: { id_merek: 1, nama_merek: "Lenovo" } } }, errors: [{ status: 404, body: { status: false, message: "Merek tidak ditemukan." } }] },
-            { method: "PUT", path: "/api/merek/{id}", summary: "Update merek", auth: true, desc: "Memperbarui data merek.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID merek" }], body: [{ name: "nama_merek", type: "string", required: true, desc: "Nama merek" }], request: { nama_merek: "Lenovo Updated" }, response: { status: 200, body: { status: true, message: "Merek berhasil diperbarui." } }, errors: [] },
+            { method: "PUT", path: "/api/merek/{id}", summary: "Update merek", auth: true, desc: "Memperbarui data merek.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID merek" }], body: [{ name: "nama_merek", type: "string", required: true, desc: "Nama merek" }, { name: "keterangan", type: "string", required: false, desc: "Keterangan" }], request: { nama_merek: "Lenovo Updated" }, response: { status: 200, body: { status: true, message: "Merek berhasil diperbarui." } }, errors: [] },
             { method: "DELETE", path: "/api/merek/{id}", summary: "Hapus merek", auth: true, desc: "Menghapus data merek.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID merek" }], request: null, response: { status: 200, body: { status: true, message: "Merek berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Merek tidak ditemukan." } }] },
             // SATUAN
             { method: "GET", path: "/api/satuan", summary: "Daftar satuan", auth: true, desc: "Mengambil semua data satuan.", request: null, response: { status: 200, body: { status: true, message: "Daftar satuan berhasil diambil.", data: [{ id_satuan: 1, nama_satuan: "Unit" }] } }, errors: [] },
@@ -1206,7 +1208,8 @@ const API_DATA = [
                   { name: "nama_barang", type: "string", required: true, desc: "Nama barang" },
                   { name: "id_kategori", type: "integer", required: true, desc: "ID kategori" },
                   { name: "id_merek", type: "integer", required: true, desc: "ID merek" },
-                  { name: "id_satuan", type: "integer", required: true, desc: "ID satuan" }
+                  { name: "id_satuan", type: "integer", required: true, desc: "ID satuan" },
+                  { name: "keterangan", type: "string", required: false, desc: "Keterangan" }
               ],
               request: { nama_barang: "Proyektor Epson EB-X51", id_kategori: 1, id_merek: 2, id_satuan: 1 },
               response: { status: 201, body: { status: true, message: "Master barang berhasil ditambahkan.", data: { id_master_barang: 2, nama_barang: "Proyektor Epson EB-X51" } } }, errors: [] },
@@ -1216,7 +1219,8 @@ const API_DATA = [
                   { name: "nama_barang", type: "string", required: true, desc: "Nama barang" },
                   { name: "id_kategori", type: "integer", required: true, desc: "ID kategori" },
                   { name: "id_merek", type: "integer", required: true, desc: "ID merek" },
-                  { name: "id_satuan", type: "integer", required: true, desc: "ID satuan" }
+                  { name: "id_satuan", type: "integer", required: true, desc: "ID satuan" },
+                  { name: "keterangan", type: "string", required: false, desc: "Keterangan" }
               ],
               request: { nama_barang: "Laptop ThinkPad X1", id_kategori: 1, id_merek: 1, id_satuan: 1 },
               response: { status: 200, body: { status: true, message: "Master barang berhasil diperbarui." } }, errors: [] },
@@ -1231,44 +1235,102 @@ const API_DATA = [
         description: "Manajemen data aset: Lokasi, Ruang, dan Aset.",
         endpoints: [
             { method: "GET", path: "/api/lokasi", summary: "Daftar lokasi", auth: true, desc: "Mengambil semua data lokasi.", request: null, response: { status: 200, body: { status: true, message: "Daftar lokasi berhasil diambil.", data: [{ id_lokasi: 1, nama_lokasi: "Gedung A" }] } }, errors: [] },
-            { method: "POST", path: "/api/lokasi", summary: "Tambah lokasi", auth: true, desc: "Menambahkan lokasi baru.", body: [{ name: "nama_lokasi", type: "string", required: true, desc: "Nama lokasi" }, { name: "alamat", type: "string", required: false, desc: "Alamat lokasi" }], request: { nama_lokasi: "Gedung B", alamat: "Jl. Pendidikan No.1" }, response: { status: 201, body: { status: true, message: "Lokasi berhasil ditambahkan." } }, errors: [] },
+            { method: "POST", path: "/api/lokasi", summary: "Tambah lokasi", auth: true, desc: "Menambahkan lokasi baru.", body: [{ name: "nama_lokasi", type: "string", required: true, desc: "Nama lokasi" }, { name: "alamat", type: "string", required: false, desc: "Alamat lokasi" }, { name: "keterangan", type: "string", required: false, desc: "Keterangan" }], request: { nama_lokasi: "Gedung B", alamat: "Jl. Pendidikan No.1" }, response: { status: 201, body: { status: true, message: "Lokasi berhasil ditambahkan." } }, errors: [] },
             { method: "GET", path: "/api/lokasi/{id}", summary: "Detail lokasi", auth: true, desc: "Mengambil detail satu lokasi beserta daftar ruangnya.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID lokasi" }], request: null, response: { status: 200, body: { status: true, message: "Detail lokasi berhasil diambil.", data: { id_lokasi: 1, nama_lokasi: "Gedung A", ruang: [{ id_ruang: 1, nama_ruang: "Lab Komputer 1" }] } } }, errors: [{ status: 404, body: { status: false, message: "Lokasi tidak ditemukan." } }] },
-            { method: "PUT", path: "/api/lokasi/{id}", summary: "Update lokasi", auth: true, desc: "Memperbarui data lokasi.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID lokasi" }], body: [{ name: "nama_lokasi", type: "string", required: true, desc: "Nama lokasi" }, { name: "alamat", type: "string", required: false, desc: "Alamat" }], request: { nama_lokasi: "Gedung A Updated" }, response: { status: 200, body: { status: true, message: "Lokasi berhasil diperbarui." } }, errors: [] },
+            { method: "PUT", path: "/api/lokasi/{id}", summary: "Update lokasi", auth: true, desc: "Memperbarui data lokasi.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID lokasi" }], body: [{ name: "nama_lokasi", type: "string", required: true, desc: "Nama lokasi" }, { name: "alamat", type: "string", required: false, desc: "Alamat" }, { name: "keterangan", type: "string", required: false, desc: "Keterangan" }], request: { nama_lokasi: "Gedung A Updated" }, response: { status: 200, body: { status: true, message: "Lokasi berhasil diperbarui." } }, errors: [] },
             { method: "DELETE", path: "/api/lokasi/{id}", summary: "Hapus lokasi", auth: true, desc: "Menghapus data lokasi.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID lokasi" }], request: null, response: { status: 200, body: { status: true, message: "Lokasi berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Lokasi tidak ditemukan." } }] },
             { method: "GET", path: "/api/ruang", summary: "Daftar ruang", auth: true, desc: "Mengambil semua data ruang beserta lokasinya.", request: null, response: { status: 200, body: { status: true, message: "Daftar ruang berhasil diambil.", data: [{ id_ruang: 1, nama_ruang: "Lab Komputer 1", lokasi: { nama_lokasi: "Gedung A" } }] } }, errors: [] },
-            { method: "POST", path: "/api/ruang", summary: "Tambah ruang", auth: true, desc: "Menambahkan ruang baru.", body: [{ name: "nama_ruang", type: "string", required: true, desc: "Nama ruang" }, { name: "id_lokasi", type: "integer", required: true, desc: "ID lokasi" }], request: { nama_ruang: "Lab Komputer 2", id_lokasi: 1 }, response: { status: 201, body: { status: true, message: "Ruang berhasil ditambahkan." } }, errors: [] },
+            { method: "POST", path: "/api/ruang", summary: "Tambah ruang", auth: true, desc: "Menambahkan ruang baru.", body: [{ name: "nama_ruang", type: "string", required: true, desc: "Nama ruang" }, { name: "id_lokasi", type: "integer", required: true, desc: "ID lokasi" }, { name: "keterangan", type: "string", required: false, desc: "Keterangan" }], request: { nama_ruang: "Lab Komputer 2", id_lokasi: 1 }, response: { status: 201, body: { status: true, message: "Ruang berhasil ditambahkan." } }, errors: [] },
             { method: "GET", path: "/api/ruang/{id}", summary: "Detail ruang", auth: true, desc: "Mengambil detail satu ruang beserta lokasinya.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID ruang" }], request: null, response: { status: 200, body: { status: true, message: "Detail ruang berhasil diambil.", data: { id_ruang: 1, nama_ruang: "Lab Komputer 1", lokasi: { nama_lokasi: "Gedung A" } } } }, errors: [{ status: 404, body: { status: false, message: "Ruang tidak ditemukan." } }] },
-            { method: "PUT", path: "/api/ruang/{id}", summary: "Update ruang", auth: true, desc: "Memperbarui data ruang.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID ruang" }], body: [{ name: "nama_ruang", type: "string", required: true, desc: "Nama ruang" }, { name: "id_lokasi", type: "integer", required: true, desc: "ID lokasi" }], request: { nama_ruang: "Lab Komputer 1 Updated", id_lokasi: 1 }, response: { status: 200, body: { status: true, message: "Ruang berhasil diperbarui." } }, errors: [] },
+            { method: "PUT", path: "/api/ruang/{id}", summary: "Update ruang", auth: true, desc: "Memperbarui data ruang.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID ruang" }], body: [{ name: "nama_ruang", type: "string", required: true, desc: "Nama ruang" }, { name: "id_lokasi", type: "integer", required: true, desc: "ID lokasi" }, { name: "keterangan", type: "string", required: false, desc: "Keterangan" }], request: { nama_ruang: "Lab Komputer 1 Updated", id_lokasi: 1 }, response: { status: 200, body: { status: true, message: "Ruang berhasil diperbarui." } }, errors: [] },
             { method: "DELETE", path: "/api/ruang/{id}", summary: "Hapus ruang", auth: true, desc: "Menghapus data ruang.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID ruang" }], request: null, response: { status: 200, body: { status: true, message: "Ruang berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Ruang tidak ditemukan." } }] },
-            { method: "GET", path: "/api/aset", summary: "Daftar aset", auth: true, desc: "Mengambil seluruh data aset beserta relasi master barang, kategori, merek, satuan, ruang, dan lokasi.", request: null,
-              response: { status: 200, body: { status: true, message: "Daftar aset berhasil diambil.", data: [{ kode_barang: "BRG-2026-001", id_master_barang: 1, master_barang: { nama_barang: "Laptop Lenovo ThinkPad" }, id_ruang: 1, ruang: { nama_ruang: "Lab Komputer 1" }, tanggal_registrasi: "2026-04-16", kondisi_barang: "Baik", nilai_residu: 0, status_ketersediaan: "Tersedia", gambar: null }] } }, errors: [] },
+            { method: "GET", path: "/api/aset", summary: "Daftar aset", auth: true, desc: "Mengambil seluruh data aset beserta relasi master barang, kategori, merek, satuan, ruang, lokasi, kondisi, dan status barang.", request: null,
+              response: { status: 200, body: { status: true, message: "Daftar aset berhasil diambil.", data: [{ kode_barang: "BRG-2026-001", id_master_barang: 1, master_barang: { nama_barang: "Laptop Lenovo ThinkPad" }, id_ruang: 1, ruang: { nama_ruang: "Lab Komputer 1" }, tanggal_registrasi: "2026-04-16", id_kondisi: 1, kondisi: { id_kondisi: 1, nama_kondisi: "Baik", keterangan: null }, nilai_residu: 0, id_status: 1, status_barang: { id_status: 1, nama_status: "Tersedia", keterangan: null }, gambar: null }] } }, errors: [] },
             { method: "POST", path: "/api/aset", summary: "Tambah aset", auth: true, desc: "Mendaftarkan aset baru ke dalam sistem inventaris.",
               body: [
                   { name: "kode_barang", type: "string", required: true, desc: "Kode barang unik, maks 50 karakter" },
                   { name: "id_master_barang", type: "integer", required: true, desc: "ID master barang" },
                   { name: "id_ruang", type: "integer", required: false, desc: "ID ruang penempatan aset" },
                   { name: "tanggal_registrasi", type: "date", required: true, desc: "Tanggal registrasi (Y-m-d)" },
-                  { name: "kondisi_barang", type: "string", required: true, desc: "Kondisi: Baik | Rusak Ringan | Rusak Berat" },
+                  { name: "id_kondisi", type: "integer", required: true, desc: "ID kondisi barang (FK ke tabel kondisi)" },
                   { name: "nilai_residu", type: "numeric", required: false, desc: "Nilai residu aset (default: 0)" },
-                  { name: "status_ketersediaan", type: "string", required: false, desc: "Status: Tersedia | Dipinjam | Non-Aktif | Dihapus (default: Tersedia)" },
-                  { name: "gambar", type: "string", required: false, desc: "Path gambar aset, maks 255 karakter" }
+                  { name: "id_status", type: "integer", required: false, desc: "ID status barang (FK ke tabel status_barang)" },
+                  { name: "gambar", type: "string", required: false, desc: "Path gambar aset, maks 255 karakter" },
+                  { name: "keterangan", type: "string", required: false, desc: "Keterangan" }
               ],
-              request: { kode_barang: "BRG-2026-005", id_master_barang: 1, id_ruang: 1, tanggal_registrasi: "2026-04-16", kondisi_barang: "Baik", nilai_residu: 0, status_ketersediaan: "Tersedia" },
-              response: { status: 201, body: { status: true, message: "Aset berhasil ditambahkan.", data: { kode_barang: "BRG-2026-005", kondisi_barang: "Baik", status_ketersediaan: "Tersedia" } } }, errors: [{ status: 422, body: { status: false, message: "Validasi gagal.", errors: { kode_barang: ["Kode barang sudah digunakan."] } } }] },
-            { method: "GET", path: "/api/aset/{id}", summary: "Detail aset", auth: true, desc: "Mengambil detail satu aset termasuk data bangunan/tanah jika ada.", params: [{ name: "id", in: "path", type: "string", required: true, desc: "Kode barang" }], request: null, response: { status: 200, body: { status: true, message: "Detail aset berhasil diambil.", data: { kode_barang: "BRG-2026-001", tanggal_registrasi: "2026-04-16" } } }, errors: [{ status: 404, body: { status: false, message: "Aset tidak ditemukan." } }] },
+              request: { kode_barang: "BRG-2026-005", id_master_barang: 1, id_ruang: 1, tanggal_registrasi: "2026-04-16", id_kondisi: 1, nilai_residu: 0, id_status: 1 },
+              response: { status: 201, body: { status: true, message: "Aset berhasil ditambahkan.", data: { kode_barang: "BRG-2026-005", id_kondisi: 1, kondisi: { id_kondisi: 1, nama_kondisi: "Baik" }, id_status: 1, status_barang: { id_status: 1, nama_status: "Tersedia" } } } }, errors: [{ status: 422, body: { status: false, message: "Validasi gagal.", errors: { kode_barang: ["Kode barang sudah digunakan."] } } }] },
+            { method: "GET", path: "/api/aset/{id}", summary: "Detail aset", auth: true, desc: "Mengambil detail satu aset termasuk data bangunan/tanah jika ada.", params: [{ name: "id", in: "path", type: "string", required: true, desc: "Kode barang" }], request: null, response: { status: 200, body: { status: true, message: "Detail aset berhasil diambil.", data: { kode_barang: "BRG-2026-001", tanggal_registrasi: "2026-04-16", id_kondisi: 1, kondisi: { id_kondisi: 1, nama_kondisi: "Baik" }, id_status: 1, status_barang: { id_status: 1, nama_status: "Tersedia" } } } }, errors: [{ status: 404, body: { status: false, message: "Aset tidak ditemukan." } }] },
             { method: "PUT", path: "/api/aset/{id}", summary: "Update aset", auth: true, desc: "Memperbarui data aset.", params: [{ name: "id", in: "path", type: "string", required: true, desc: "Kode barang" }],
               body: [
                   { name: "kode_barang", type: "string", required: false, desc: "Kode barang (unik)" },
                   { name: "id_master_barang", type: "integer", required: false, desc: "ID master barang" },
                   { name: "id_ruang", type: "integer", required: false, desc: "ID ruang" },
                   { name: "tanggal_registrasi", type: "date", required: false, desc: "Tanggal registrasi" },
-                  { name: "kondisi_barang", type: "string", required: false, desc: "Kondisi: Baik | Rusak Ringan | Rusak Berat" },
+                  { name: "id_kondisi", type: "integer", required: false, desc: "ID kondisi barang (FK ke tabel kondisi)" },
                   { name: "nilai_residu", type: "numeric", required: false, desc: "Nilai residu" },
-                  { name: "status_ketersediaan", type: "string", required: false, desc: "Status: Tersedia | Dipinjam | Non-Aktif | Dihapus" },
-                  { name: "gambar", type: "string", required: false, desc: "Path gambar" }
+                  { name: "id_status", type: "integer", required: false, desc: "ID status barang (FK ke tabel status_barang)" },
+                  { name: "gambar", type: "string", required: false, desc: "Path gambar" },
+                  { name: "keterangan", type: "string", required: false, desc: "Keterangan" }
               ],
-              request: { kondisi_barang: "Baik", status_ketersediaan: "Tersedia" }, response: { status: 200, body: { status: true, message: "Aset berhasil diperbarui." } }, errors: [] },
+              request: { id_kondisi: 1, id_status: 1 }, response: { status: 200, body: { status: true, message: "Aset berhasil diperbarui." } }, errors: [] },
             { method: "DELETE", path: "/api/aset/{id}", summary: "Hapus aset", auth: true, desc: "Menghapus aset secara permanen.", params: [{ name: "id", in: "path", type: "string", required: true, desc: "Kode barang" }], request: null, response: { status: 200, body: { status: true, message: "Aset berhasil dihapus." } }, errors: [] }
+        ]
+    },
+    // ───────────────── KONDISI BARANG ─────────────────
+    {
+        group: "Kondisi Barang",
+        icon: "🔧",
+        color: "#f59e0b",
+        description: "Master data kondisi barang. Digunakan sebagai referensi FK (id_kondisi) pada tabel aset.",
+        endpoints: [
+            { method: "GET", path: "/api/aset-kondisi", summary: "Daftar kondisi", auth: true, desc: "Mengambil semua data kondisi barang.", request: null, response: { status: 200, body: { status: true, message: "Daftar kondisi berhasil diambil.", data: [{ id_kondisi: 1, nama_kondisi: "Baik", keterangan: null }, { id_kondisi: 2, nama_kondisi: "Rusak Ringan", keterangan: null }, { id_kondisi: 3, nama_kondisi: "Rusak Berat", keterangan: null }] } }, errors: [] },
+            { method: "POST", path: "/api/aset-kondisi", summary: "Tambah kondisi", auth: true, desc: "Menambahkan data kondisi baru.",
+              body: [
+                  { name: "nama_kondisi", type: "string", required: true, desc: "Nama kondisi (unik, maks 50 karakter)" },
+                  { name: "keterangan", type: "string", required: false, desc: "Keterangan tambahan" }
+              ],
+              request: { nama_kondisi: "Baik", keterangan: "Kondisi barang baik dan layak pakai" },
+              response: { status: 201, body: { status: true, message: "Kondisi berhasil ditambahkan.", data: { id_kondisi: 1, nama_kondisi: "Baik", keterangan: "Kondisi barang baik dan layak pakai" } } },
+              errors: [{ status: 422, body: { status: false, message: "Validasi gagal.", errors: { nama_kondisi: ["The nama kondisi has already been taken."] } } }] },
+            { method: "GET", path: "/api/aset-kondisi/{id}", summary: "Detail kondisi", auth: true, desc: "Mengambil detail satu kondisi.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID kondisi" }], request: null, response: { status: 200, body: { status: true, message: "Detail kondisi berhasil diambil.", data: { id_kondisi: 1, nama_kondisi: "Baik", keterangan: null } } }, errors: [{ status: 404, body: { status: false, message: "Kondisi tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/aset-kondisi/{id}", summary: "Update kondisi", auth: true, desc: "Memperbarui data kondisi.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID kondisi" }],
+              body: [
+                  { name: "nama_kondisi", type: "string", required: false, desc: "Nama kondisi (unik)" },
+                  { name: "keterangan", type: "string", required: false, desc: "Keterangan" }
+              ],
+              request: { nama_kondisi: "Rusak Ringan", keterangan: "Kerusakan minor, masih bisa digunakan" },
+              response: { status: 200, body: { status: true, message: "Kondisi berhasil diperbarui.", data: { id_kondisi: 2, nama_kondisi: "Rusak Ringan", keterangan: "Kerusakan minor, masih bisa digunakan" } } },
+              errors: [{ status: 404, body: { status: false, message: "Kondisi tidak ditemukan." } }] },
+            { method: "DELETE", path: "/api/aset-kondisi/{id}", summary: "Hapus kondisi", auth: true, desc: "Menghapus data kondisi.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID kondisi" }], request: null, response: { status: 200, body: { status: true, message: "Kondisi berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Kondisi tidak ditemukan." } }] }
+        ]
+    },
+    // ───────────────── STATUS BARANG ─────────────────
+    {
+        group: "Status Barang",
+        icon: "📊",
+        color: "#3b82f6",
+        description: "Master data status ketersediaan barang. Digunakan sebagai referensi FK (id_status) pada tabel aset.",
+        endpoints: [
+            { method: "GET", path: "/api/aset-status", summary: "Daftar status barang", auth: true, desc: "Mengambil semua data status barang.", request: null, response: { status: 200, body: { status: true, message: "Daftar status barang berhasil diambil.", data: [{ id_status: 1, nama_status: "Tersedia", keterangan: null }, { id_status: 2, nama_status: "Dipinjam", keterangan: null }, { id_status: 3, nama_status: "Non-Aktif", keterangan: null }] } }, errors: [] },
+            { method: "POST", path: "/api/aset-status", summary: "Tambah status barang", auth: true, desc: "Menambahkan data status barang baru.",
+              body: [
+                  { name: "nama_status", type: "string", required: true, desc: "Nama status (unik, maks 50 karakter)" },
+                  { name: "keterangan", type: "string", required: false, desc: "Keterangan tambahan" }
+              ],
+              request: { nama_status: "Tersedia", keterangan: "Barang tersedia untuk dipinjam" },
+              response: { status: 201, body: { status: true, message: "Status barang berhasil ditambahkan.", data: { id_status: 1, nama_status: "Tersedia", keterangan: "Barang tersedia untuk dipinjam" } } },
+              errors: [{ status: 422, body: { status: false, message: "Validasi gagal.", errors: { nama_status: ["The nama status has already been taken."] } } }] },
+            { method: "GET", path: "/api/aset-status/{id}", summary: "Detail status barang", auth: true, desc: "Mengambil detail satu status barang.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID status barang" }], request: null, response: { status: 200, body: { status: true, message: "Detail status barang berhasil diambil.", data: { id_status: 1, nama_status: "Tersedia", keterangan: null } } }, errors: [{ status: 404, body: { status: false, message: "Status barang tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/aset-status/{id}", summary: "Update status barang", auth: true, desc: "Memperbarui data status barang.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID status barang" }],
+              body: [
+                  { name: "nama_status", type: "string", required: false, desc: "Nama status (unik)" },
+                  { name: "keterangan", type: "string", required: false, desc: "Keterangan" }
+              ],
+              request: { nama_status: "Dipinjam", keterangan: "Barang sedang dipinjam" },
+              response: { status: 200, body: { status: true, message: "Status barang berhasil diperbarui.", data: { id_status: 2, nama_status: "Dipinjam", keterangan: "Barang sedang dipinjam" } } },
+              errors: [{ status: 404, body: { status: false, message: "Status barang tidak ditemukan." } }] },
+            { method: "DELETE", path: "/api/aset-status/{id}", summary: "Hapus status barang", auth: true, desc: "Menghapus data status barang.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID status barang" }], request: null, response: { status: 200, body: { status: true, message: "Status barang berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Status barang tidak ditemukan." } }] }
         ]
     },
     // ───────────────── PEMINJAMAN ─────────────────
@@ -1668,7 +1730,7 @@ function renderEndpointCard(ep, id) {
             <h4>⚡ Try API — ${ep.method} ${ep.path}</h4>
             <div class="try-input-group"><label>URL</label><input type="text" id="${id}-try-url" value="http://127.0.0.1:8000${ep.path}"></div>
             <div class="try-input-group"><label>Bearer Token</label><input type="text" id="${id}-try-token" placeholder="Paste your access_token here..."></div>`;
-        if (ep.method === 'POST' || ep.method === 'PUT') {
+        if (ep.method === 'POST' || ep.method === 'PUT' || ep.method === 'PATCH') {
             html += `<div class="try-input-group"><label>Request Body (JSON)</label><textarea id="${id}-try-body">${defaultBody}</textarea></div>`;
         } else {
             html += `<input type="hidden" id="${id}-try-body" value="">`;

@@ -14,6 +14,7 @@ class RuangResource extends JsonResource
             'nama_ruang' => $this->nama_ruang,
             'id_lokasi'  => $this->id_lokasi,
             'lokasi'     => new LokasiResource($this->whenLoaded('lokasi')),
+            'keterangan' => $this->keterangan,
         ];
     }
 }

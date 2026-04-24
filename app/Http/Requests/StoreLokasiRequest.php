@@ -16,15 +16,9 @@ class StoreLokasiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_lokasi' => ['required', 'string', 'max:255'],
+            'nama_lokasi' => ['required', 'string', 'max:100', 'unique:lokasi,nama_lokasi'],
             'alamat'      => ['nullable', 'string'],
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'nama_lokasi.required' => 'Nama lokasi wajib diisi.',
+            'keterangan'  => ['nullable', 'string'],
         ];
     }
 

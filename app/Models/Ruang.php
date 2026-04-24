@@ -13,23 +13,14 @@ class Ruang extends Model
     protected $fillable = [
         'nama_ruang',
         'id_lokasi',
+        'keterangan',
     ];
 
-    // =========================================================================
-    // RELASI
-    // =========================================================================
-
-    /**
-     * Relasi: Ruang belongsTo Lokasi.
-     */
     public function lokasi()
     {
         return $this->belongsTo(Lokasi::class, 'id_lokasi', 'id_lokasi');
     }
 
-    /**
-     * Relasi: Ruang hasMany Aset.
-     */
     public function aset()
     {
         return $this->hasMany(Aset::class, 'id_ruang', 'id_ruang');

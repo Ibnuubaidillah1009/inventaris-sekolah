@@ -15,33 +15,33 @@ class MasterBarang extends Model
         'id_kategori',
         'id_merek',
         'id_satuan',
+        'jenis_barang',
+        'stok_minimal',
+        'stok_aktual',
+        'keterangan',
     ];
 
     // =========================================================================
     // RELASI
     // =========================================================================
 
-    /**
-     * Relasi: MasterBarang belongsTo Kategori.
-     */
     public function kategori()
     {
         return $this->belongsTo(Kategori::class, 'id_kategori', 'id_kategori');
     }
 
-    /**
-     * Relasi: MasterBarang belongsTo Merek.
-     */
     public function merek()
     {
         return $this->belongsTo(Merek::class, 'id_merek', 'id_merek');
     }
 
-    /**
-     * Relasi: MasterBarang belongsTo Satuan.
-     */
     public function satuan()
     {
         return $this->belongsTo(Satuan::class, 'id_satuan', 'id_satuan');
+    }
+
+    public function aset()
+    {
+        return $this->hasMany(Aset::class, 'id_master_barang', 'id_master_barang');
     }
 }

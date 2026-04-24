@@ -12,15 +12,9 @@ class Merek extends Model
 
     protected $fillable = [
         'nama_merek',
+        'keterangan',
     ];
 
-    // =========================================================================
-    // RELASI
-    // =========================================================================
-
-    /**
-     * Relasi: Merek hasMany MasterBarang.
-     */
     public function masterBarang()
     {
         return $this->hasMany(MasterBarang::class, 'id_merek', 'id_merek');

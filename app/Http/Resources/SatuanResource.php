@@ -12,6 +12,7 @@ class SatuanResource extends JsonResource
         return [
             'id_satuan'   => $this->id_satuan,
             'nama_satuan' => $this->nama_satuan,
+            'keterangan'  => $this->keterangan,
         ];
     }
 }

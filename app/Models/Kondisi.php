@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Kategori extends Model
+class Kondisi extends Model
 {
-    protected $table = 'kategori';
-    protected $primaryKey = 'id_kategori';
+    protected $table = 'kondisi';
+    protected $primaryKey = 'id_kondisi';
     public $timestamps = false;
 
     protected $fillable = [
-        'nama_kategori',
+        'nama_kondisi',
         'keterangan',
     ];
 
@@ -19,11 +19,8 @@ class Kategori extends Model
     // RELASI
     // =========================================================================
 
-    /**
-     * Relasi: Kategori hasMany MasterBarang.
-     */
-    public function masterBarang()
+    public function aset()
     {
-        return $this->hasMany(MasterBarang::class, 'id_kategori', 'id_kategori');
+        return $this->hasMany(Aset::class, 'id_kondisi', 'id_kondisi');
     }
 }

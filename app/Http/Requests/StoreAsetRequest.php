@@ -13,20 +13,6 @@ class StoreAsetRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Validasi input aset baru.
-     * Format body yang diharapkan:
-     * {
-     *   "kode_barang": "BRG-2026-001",
-     *   "id_master_barang": 1,
-     *   "id_ruang": 1,
-     *   "tanggal_registrasi": "2026-04-16",
-     *   "kondisi_barang": "Baik",
-     *   "nilai_residu": 0,
-     *   "status_ketersediaan": "Tersedia",
-     *   "gambar": "foto.jpg"
-     * }
-     */
     public function rules(): array
     {
         return [
@@ -34,10 +20,11 @@ class StoreAsetRequest extends FormRequest
             'id_master_barang'    => ['required', 'integer', 'exists:master_barang,id_master_barang'],
             'id_ruang'            => ['nullable', 'integer', 'exists:ruang,id_ruang'],
             'tanggal_registrasi'  => ['required', 'date'],
-            'kondisi_barang'      => ['required', 'string', 'in:Baik,Rusak Ringan,Rusak Berat'],
+            'id_kondisi'          => ['required', 'integer', 'exists:kondisi,id_kondisi'],
             'nilai_residu'        => ['nullable', 'numeric', 'min:0'],
-            'status_ketersediaan' => ['nullable', 'string', 'in:Tersedia,Dipinjam,Non-Aktif,Dihapus'],
+            'id_status'           => ['nullable', 'integer', 'exists:status_barang,id_status'],
             'gambar'              => ['nullable', 'string', 'max:255'],
+            'keterangan'          => ['nullable', 'string'],
         ];
     }
 
@@ -51,9 +38,9 @@ class StoreAsetRequest extends FormRequest
             'id_ruang.exists'              => 'Ruang tidak ditemukan.',
             'tanggal_registrasi.required'  => 'Tanggal registrasi wajib diisi.',
             'tanggal_registrasi.date'      => 'Format tanggal registrasi tidak valid.',
-            'kondisi_barang.required'      => 'Kondisi barang wajib diisi.',
-            'kondisi_barang.in'            => 'Kondisi barang harus salah satu dari: Baik, Rusak Ringan, Rusak Berat.',
-            'status_ketersediaan.in'       => 'Status harus salah satu dari: Tersedia, Dipinjam, Non-Aktif, Dihapus.',
+            'id_kondisi.required'          => 'Kondisi barang wajib dipilih.',
+            'id_kondisi.exists'            => 'Kondisi barang tidak ditemukan.',
+            'id_status.exists'             => 'Status barang tidak ditemukan.',
         ];
     }
 

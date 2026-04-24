@@ -15,16 +15,12 @@ class UpdateRuangRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
-            'nama_ruang' => ['sometimes', 'required', 'string', 'max:100'],
-            'id_lokasi'  => ['sometimes', 'required', 'integer', 'exists:lokasi,id_lokasi'],
-        ];
-    }
+        $id = $this->route('ruang');
 
-    public function messages(): array
-    {
         return [
-            'id_lokasi.exists' => 'Lokasi tidak ditemukan.',
+            'nama_ruang' => ['sometimes', 'required', 'string', 'max:100', "unique:ruang,nama_ruang,{$id},id_ruang"],
+            'id_lokasi'  => ['sometimes', 'required', 'integer', 'exists:lokasi,id_lokasi'],
+            'keterangan' => ['nullable', 'string'],
         ];
     }
 

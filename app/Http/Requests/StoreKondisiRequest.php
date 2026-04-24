@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateLokasiRequest extends FormRequest
+class StoreKondisiRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -15,12 +15,9 @@ class UpdateLokasiRequest extends FormRequest
 
     public function rules(): array
     {
-        $id = $this->route('lokasi');
-
         return [
-            'nama_lokasi' => ['sometimes', 'required', 'string', 'max:100', "unique:lokasi,nama_lokasi,{$id},id_lokasi"],
-            'alamat'      => ['nullable', 'string'],
-            'keterangan'  => ['nullable', 'string'],
+            'nama_kondisi' => ['required', 'string', 'max:50', 'unique:kondisi,nama_kondisi'],
+            'keterangan'   => ['nullable', 'string'],
         ];
     }
 
@@ -28,7 +25,7 @@ class UpdateLokasiRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'status'  => false,
-            'message' => 'Validasi gagal.',
+            'message' => 'validasi gagal.',
             'errors'  => $validator->errors(),
         ], 422));
     }

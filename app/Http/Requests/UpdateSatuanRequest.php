@@ -18,7 +18,8 @@ class UpdateSatuanRequest extends FormRequest
         $id = $this->route('satuan');
 
         return [
-            'nama_satuan' => ['sometimes', 'required', 'string', 'max:100', "unique:satuan,nama_satuan,{$id},id_satuan"],
+            'nama_satuan' => ['sometimes', 'required', 'string', 'max:50', "unique:satuan,nama_satuan,{$id},id_satuan"],
+            'keterangan'  => ['nullable', 'string'],
         ];
     }
 

@@ -13,15 +13,9 @@ class Lokasi extends Model
     protected $fillable = [
         'nama_lokasi',
         'alamat',
+        'keterangan',
     ];
 
-    // =========================================================================
-    // RELASI
-    // =========================================================================
-
-    /**
-     * Relasi: Lokasi hasMany Ruang.
-     */
     public function ruang()
     {
         return $this->hasMany(Ruang::class, 'id_lokasi', 'id_lokasi');

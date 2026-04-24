@@ -16,17 +16,9 @@ class StoreRuangRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_ruang' => ['required', 'string', 'max:100'],
+            'nama_ruang' => ['required', 'string', 'max:100', 'unique:ruang,nama_ruang'],
             'id_lokasi'  => ['required', 'integer', 'exists:lokasi,id_lokasi'],
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'nama_ruang.required' => 'Nama ruang wajib diisi.',
-            'id_lokasi.required'  => 'Lokasi wajib dipilih.',
-            'id_lokasi.exists'    => 'Lokasi tidak ditemukan.',
+            'keterangan' => ['nullable', 'string'],
         ];
     }
 

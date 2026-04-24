@@ -25,7 +25,8 @@ class KategoriController extends Controller
      *             @OA\Property(property="data", type="array",
      *                 @OA\Items(type="object",
      *                     @OA\Property(property="id_kategori", type="integer", example=1),
-     *                     @OA\Property(property="nama_kategori", type="string", example="Elektronik")
+     *                     @OA\Property(property="nama_kategori", type="string", example="Elektronik"),
+                     @OA\Property(property="keterangan", type="string", example="Barang-barang elektronik")
      *                 )
      *             )
      *         )
@@ -54,7 +55,8 @@ class KategoriController extends Controller
      *     @OA\RequestBody(required=true,
      *         @OA\JsonContent(
      *             required={"nama_kategori"},
-     *             @OA\Property(property="nama_kategori", type="string", maxLength=100, example="Elektronik")
+     *             @OA\Property(property="nama_kategori", type="string", maxLength=100, example="Elektronik"),
+             @OA\Property(property="keterangan", type="string", example="Barang-barang elektronik")
      *         )
      *     ),
      *     @OA\Response(response=201, description="Kategori berhasil ditambahkan",
@@ -63,7 +65,8 @@ class KategoriController extends Controller
      *             @OA\Property(property="message", type="string", example="Kategori berhasil ditambahkan."),
      *             @OA\Property(property="data", type="object",
      *                 @OA\Property(property="id_kategori", type="integer", example=1),
-     *                 @OA\Property(property="nama_kategori", type="string", example="Elektronik")
+     *                 @OA\Property(property="nama_kategori", type="string", example="Elektronik"),
+     *                 @OA\Property(property="keterangan", type="string", example="Barang-barang elektronik")
      *             )
      *         )
      *     ),
@@ -98,7 +101,8 @@ class KategoriController extends Controller
      *             @OA\Property(property="message", type="string", example="Detail kategori berhasil diambil."),
      *             @OA\Property(property="data", type="object",
      *                 @OA\Property(property="id_kategori", type="integer", example=1),
-     *                 @OA\Property(property="nama_kategori", type="string", example="Elektronik")
+     *                 @OA\Property(property="nama_kategori", type="string", example="Elektronik"),
+     *                 @OA\Property(property="keterangan", type="string", example="Barang-barang elektronik")
      *             )
      *         )
      *     ),
@@ -136,7 +140,8 @@ class KategoriController extends Controller
      *     @OA\Parameter(name="id", in="path", required=true, description="ID kategori", @OA\Schema(type="string", example="1")),
      *     @OA\RequestBody(required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="nama_kategori", type="string", maxLength=100, example="Furnitur")
+     *             @OA\Property(property="nama_kategori", type="string", maxLength=100, example="Furnitur"),
+             @OA\Property(property="keterangan", type="string", example="Perabotan kantor")
      *         )
      *     ),
      *     @OA\Response(response=200, description="Kategori berhasil diperbarui",
@@ -145,7 +150,8 @@ class KategoriController extends Controller
      *             @OA\Property(property="message", type="string", example="Kategori berhasil diperbarui."),
      *             @OA\Property(property="data", type="object",
      *                 @OA\Property(property="id_kategori", type="integer", example=1),
-     *                 @OA\Property(property="nama_kategori", type="string", example="Furnitur")
+     *                 @OA\Property(property="nama_kategori", type="string", example="Furnitur"),
+                 @OA\Property(property="keterangan", type="string", example="Perabotan kantor")
      *             )
      *         )
      *     ),

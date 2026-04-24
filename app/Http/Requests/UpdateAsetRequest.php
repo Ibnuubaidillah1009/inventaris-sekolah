@@ -22,10 +22,11 @@ class UpdateAsetRequest extends FormRequest
             'id_master_barang'    => ['sometimes', 'required', 'integer', 'exists:master_barang,id_master_barang'],
             'id_ruang'            => ['nullable', 'integer', 'exists:ruang,id_ruang'],
             'tanggal_registrasi'  => ['sometimes', 'required', 'date'],
-            'kondisi_barang'      => ['sometimes', 'required', 'string', 'in:Baik,Rusak Ringan,Rusak Berat'],
+            'id_kondisi'          => ['sometimes', 'required', 'integer', 'exists:kondisi,id_kondisi'],
             'nilai_residu'        => ['nullable', 'numeric', 'min:0'],
-            'status_ketersediaan' => ['sometimes', 'required', 'string', 'in:Tersedia,Dipinjam,Non-Aktif,Dihapus'],
+            'id_status'           => ['sometimes', 'required', 'integer', 'exists:status_barang,id_status'],
             'gambar'              => ['nullable', 'string'],
+            'keterangan'          => ['nullable', 'string'],
         ];
     }
 
@@ -35,8 +36,8 @@ class UpdateAsetRequest extends FormRequest
             'kode_barang.unique'           => 'Kode barang sudah digunakan.',
             'id_master_barang.exists'      => 'Master barang tidak ditemukan.',
             'id_ruang.exists'              => 'Ruang tidak ditemukan.',
-            'kondisi_barang.in'            => 'Kondisi barang harus salah satu dari: Baik, Rusak Ringan, Rusak Berat.',
-            'status_ketersediaan.in'       => 'Status harus salah satu dari: Tersedia, Dipinjam, Non-Aktif, Dihapus.',
+            'id_kondisi.exists'            => 'Kondisi barang tidak ditemukan.',
+            'id_status.exists'             => 'Status barang tidak ditemukan.',
         ];
     }
 

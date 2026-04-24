@@ -19,6 +19,7 @@ class UpdateMerekRequest extends FormRequest
 
         return [
             'nama_merek' => ['sometimes', 'required', 'string', 'max:100', "unique:merek,nama_merek,{$id},id_merek"],
+            'keterangan' => ['nullable', 'string'],
         ];
     }
 

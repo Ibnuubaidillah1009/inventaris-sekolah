@@ -12,15 +12,9 @@ class Satuan extends Model
 
     protected $fillable = [
         'nama_satuan',
+        'keterangan',
     ];
 
-    // =========================================================================
-    // RELASI
-    // =========================================================================
-
-    /**
-     * Relasi: Satuan hasMany MasterBarang.
-     */
     public function masterBarang()
     {
         return $this->hasMany(MasterBarang::class, 'id_satuan', 'id_satuan');
