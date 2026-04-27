@@ -110,6 +110,22 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // -----------------------------------------------------------------
+    // MODUL: PENGATURAN
+    // -----------------------------------------------------------------
+    Route::prefix('pengaturan')->group(function () {
+        Route::get('/', [\App\Http\Controllers\PengaturanController::class, 'index'])
+            ->middleware('cek.hak.akses:pengaturan,hak_baca');
+        Route::post('/', [\App\Http\Controllers\PengaturanController::class, 'store'])
+            ->middleware('cek.hak.akses:pengaturan,hak_buat');
+        Route::get('/{id}', [\App\Http\Controllers\PengaturanController::class, 'show'])
+            ->middleware('cek.hak.akses:pengaturan,hak_baca');
+        Route::post('/{id}', [\App\Http\Controllers\PengaturanController::class, 'update'])
+            ->middleware('cek.hak.akses:pengaturan,hak_ubah');
+        Route::delete('/{id}', [\App\Http\Controllers\PengaturanController::class, 'destroy'])
+            ->middleware('cek.hak.akses:pengaturan,hak_hapus');
+    });
+
+    // -----------------------------------------------------------------
     // MODUL: MASTER SEKOLAH
     // -----------------------------------------------------------------
 
@@ -301,6 +317,20 @@ Route::middleware('auth:sanctum')->group(function () {
             ->middleware('cek.hak.akses:kondisi,hak_ubah');
         Route::delete('/{kondisi}', [AsetKondisiController::class, 'destroy'])
             ->middleware('cek.hak.akses:kondisi,hak_hapus');
+    });
+
+    // Opname Aset
+    Route::prefix('opname-aset')->group(function () {
+        Route::get('/', [\App\Http\Controllers\OpnameAsetController::class, 'index'])
+            ->middleware('cek.hak.akses:opname_aset,hak_baca');
+        Route::post('/', [\App\Http\Controllers\OpnameAsetController::class, 'store'])
+            ->middleware('cek.hak.akses:opname_aset,hak_buat');
+        Route::get('/{id}', [\App\Http\Controllers\OpnameAsetController::class, 'show'])
+            ->middleware('cek.hak.akses:opname_aset,hak_baca');
+        Route::put('/{id}', [\App\Http\Controllers\OpnameAsetController::class, 'update'])
+            ->middleware('cek.hak.akses:opname_aset,hak_ubah');
+        Route::delete('/{id}', [\App\Http\Controllers\OpnameAsetController::class, 'destroy'])
+            ->middleware('cek.hak.akses:opname_aset,hak_hapus');
     });
 
     // Status Barang

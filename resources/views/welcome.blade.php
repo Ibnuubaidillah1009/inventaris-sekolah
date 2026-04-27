@@ -1505,6 +1505,80 @@ const API_DATA = [
             { method: "DELETE", path: "/api/penghapusan-aset/{id}", summary: "Hapus record penghapusan", auth: true, desc: "Menghapus data record penghapusan aset.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID penghapusan" }], request: null, response: { status: 200, body: { status: true, message: "Data penghapusan aset berhasil dihapus." } }, errors: [] }
         ]
     },
+    // ───────────────── OPNAME ASET ─────────────────
+    {
+        group: "Opname Aset",
+        icon: "📋",
+        color: "#10b981",
+        description: "Manajemen opname aset (pencatatan kondisi aktual aset).",
+        endpoints: [
+            { method: "GET", path: "/api/opname-aset", summary: "Daftar opname aset", auth: true, desc: "Mengambil semua data opname aset beserta detail barang.", request: null,
+              response: { status: 200, body: { status: true, message: "Daftar opname aset berhasil diambil.", data: [{ id_opname_aset: 1, kode_barang: "BRG-2026-001", nama_barang: "Laptop Lenovo ThinkPad", tanggal_opname: "2026-04-27", kondisi_ditemukan: "Baik", keterangan: null }] } }, errors: [] },
+            { method: "POST", path: "/api/opname-aset", summary: "Tambah opname aset", auth: true, desc: "Menambahkan data opname aset baru.",
+              body: [
+                  { name: "kode_barang", type: "string", required: true, desc: "Kode barang dari aset yang di-opname" },
+                  { name: "tanggal_opname", type: "date", required: true, desc: "Tanggal pelaksanaan opname (Y-m-d)" },
+                  { name: "kondisi_ditemukan", type: "string", required: true, desc: "Kondisi: Baik | Rusak Ringan | Rusak Berat | Hilang" },
+                  { name: "keterangan", type: "string", required: false, desc: "Catatan tambahan" }
+              ],
+              request: { kode_barang: "BRG-2026-001", tanggal_opname: "2026-04-27", kondisi_ditemukan: "Baik", keterangan: "Sesuai data" },
+              response: { status: 201, body: { status: true, message: "Opname aset berhasil ditambahkan.", data: { id_opname_aset: 1, kode_barang: "BRG-2026-001", kondisi_ditemukan: "Baik" } } },
+              errors: [{ status: 422, body: { status: false, message: "Validasi gagal.", errors: { kode_barang: ["Kode barang tidak ditemukan di data aset."] } } }] },
+            { method: "GET", path: "/api/opname-aset/{id}", summary: "Detail opname aset", auth: true, desc: "Mengambil detail satu data opname aset.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID opname aset" }], request: null, response: { status: 200, body: { status: true, message: "Detail opname aset berhasil diambil." } }, errors: [{ status: 404, body: { status: false, message: "Opname aset tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/opname-aset/{id}", summary: "Update opname aset", auth: true, desc: "Memperbarui data opname aset.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID opname aset" }],
+              body: [
+                  { name: "kode_barang", type: "string", required: false, desc: "Kode barang" },
+                  { name: "tanggal_opname", type: "date", required: false, desc: "Tanggal opname" },
+                  { name: "kondisi_ditemukan", type: "string", required: false, desc: "Kondisi: Baik | Rusak Ringan | Rusak Berat | Hilang" },
+                  { name: "keterangan", type: "string", required: false, desc: "Keterangan" }
+              ],
+              request: { kondisi_ditemukan: "Rusak Ringan", keterangan: "Ada lecet sedikit" },
+              response: { status: 200, body: { status: true, message: "Opname aset berhasil diperbarui." } }, errors: [{ status: 404, body: { status: false, message: "Opname aset tidak ditemukan." } }] },
+            { method: "DELETE", path: "/api/opname-aset/{id}", summary: "Hapus opname aset", auth: true, desc: "Menghapus data opname aset.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID opname aset" }], request: null, response: { status: 200, body: { status: true, message: "Opname aset berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Opname aset tidak ditemukan." } }] }
+        ]
+    },
+    // ───────────────── PENGATURAN ─────────────────
+    {
+        group: "Pengaturan",
+        icon: "⚙️",
+        color: "#6b7280",
+        description: "Pengaturan profil, kontak, dan identitas lembaga.",
+        endpoints: [
+            { method: "GET", path: "/api/pengaturan", summary: "Ambil pengaturan", auth: true, desc: "Mengambil data pengaturan lembaga.", request: null,
+              response: { status: 200, body: { status: true, message: "Data pengaturan berhasil diambil.", data: { id_pengaturan: 1, nama_instansi: "SMK Negeri 1 Contoh", alamat_instansi: "Jl. Pendidikan", wallpaper_aplikasi: null, telpon: "021-1234", website: "https://web.sch.id", email: "info@web.sch.id", kota: "Jakarta", kepala_sekolah: "Dr. Budi", NIP: "19800101", bagian_inventaris: "Sarpras" } } }, errors: [] },
+            { method: "POST", path: "/api/pengaturan", summary: "Buat pengaturan", auth: true, desc: "Membuat pengaturan baru (jika belum ada). Mendukung upload file logo.",
+              body: [
+                  { name: "nama_instansi", type: "string", required: true, desc: "Nama institusi" },
+                  { name: "alamat_instansi", type: "string", required: false, desc: "Alamat lengkap" },
+                  { name: "wallpaper_aplikasi", type: "file", required: false, desc: "Logo lembaga (jpg, png)" },
+                  { name: "telpon", type: "string", required: false, desc: "Nomor telepon" },
+                  { name: "website", type: "string", required: false, desc: "URL website" },
+                  { name: "email", type: "string", required: false, desc: "Email" },
+                  { name: "kota", type: "string", required: false, desc: "Kota" },
+                  { name: "kepala_sekolah", type: "string", required: false, desc: "Nama Kepala Sekolah" },
+                  { name: "NIP", type: "string", required: false, desc: "NIP Kepala Sekolah" },
+                  { name: "bagian_inventaris", type: "string", required: false, desc: "Penanggung Jawab Inventaris" }
+              ],
+              request: { nama_instansi: "SMK Negeri 1 Contoh", kota: "Jakarta" },
+              response: { status: 201, body: { status: true, message: "Pengaturan lembaga berhasil dibuat." } },
+              errors: [{ status: 422, body: { status: false, message: "Pengaturan sudah ada. Gunakan endpoint PUT untuk memperbarui." } }] },
+            { method: "POST", path: "/api/pengaturan/{id}", summary: "Update pengaturan", auth: true, desc: "Memperbarui pengaturan (Menggunakan POST untuk mendukung multipart/form-data upload gambar).", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID pengaturan" }],
+              body: [
+                  { name: "nama_instansi", type: "string", required: false, desc: "Nama institusi" },
+                  { name: "alamat_instansi", type: "string", required: false, desc: "Alamat lengkap" },
+                  { name: "wallpaper_aplikasi", type: "file", required: false, desc: "Logo lembaga (jpg, png)" },
+                  { name: "telpon", type: "string", required: false, desc: "Nomor telepon" },
+                  { name: "website", type: "string", required: false, desc: "URL website" },
+                  { name: "email", type: "string", required: false, desc: "Email" },
+                  { name: "kota", type: "string", required: false, desc: "Kota" },
+                  { name: "kepala_sekolah", type: "string", required: false, desc: "Nama Kepala Sekolah" },
+                  { name: "NIP", type: "string", required: false, desc: "NIP Kepala Sekolah" },
+                  { name: "bagian_inventaris", type: "string", required: false, desc: "Penanggung Jawab Inventaris" }
+              ],
+              request: { nama_instansi: "SMK Negeri 1 Contoh Updated" },
+              response: { status: 200, body: { status: true, message: "Pengaturan lembaga berhasil diperbarui." } }, errors: [{ status: 404, body: { status: false, message: "Pengaturan tidak ditemukan." } }] }
+        ]
+    },
     // ───────────────── MANAJEMEN DATABASE ─────────────────
     {
         group: "Manajemen Database",
