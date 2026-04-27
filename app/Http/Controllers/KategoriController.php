@@ -19,7 +19,7 @@ use Illuminate\Http\JsonResponse;
  *     description="Representasi data kategori barang",
  *     @OA\Property(property="id_kategori", type="integer", example=1),
  *     @OA\Property(property="nama_kategori", type="string", example="Elektronik"),
- *     @OA\Property(property="keterangan", type="string", example="Barang-barang elektronik")
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Barang-barang elektronik")
  * )
  *
  * @OA\Schema(
@@ -28,7 +28,7 @@ use Illuminate\Http\JsonResponse;
  *     required={"nama_kategori"},
  *     description="Payload untuk menambah kategori baru",
  *     @OA\Property(property="nama_kategori", type="string", maxLength=100, example="Elektronik"),
- *     @OA\Property(property="keterangan", type="string", example="Barang-barang elektronik")
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Barang-barang elektronik")
  * )
  *
  * @OA\Schema(
@@ -36,7 +36,7 @@ use Illuminate\Http\JsonResponse;
  *     type="object",
  *     description="Payload untuk memperbarui kategori",
  *     @OA\Property(property="nama_kategori", type="string", maxLength=100, example="Furnitur"),
- *     @OA\Property(property="keterangan", type="string", example="Perabotan kantor")
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Perabotan kantor")
  * )
  *
  * @OA\Schema(
