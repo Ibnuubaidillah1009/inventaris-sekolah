@@ -21,6 +21,7 @@ class Peran extends Model
      */
     protected $fillable = [
         'nama_peran',
+        'keterangan',
     ];
 
     /**

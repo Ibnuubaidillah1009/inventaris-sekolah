@@ -12,6 +12,7 @@ class PeranResource extends JsonResource
         return [
             'id_peran'   => $this->id_peran,
             'nama_peran' => $this->nama_peran,
+            'keterangan' => $this->keterangan,
             'akses_list' => AksesResource::collection($this->whenLoaded('aksesList')),
         ];
     }

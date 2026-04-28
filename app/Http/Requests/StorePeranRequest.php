@@ -17,6 +17,7 @@ class StorePeranRequest extends FormRequest
     {
         return [
             'nama_peran' => ['required', 'string', 'max:100', 'unique:peran,nama_peran'],
+            'keterangan' => ['nullable', 'string'],
         ];
     }
 
