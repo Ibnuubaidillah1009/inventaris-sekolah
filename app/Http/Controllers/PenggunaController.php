@@ -10,16 +10,17 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * @OA\Schema(schema="PenggunaResource", type="object",
+ *     description="Representasi data pengguna",
  *     @OA\Property(property="id_pengguna", type="integer", example=1),
  *     @OA\Property(property="username", type="string", example="admin"),
  *     @OA\Property(property="id_peran", type="integer", nullable=true, example=1),
- *     @OA\Property(property="peran", type="object", nullable=true),
+ *     @OA\Property(property="peran", ref="#/components/schemas/PeranResource", nullable=true),
  *     @OA\Property(property="id_kelas", type="integer", nullable=true, example=null),
- *     @OA\Property(property="kelas", type="object", nullable=true),
+ *     @OA\Property(property="kelas", ref="#/components/schemas/KelasResource", nullable=true),
  *     @OA\Property(property="id_mapel", type="integer", nullable=true, example=null),
- *     @OA\Property(property="mapel", type="object", nullable=true),
+ *     @OA\Property(property="mapel", ref="#/components/schemas/MapelResource", nullable=true),
  *     @OA\Property(property="id_unit", type="integer", nullable=true, example=null),
- *     @OA\Property(property="unit", type="object", nullable=true)
+ *     @OA\Property(property="unit", ref="#/components/schemas/UnitResource", nullable=true)
  * )
  * @OA\Schema(schema="StorePenggunaRequest", type="object", required={"username","password","id_peran"},
  *     @OA\Property(property="username", type="string", maxLength=100, example="guru01"),

@@ -490,26 +490,16 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Daftar kondisi berhasil diambil."
-                                        },
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/KondisiListResponse"
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     }
                 },
                 "security": [
@@ -530,28 +520,24 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "nama_kondisi"
-                                ],
-                                "properties": {
-                                    "nama_kondisi": {
-                                        "type": "string",
-                                        "example": "Baik"
-                                    },
-                                    "keterangan": {
-                                        "type": "string",
-                                        "example": "Kondisi barang baik",
-                                        "nullable": true
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/StoreKondisiRequest"
                             }
                         }
                     }
                 },
                 "responses": {
                     "201": {
-                        "description": "Kondisi berhasil ditambahkan"
+                        "description": "Kondisi berhasil ditambahkan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KondisiSingleResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "422": {
                         "description": "Validasi gagal"
@@ -586,7 +572,17 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Detail kondisi berhasil diambil"
+                        "description": "Detail kondisi berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KondisiSingleResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "404": {
                         "description": "Kondisi tidak ditemukan"
@@ -622,28 +618,30 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "nama_kondisi": {
-                                        "type": "string",
-                                        "example": "Rusak Ringan"
-                                    },
-                                    "keterangan": {
-                                        "type": "string",
-                                        "example": "Kondisi rusak ringan",
-                                        "nullable": true
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/UpdateKondisiRequest"
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "Kondisi berhasil diperbarui"
+                        "description": "Kondisi berhasil diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KondisiSingleResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "404": {
                         "description": "Kondisi tidak ditemukan"
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
                     }
                 },
                 "security": [
@@ -673,7 +671,20 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Kondisi berhasil dihapus"
+                        "description": "Kondisi berhasil dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KondisiDeleteResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Kondisi tidak ditemukan"
                     }
                 },
                 "security": [
@@ -697,26 +708,16 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Daftar status barang berhasil diambil."
-                                        },
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/StatusBarangListResponse"
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     }
                 },
                 "security": [
@@ -737,28 +738,24 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "nama_status"
-                                ],
-                                "properties": {
-                                    "nama_status": {
-                                        "type": "string",
-                                        "example": "Tersedia"
-                                    },
-                                    "keterangan": {
-                                        "type": "string",
-                                        "example": "Barang tersedia untuk dipinjam",
-                                        "nullable": true
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/StoreStatusBarangRequest"
                             }
                         }
                     }
                 },
                 "responses": {
                     "201": {
-                        "description": "Status barang berhasil ditambahkan"
+                        "description": "Status barang berhasil ditambahkan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StatusBarangSingleResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "422": {
                         "description": "Validasi gagal"
@@ -793,7 +790,17 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Detail status barang berhasil diambil"
+                        "description": "Detail status barang berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StatusBarangSingleResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "404": {
                         "description": "Status barang tidak ditemukan"
@@ -829,28 +836,30 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "nama_status": {
-                                        "type": "string",
-                                        "example": "Dipinjam"
-                                    },
-                                    "keterangan": {
-                                        "type": "string",
-                                        "example": "Barang sedang dipinjam",
-                                        "nullable": true
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/UpdateStatusBarangRequest"
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "Status barang berhasil diperbarui"
+                        "description": "Status barang berhasil diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StatusBarangSingleResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "404": {
                         "description": "Status barang tidak ditemukan"
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
                     }
                 },
                 "security": [
@@ -880,7 +889,20 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Status barang berhasil dihapus"
+                        "description": "Status barang berhasil dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StatusBarangDeleteResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Status barang tidak ditemukan"
                     }
                 },
                 "security": [
@@ -942,17 +964,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Logout berhasil."
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/LogoutResponse"
                                 }
                             }
                         }
@@ -3000,7 +3012,17 @@
                 "operationId": "indexOpnameAset",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Daftar opname aset berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OpnameAsetListResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     }
                 },
                 "security": [
@@ -3027,7 +3049,14 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Created"
+                        "description": "Opname aset berhasil ditambahkan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OpnameAsetSingleResponse"
+                                }
+                            }
+                        }
                     },
                     "422": {
                         "description": "Validasi gagal"
@@ -3060,7 +3089,14 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Detail opname aset berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OpnameAsetSingleResponse"
+                                }
+                            }
+                        }
                     },
                     "404": {
                         "description": "Tidak ditemukan"
@@ -3101,10 +3137,20 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Opname aset berhasil diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OpnameAsetSingleResponse"
+                                }
+                            }
+                        }
                     },
                     "404": {
                         "description": "Tidak ditemukan"
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
                     }
                 },
                 "security": [
@@ -3132,7 +3178,17 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Opname aset berhasil dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OpnameAsetDeleteResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tidak ditemukan"
                     }
                 },
                 "security": [
@@ -3347,7 +3403,17 @@
                 "operationId": "indexPengaturan",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Data pengaturan berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PengaturanSingleResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     }
                 },
                 "security": [
@@ -3410,7 +3476,14 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Created"
+                        "description": "Pengaturan lembaga berhasil dibuat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PengaturanSingleResponse"
+                                }
+                            }
+                        }
                     },
                     "422": {
                         "description": "Validasi gagal"
@@ -3443,7 +3516,14 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Detail pengaturan berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PengaturanSingleResponse"
+                                }
+                            }
+                        }
                     },
                     "404": {
                         "description": "Tidak ditemukan"
@@ -3517,7 +3597,14 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Pengaturan lembaga berhasil diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PengaturanSingleResponse"
+                                }
+                            }
+                        }
                     },
                     "404": {
                         "description": "Tidak ditemukan"
@@ -3548,7 +3635,17 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Pengaturan berhasil dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PengaturanDeleteResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tidak ditemukan"
                     }
                 },
                 "security": [
@@ -5449,7 +5546,11 @@
                         "example": 1
                     },
                     "master_barang": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/MasterBarangResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "id_ruang": {
@@ -5457,9 +5558,31 @@
                         "example": 1,
                         "nullable": true
                     },
-                    "nama_ruang": {
+                    "ruang": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/RuangResource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "tanggal_registrasi": {
                         "type": "string",
-                        "example": "Lab Komputer 1",
+                        "format": "date",
+                        "example": "2026-01-15",
+                        "nullable": true
+                    },
+                    "id_kondisi": {
+                        "type": "integer",
+                        "example": 1,
+                        "nullable": true
+                    },
+                    "kondisi": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/KondisiResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "nilai_residu": {
@@ -5467,9 +5590,23 @@
                         "example": 500000,
                         "nullable": true
                     },
-                    "kondisi_barang": {
+                    "id_status": {
+                        "type": "integer",
+                        "example": 1,
+                        "nullable": true
+                    },
+                    "status_barang": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/StatusBarangResource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "gambar": {
                         "type": "string",
-                        "example": "Baik"
+                        "example": "https://example.com/image.jpg",
+                        "nullable": true
                     },
                     "keterangan": {
                         "type": "string",
@@ -5655,6 +5792,218 @@
                 },
                 "type": "object"
             },
+            "KondisiResource": {
+                "description": "Representasi data kondisi barang",
+                "properties": {
+                    "id_kondisi": {
+                        "description": "============================================================\n SCHEMA DEFINITIONS – Kondisi Module\n============================================================",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nama_kondisi": {
+                        "type": "string",
+                        "example": "Baik"
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Kondisi barang baik",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "StoreKondisiRequest": {
+                "description": "Payload untuk menambah kondisi baru",
+                "required": [
+                    "nama_kondisi"
+                ],
+                "properties": {
+                    "nama_kondisi": {
+                        "type": "string",
+                        "example": "Baik",
+                        "maxLength": 100
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Kondisi barang baik",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateKondisiRequest": {
+                "description": "Payload untuk memperbarui kondisi",
+                "properties": {
+                    "nama_kondisi": {
+                        "type": "string",
+                        "example": "Rusak Ringan",
+                        "maxLength": 100
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Kondisi rusak ringan",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "KondisiListResponse": {
+                "description": "Response wrapper untuk daftar kondisi",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Daftar kondisi berhasil diambil."
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/KondisiResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "KondisiSingleResponse": {
+                "description": "Response wrapper untuk satu kondisi",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Detail kondisi berhasil diambil."
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/KondisiResource"
+                    }
+                },
+                "type": "object"
+            },
+            "KondisiDeleteResponse": {
+                "description": "Response wrapper untuk penghapusan kondisi",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Kondisi berhasil dihapus."
+                    }
+                },
+                "type": "object"
+            },
+            "StatusBarangResource": {
+                "description": "Representasi data status barang",
+                "properties": {
+                    "id_status": {
+                        "description": "============================================================\n SCHEMA DEFINITIONS – Status Barang Module\n============================================================",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nama_status": {
+                        "type": "string",
+                        "example": "Tersedia"
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Barang tersedia untuk dipinjam",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "StoreStatusBarangRequest": {
+                "description": "Payload untuk menambah status barang baru",
+                "required": [
+                    "nama_status"
+                ],
+                "properties": {
+                    "nama_status": {
+                        "type": "string",
+                        "example": "Tersedia",
+                        "maxLength": 100
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Barang tersedia untuk dipinjam",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateStatusBarangRequest": {
+                "description": "Payload untuk memperbarui status barang",
+                "properties": {
+                    "nama_status": {
+                        "type": "string",
+                        "example": "Dipinjam",
+                        "maxLength": 100
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Barang sedang dipinjam",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "StatusBarangListResponse": {
+                "description": "Response wrapper untuk daftar status barang",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Daftar status barang berhasil diambil."
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/StatusBarangResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "StatusBarangSingleResponse": {
+                "description": "Response wrapper untuk satu status barang",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Detail status barang berhasil diambil."
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/StatusBarangResource"
+                    }
+                },
+                "type": "object"
+            },
+            "StatusBarangDeleteResponse": {
+                "description": "Response wrapper untuk penghapusan status barang",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Status barang berhasil dihapus."
+                    }
+                },
+                "type": "object"
+            },
             "LoginRequest": {
                 "description": "Payload untuk login pengguna",
                 "required": [
@@ -5678,11 +6027,25 @@
                 "description": "Data hasil login berisi pengguna dan token",
                 "properties": {
                     "pengguna": {
-                        "type": "object"
+                        "$ref": "#/components/schemas/PenggunaResource"
                     },
                     "token": {
                         "type": "string",
                         "example": "1|abc123tokenxyz"
+                    }
+                },
+                "type": "object"
+            },
+            "LogoutResponse": {
+                "description": "Response wrapper untuk logout berhasil",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Logout berhasil."
                     }
                 },
                 "type": "object"
@@ -6243,7 +6606,11 @@
                         "example": "BRG-001"
                     },
                     "aset": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/AsetResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "tanggal_kerusakan": {
@@ -6265,7 +6632,11 @@
                         "example": 1
                     },
                     "pelapor": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/PenggunaResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "status_kerusakan": {
@@ -6582,6 +6953,7 @@
                 "type": "object"
             },
             "MasterBarangResource": {
+                "description": "Representasi data master barang",
                 "properties": {
                     "id_master_barang": {
                         "type": "integer",
@@ -6596,7 +6968,11 @@
                         "example": 1
                     },
                     "kategori": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/KategoriResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "id_merek": {
@@ -6604,7 +6980,11 @@
                         "example": 1
                     },
                     "merek": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/MerekResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "id_satuan": {
@@ -6612,7 +6992,11 @@
                         "example": 1
                     },
                     "satuan": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/SatuanResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "jenis_barang": {
@@ -6622,6 +7006,10 @@
                     "stok_minimal": {
                         "type": "integer",
                         "example": 5
+                    },
+                    "stok_aktual": {
+                        "type": "integer",
+                        "example": 10
                     },
                     "keterangan": {
                         "type": "string",
@@ -6847,7 +7235,11 @@
                         "example": "BRG-001"
                     },
                     "aset": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/AsetResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "id_ruang_asal": {
@@ -6855,7 +7247,11 @@
                         "example": 1
                     },
                     "ruang_asal": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/RuangResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "id_ruang_tujuan": {
@@ -6863,7 +7259,11 @@
                         "example": 3
                     },
                     "ruang_tujuan": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/RuangResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "tanggal_mutasi": {
@@ -6876,7 +7276,11 @@
                         "example": 1
                     },
                     "petugas": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/PenggunaResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "keterangan": {
@@ -6963,7 +7367,33 @@
                 },
                 "type": "object"
             },
+            "OpnameAsetInlineAset": {
+                "description": "Nested aset object di dalam OpnameAsetResource",
+                "properties": {
+                    "kode_barang": {
+                        "description": "============================================================\n SCHEMA DEFINITIONS – Opname Aset Module\n============================================================",
+                        "type": "string",
+                        "example": "BRG-2026-001"
+                    },
+                    "master_barang": {
+                        "properties": {
+                            "id_master_barang": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "nama_barang": {
+                                "type": "string",
+                                "example": "Laptop Lenovo ThinkPad"
+                            }
+                        },
+                        "type": "object",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
             "OpnameAsetResource": {
+                "description": "Representasi data opname aset",
                 "properties": {
                     "id_opname_aset": {
                         "type": "integer",
@@ -6975,7 +7405,8 @@
                     },
                     "nama_barang": {
                         "type": "string",
-                        "example": "Laptop Lenovo ThinkPad"
+                        "example": "Laptop Lenovo ThinkPad",
+                        "nullable": true
                     },
                     "tanggal_opname": {
                         "type": "string",
@@ -6990,11 +7421,25 @@
                         "type": "string",
                         "example": "Kondisi sesuai data",
                         "nullable": true
+                    },
+                    "id_pemeriksa": {
+                        "type": "integer",
+                        "example": 1,
+                        "nullable": true
+                    },
+                    "aset": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/OpnameAsetInlineAset"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "type": "object"
             },
             "StoreOpnameAsetRequest": {
+                "description": "Payload untuk menambah opname aset baru",
                 "required": [
                     "kode_barang",
                     "tanggal_opname",
@@ -7029,6 +7474,7 @@
                 "type": "object"
             },
             "UpdateOpnameAsetRequest": {
+                "description": "Payload untuk memperbarui opname aset",
                 "properties": {
                     "kode_barang": {
                         "type": "string",
@@ -7057,6 +7503,57 @@
                 },
                 "type": "object"
             },
+            "OpnameAsetListResponse": {
+                "description": "Response wrapper untuk daftar opname aset",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Daftar opname aset berhasil diambil."
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OpnameAsetResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "OpnameAsetSingleResponse": {
+                "description": "Response wrapper untuk satu opname aset",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Detail opname aset berhasil diambil."
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/OpnameAsetResource"
+                    }
+                },
+                "type": "object"
+            },
+            "OpnameAsetDeleteResponse": {
+                "description": "Response wrapper untuk penghapusan opname aset",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Opname aset berhasil dihapus."
+                    }
+                },
+                "type": "object"
+            },
             "DetailPeminjamanResource": {
                 "properties": {
                     "id_detail_pinjam": {
@@ -7072,7 +7569,11 @@
                         "example": "BRG-001"
                     },
                     "aset": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/AsetResource"
+                            }
+                        ],
                         "nullable": true
                     }
                 },
@@ -7112,7 +7613,11 @@
                         "nullable": true
                     },
                     "peminjam": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/PenggunaResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "detail_peminjaman": {
@@ -7227,8 +7732,10 @@
                 "type": "object"
             },
             "PengaturanResource": {
+                "description": "Representasi data pengaturan lembaga",
                 "properties": {
                     "id_pengaturan": {
+                        "description": "============================================================\n SCHEMA DEFINITIONS – Pengaturan Module\n============================================================",
                         "type": "integer",
                         "example": 1
                     },
@@ -7238,7 +7745,8 @@
                     },
                     "alamat_instansi": {
                         "type": "string",
-                        "example": "Jl. Pendidikan No.1"
+                        "example": "Jl. Pendidikan No.1",
+                        "nullable": true
                     },
                     "wallpaper_aplikasi": {
                         "type": "string",
@@ -7283,7 +7791,58 @@
                 },
                 "type": "object"
             },
+            "PengaturanSingleResponse": {
+                "description": "Response wrapper untuk satu pengaturan",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Data pengaturan berhasil diambil."
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/PengaturanResource"
+                    }
+                },
+                "type": "object"
+            },
+            "PengaturanNullResponse": {
+                "description": "Response wrapper ketika belum ada data pengaturan",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Belum ada data pengaturan. Silakan buat pengaturan baru."
+                    },
+                    "data": {
+                        "type": "object",
+                        "example": null,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PengaturanDeleteResponse": {
+                "description": "Response wrapper untuk penghapusan pengaturan",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Pengaturan berhasil dihapus."
+                    }
+                },
+                "type": "object"
+            },
             "PenggunaResource": {
+                "description": "Representasi data pengguna",
                 "properties": {
                     "id_pengguna": {
                         "type": "integer",
@@ -7299,7 +7858,11 @@
                         "nullable": true
                     },
                     "peran": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/PeranResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "id_kelas": {
@@ -7308,7 +7871,11 @@
                         "nullable": true
                     },
                     "kelas": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/KelasResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "id_mapel": {
@@ -7317,7 +7884,11 @@
                         "nullable": true
                     },
                     "mapel": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/MapelResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "id_unit": {
@@ -7326,7 +7897,11 @@
                         "nullable": true
                     },
                     "unit": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/UnitResource"
+                            }
+                        ],
                         "nullable": true
                     }
                 },
@@ -7465,7 +8040,11 @@
                         "example": "BRG-001"
                     },
                     "aset": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/AsetResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "tanggal_penghapusan": {
@@ -7490,7 +8069,11 @@
                         "nullable": true
                     },
                     "penyetuju": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/PenggunaResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "dokumen_pendukung": {
@@ -7591,6 +8174,11 @@
                     "nama_peran": {
                         "type": "string",
                         "example": "Administrator"
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Peran administrator sistem",
+                        "nullable": true
                     },
                     "akses_list": {
                         "type": "array",
@@ -7702,7 +8290,11 @@
                         "example": 1
                     },
                     "kerusakan": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/KerusakanResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "tanggal_perbaikan": {
@@ -7836,7 +8428,11 @@
                         "example": 1
                     },
                     "master_barang": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/MasterBarangResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "jumlah": {
@@ -7867,7 +8463,11 @@
                         "example": 5
                     },
                     "pemohon": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/PenggunaResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "id_penyetuju": {
@@ -7876,7 +8476,11 @@
                         "nullable": true
                     },
                     "penyetuju": {
-                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/PenggunaResource"
+                            }
+                        ],
                         "nullable": true
                     },
                     "status_permintaan": {

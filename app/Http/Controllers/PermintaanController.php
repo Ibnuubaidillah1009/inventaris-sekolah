@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
  *     @OA\Property(property="id_detail_permintaan", type="integer", example=1),
  *     @OA\Property(property="id_permintaan", type="integer", example=1),
  *     @OA\Property(property="id_master_barang", type="integer", example=1),
- *     @OA\Property(property="master_barang", type="object", nullable=true),
+ *     @OA\Property(property="master_barang", ref="#/components/schemas/MasterBarangResource", nullable=true),
  *     @OA\Property(property="jumlah", type="integer", example=5),
  *     @OA\Property(property="keterangan", type="string", nullable=true, example="Laptop")
  * )
@@ -23,9 +23,9 @@ use Illuminate\Support\Facades\DB;
  *     @OA\Property(property="id_permintaan", type="integer", example=1),
  *     @OA\Property(property="tanggal_permintaan", type="string", format="date", example="2026-04-18"),
  *     @OA\Property(property="id_pemohon", type="integer", example=5),
- *     @OA\Property(property="pemohon", type="object", nullable=true),
+ *     @OA\Property(property="pemohon", ref="#/components/schemas/PenggunaResource", nullable=true),
  *     @OA\Property(property="id_penyetuju", type="integer", nullable=true, example=null),
- *     @OA\Property(property="penyetuju", type="object", nullable=true),
+ *     @OA\Property(property="penyetuju", ref="#/components/schemas/PenggunaResource", nullable=true),
  *     @OA\Property(property="status_permintaan", type="string", example="Menunggu"),
  *     @OA\Property(property="keterangan", type="string", nullable=true, example="Permintaan alat praktik"),
  *     @OA\Property(property="detail_permintaan", type="array", @OA\Items(ref="#/components/schemas/DetailPermintaanResource"))

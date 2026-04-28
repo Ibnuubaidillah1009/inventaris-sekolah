@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
  * @OA\Schema(schema="PerbaikanResource", type="object",
  *     @OA\Property(property="id_perbaikan", type="integer", example=1),
  *     @OA\Property(property="id_kerusakan", type="integer", example=1),
- *     @OA\Property(property="kerusakan", type="object", nullable=true),
+ *     @OA\Property(property="kerusakan", ref="#/components/schemas/KerusakanResource", nullable=true),
  *     @OA\Property(property="tanggal_perbaikan", type="string", format="date", nullable=true, example="2026-04-18"),
  *     @OA\Property(property="tanggal_selesai", type="string", format="date", nullable=true, example="2026-04-20"),
  *     @OA\Property(property="pelaksana", type="string", nullable=true, example="Budi Santoso"),

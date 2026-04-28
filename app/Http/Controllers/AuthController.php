@@ -26,8 +26,16 @@ use Illuminate\Support\Facades\Hash;
  *     schema="LoginData",
  *     type="object",
  *     description="Data hasil login berisi pengguna dan token",
- *     @OA\Property(property="pengguna", type="object"),
+ *     @OA\Property(property="pengguna", ref="#/components/schemas/PenggunaResource"),
  *     @OA\Property(property="token", type="string", example="1|abc123tokenxyz")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="LogoutResponse",
+ *     type="object",
+ *     description="Response wrapper untuk logout berhasil",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Logout berhasil.")
  * )
  *
  * @OA\Schema(
@@ -123,10 +131,7 @@ class AuthController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="Logout berhasil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Logout berhasil.")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/LogoutResponse")
      *     ),
      *     @OA\Response(response=401, description="Token tidak valid atau tidak diberikan")
      * )

@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
  * @OA\Schema(schema="PeranResource", type="object",
  *     @OA\Property(property="id_peran", type="integer", example=1),
  *     @OA\Property(property="nama_peran", type="string", example="Administrator"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Peran administrator sistem"),
  *     @OA\Property(property="akses_list", type="array", @OA\Items(ref="#/components/schemas/AksesResource"))
  * )
  * @OA\Schema(schema="StorePeranRequest", type="object", required={"nama_peran"},

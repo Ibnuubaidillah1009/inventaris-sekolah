@@ -13,14 +13,14 @@ use Illuminate\Support\Facades\DB;
  * @OA\Schema(schema="MutasiResource", type="object",
  *     @OA\Property(property="id_mutasi", type="integer", example=1),
  *     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
- *     @OA\Property(property="aset", type="object", nullable=true),
+ *     @OA\Property(property="aset", ref="#/components/schemas/AsetResource", nullable=true),
  *     @OA\Property(property="id_ruang_asal", type="integer", example=1),
- *     @OA\Property(property="ruang_asal", type="object", nullable=true),
+ *     @OA\Property(property="ruang_asal", ref="#/components/schemas/RuangResource", nullable=true),
  *     @OA\Property(property="id_ruang_tujuan", type="integer", example=3),
- *     @OA\Property(property="ruang_tujuan", type="object", nullable=true),
+ *     @OA\Property(property="ruang_tujuan", ref="#/components/schemas/RuangResource", nullable=true),
  *     @OA\Property(property="tanggal_mutasi", type="string", format="date", example="2026-04-18"),
  *     @OA\Property(property="id_petugas", type="integer", example=1),
- *     @OA\Property(property="petugas", type="object", nullable=true),
+ *     @OA\Property(property="petugas", ref="#/components/schemas/PenggunaResource", nullable=true),
  *     @OA\Property(property="keterangan", type="string", nullable=true, example="Pindah ke lab baru")
  * )
  * @OA\Schema(schema="StoreMutasiRequest", type="object", required={"kode_barang","id_ruang_tujuan","tanggal_mutasi"},

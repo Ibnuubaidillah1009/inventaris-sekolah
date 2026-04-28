@@ -8,6 +8,63 @@ use App\Http\Resources\KondisiResource;
 use App\Models\Kondisi;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * ============================================================
+ *  SCHEMA DEFINITIONS – Kondisi Module
+ * ============================================================
+ *
+ * @OA\Schema(
+ *     schema="KondisiResource",
+ *     type="object",
+ *     description="Representasi data kondisi barang",
+ *     @OA\Property(property="id_kondisi", type="integer", example=1),
+ *     @OA\Property(property="nama_kondisi", type="string", example="Baik"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Kondisi barang baik")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="StoreKondisiRequest",
+ *     type="object",
+ *     required={"nama_kondisi"},
+ *     description="Payload untuk menambah kondisi baru",
+ *     @OA\Property(property="nama_kondisi", type="string", maxLength=100, example="Baik"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Kondisi barang baik")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="UpdateKondisiRequest",
+ *     type="object",
+ *     description="Payload untuk memperbarui kondisi",
+ *     @OA\Property(property="nama_kondisi", type="string", maxLength=100, example="Rusak Ringan"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Kondisi rusak ringan")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="KondisiListResponse",
+ *     type="object",
+ *     description="Response wrapper untuk daftar kondisi",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Daftar kondisi berhasil diambil."),
+ *     @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/KondisiResource"))
+ * )
+ *
+ * @OA\Schema(
+ *     schema="KondisiSingleResponse",
+ *     type="object",
+ *     description="Response wrapper untuk satu kondisi",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Detail kondisi berhasil diambil."),
+ *     @OA\Property(property="data", ref="#/components/schemas/KondisiResource")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="KondisiDeleteResponse",
+ *     type="object",
+ *     description="Response wrapper untuk penghapusan kondisi",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Kondisi berhasil dihapus.")
+ * )
+ */
 class AsetKondisiController extends Controller
 {
     /**
@@ -21,12 +78,10 @@ class AsetKondisiController extends Controller
      *     description="Mengambil daftar semua data kondisi barang.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(response=200, description="Daftar kondisi berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Daftar kondisi berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
-     *         )
-     *     )
+     *         @OA\JsonContent(ref="#/components/schemas/KondisiListResponse")
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden")
      * )
      */
     public function index(): JsonResponse
@@ -50,13 +105,12 @@ class AsetKondisiController extends Controller
      *     description="Menyimpan data kondisi baru.",
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(required=true,
-     *         @OA\JsonContent(
-     *             required={"nama_kondisi"},
-     *             @OA\Property(property="nama_kondisi", type="string", example="Baik"),
-     *             @OA\Property(property="keterangan", type="string", nullable=true, example="Kondisi barang baik")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/StoreKondisiRequest")
      *     ),
-     *     @OA\Response(response=201, description="Kondisi berhasil ditambahkan"),
+     *     @OA\Response(response=201, description="Kondisi berhasil ditambahkan",
+     *         @OA\JsonContent(ref="#/components/schemas/KondisiSingleResponse")
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=422, description="Validasi gagal")
      * )
      */
@@ -81,7 +135,10 @@ class AsetKondisiController extends Controller
      *     description="Mengambil detail satu kondisi.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID kondisi", @OA\Schema(type="integer", example=1)),
-     *     @OA\Response(response=200, description="Detail kondisi berhasil diambil"),
+     *     @OA\Response(response=200, description="Detail kondisi berhasil diambil",
+     *         @OA\JsonContent(ref="#/components/schemas/KondisiSingleResponse")
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=404, description="Kondisi tidak ditemukan")
      * )
      */
@@ -110,13 +167,14 @@ class AsetKondisiController extends Controller
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID kondisi", @OA\Schema(type="integer", example=1)),
      *     @OA\RequestBody(required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="nama_kondisi", type="string", example="Rusak Ringan"),
-     *             @OA\Property(property="keterangan", type="string", nullable=true, example="Kondisi rusak ringan")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateKondisiRequest")
      *     ),
-     *     @OA\Response(response=200, description="Kondisi berhasil diperbarui"),
-     *     @OA\Response(response=404, description="Kondisi tidak ditemukan")
+     *     @OA\Response(response=200, description="Kondisi berhasil diperbarui",
+     *         @OA\JsonContent(ref="#/components/schemas/KondisiSingleResponse")
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=404, description="Kondisi tidak ditemukan"),
+     *     @OA\Response(response=422, description="Validasi gagal")
      * )
      */
     public function update(UpdateKondisiRequest $request, int $id): JsonResponse
@@ -144,7 +202,11 @@ class AsetKondisiController extends Controller
      *     description="Menghapus kondisi.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID kondisi", @OA\Schema(type="integer", example=1)),
-     *     @OA\Response(response=200, description="Kondisi berhasil dihapus")
+     *     @OA\Response(response=200, description="Kondisi berhasil dihapus",
+     *         @OA\JsonContent(ref="#/components/schemas/KondisiDeleteResponse")
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=404, description="Kondisi tidak ditemukan")
      * )
      */
     public function destroy(int $id): JsonResponse

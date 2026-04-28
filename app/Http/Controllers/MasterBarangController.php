@@ -10,16 +10,18 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * @OA\Schema(schema="MasterBarangResource", type="object",
+ *     description="Representasi data master barang",
  *     @OA\Property(property="id_master_barang", type="integer", example=1),
  *     @OA\Property(property="nama_barang", type="string", example="Laptop Lenovo ThinkPad"),
  *     @OA\Property(property="id_kategori", type="integer", example=1),
- *     @OA\Property(property="kategori", type="object", nullable=true),
+ *     @OA\Property(property="kategori", ref="#/components/schemas/KategoriResource", nullable=true),
  *     @OA\Property(property="id_merek", type="integer", example=1),
- *     @OA\Property(property="merek", type="object", nullable=true),
+ *     @OA\Property(property="merek", ref="#/components/schemas/MerekResource", nullable=true),
  *     @OA\Property(property="id_satuan", type="integer", example=1),
- *     @OA\Property(property="satuan", type="object", nullable=true),
+ *     @OA\Property(property="satuan", ref="#/components/schemas/SatuanResource", nullable=true),
  *     @OA\Property(property="jenis_barang", type="string", example="Inventaris"),
  *     @OA\Property(property="stok_minimal", type="integer", example=5),
+ *     @OA\Property(property="stok_aktual", type="integer", example=10),
  *     @OA\Property(property="keterangan", type="string", nullable=true, example="Stok untuk lab")
  * )
  * @OA\Schema(schema="StoreMasterBarangRequest", type="object", required={"nama_barang","id_kategori","id_merek","id_satuan","jenis_barang","stok_minimal"},

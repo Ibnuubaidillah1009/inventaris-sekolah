@@ -19,11 +19,16 @@ use Illuminate\Http\JsonResponse;
  *     description="Representasi data aset inventaris",
  *     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
  *     @OA\Property(property="id_master_barang", type="integer", example=1),
- *     @OA\Property(property="master_barang", type="object", nullable=true),
+ *     @OA\Property(property="master_barang", ref="#/components/schemas/MasterBarangResource", nullable=true),
  *     @OA\Property(property="id_ruang", type="integer", nullable=true, example=1),
- *     @OA\Property(property="nama_ruang", type="string", nullable=true, example="Lab Komputer 1"),
+ *     @OA\Property(property="ruang", ref="#/components/schemas/RuangResource", nullable=true),
+ *     @OA\Property(property="tanggal_registrasi", type="string", format="date", nullable=true, example="2026-01-15"),
+ *     @OA\Property(property="id_kondisi", type="integer", nullable=true, example=1),
+ *     @OA\Property(property="kondisi", ref="#/components/schemas/KondisiResource", nullable=true),
  *     @OA\Property(property="nilai_residu", type="number", nullable=true, example=500000),
- *     @OA\Property(property="kondisi_barang", type="string", example="Baik"),
+ *     @OA\Property(property="id_status", type="integer", nullable=true, example=1),
+ *     @OA\Property(property="status_barang", ref="#/components/schemas/StatusBarangResource", nullable=true),
+ *     @OA\Property(property="gambar", type="string", nullable=true, example="https://example.com/image.jpg"),
  *     @OA\Property(property="keterangan", type="string", nullable=true, example="Barang dalam kondisi terawat")
  * )
  *

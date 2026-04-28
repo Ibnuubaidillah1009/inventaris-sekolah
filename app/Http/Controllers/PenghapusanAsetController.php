@@ -13,12 +13,12 @@ use Illuminate\Support\Facades\DB;
  * @OA\Schema(schema="PenghapusanAsetResource", type="object",
  *     @OA\Property(property="id_penghapusan", type="integer", example=1),
  *     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
- *     @OA\Property(property="aset", type="object", nullable=true),
+ *     @OA\Property(property="aset", ref="#/components/schemas/AsetResource", nullable=true),
  *     @OA\Property(property="tanggal_penghapusan", type="string", format="date", nullable=true, example="2026-04-18"),
  *     @OA\Property(property="alasan", type="string", nullable=true, example="Sudah tidak layak pakai"),
  *     @OA\Property(property="metode_penghapusan", type="string", nullable=true, example="Lelang"),
  *     @OA\Property(property="id_penyetuju", type="integer", nullable=true, example=2),
- *     @OA\Property(property="penyetuju", type="object", nullable=true),
+ *     @OA\Property(property="penyetuju", ref="#/components/schemas/PenggunaResource", nullable=true),
  *     @OA\Property(property="dokumen_pendukung", type="string", nullable=true, example="SK-001.pdf"),
  *     @OA\Property(property="keterangan", type="string", nullable=true, example="Barang rusak berat")
  * )

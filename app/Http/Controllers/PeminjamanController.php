@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
  *     @OA\Property(property="id_detail_pinjam", type="integer", example=1),
  *     @OA\Property(property="nomor_peminjaman", type="string", example="PJM-2026-001"),
  *     @OA\Property(property="kode_barang", type="string", example="BRG-001"),
- *     @OA\Property(property="aset", type="object", nullable=true)
+ *     @OA\Property(property="aset", ref="#/components/schemas/AsetResource", nullable=true)
  * )
  * @OA\Schema(schema="PeminjamanResource", type="object",
  *     @OA\Property(property="nomor_peminjaman", type="string", example="PJM-2026-001"),
@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\DB;
  *     @OA\Property(property="lama_pinjam_hari", type="integer", example=7),
  *     @OA\Property(property="status_peminjaman", type="string", example="Sedang Dipinjam"),
  *     @OA\Property(property="keterangan", type="string", nullable=true, example="Untuk kegiatan praktikum"),
- *     @OA\Property(property="peminjam", type="object", nullable=true),
+ *     @OA\Property(property="peminjam", ref="#/components/schemas/PenggunaResource", nullable=true),
  *     @OA\Property(property="detail_peminjaman", type="array", @OA\Items(ref="#/components/schemas/DetailPeminjamanResource"))
  * )
  * @OA\Schema(schema="StorePeminjamanRequest", type="object", required={"nomor_peminjaman","tanggal_pinjam","id_peminjam","lama_pinjam_hari","detail"},

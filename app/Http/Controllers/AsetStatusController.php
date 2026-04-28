@@ -8,6 +8,63 @@ use App\Http\Resources\StatusBarangResource;
 use App\Models\StatusBarang;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * ============================================================
+ *  SCHEMA DEFINITIONS – Status Barang Module
+ * ============================================================
+ *
+ * @OA\Schema(
+ *     schema="StatusBarangResource",
+ *     type="object",
+ *     description="Representasi data status barang",
+ *     @OA\Property(property="id_status", type="integer", example=1),
+ *     @OA\Property(property="nama_status", type="string", example="Tersedia"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Barang tersedia untuk dipinjam")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="StoreStatusBarangRequest",
+ *     type="object",
+ *     required={"nama_status"},
+ *     description="Payload untuk menambah status barang baru",
+ *     @OA\Property(property="nama_status", type="string", maxLength=100, example="Tersedia"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Barang tersedia untuk dipinjam")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="UpdateStatusBarangRequest",
+ *     type="object",
+ *     description="Payload untuk memperbarui status barang",
+ *     @OA\Property(property="nama_status", type="string", maxLength=100, example="Dipinjam"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true, example="Barang sedang dipinjam")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="StatusBarangListResponse",
+ *     type="object",
+ *     description="Response wrapper untuk daftar status barang",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Daftar status barang berhasil diambil."),
+ *     @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/StatusBarangResource"))
+ * )
+ *
+ * @OA\Schema(
+ *     schema="StatusBarangSingleResponse",
+ *     type="object",
+ *     description="Response wrapper untuk satu status barang",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Detail status barang berhasil diambil."),
+ *     @OA\Property(property="data", ref="#/components/schemas/StatusBarangResource")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="StatusBarangDeleteResponse",
+ *     type="object",
+ *     description="Response wrapper untuk penghapusan status barang",
+ *     @OA\Property(property="status", type="boolean", example=true),
+ *     @OA\Property(property="message", type="string", example="Status barang berhasil dihapus.")
+ * )
+ */
 class AsetStatusController extends Controller
 {
     /**
@@ -21,12 +78,10 @@ class AsetStatusController extends Controller
      *     description="Mengambil daftar semua data status barang.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(response=200, description="Daftar status barang berhasil diambil",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Daftar status barang berhasil diambil."),
-     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
-     *         )
-     *     )
+     *         @OA\JsonContent(ref="#/components/schemas/StatusBarangListResponse")
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Forbidden")
      * )
      */
     public function index(): JsonResponse
@@ -50,13 +105,12 @@ class AsetStatusController extends Controller
      *     description="Menyimpan data status barang baru.",
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(required=true,
-     *         @OA\JsonContent(
-     *             required={"nama_status"},
-     *             @OA\Property(property="nama_status", type="string", example="Tersedia"),
-     *             @OA\Property(property="keterangan", type="string", nullable=true, example="Barang tersedia untuk dipinjam")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/StoreStatusBarangRequest")
      *     ),
-     *     @OA\Response(response=201, description="Status barang berhasil ditambahkan"),
+     *     @OA\Response(response=201, description="Status barang berhasil ditambahkan",
+     *         @OA\JsonContent(ref="#/components/schemas/StatusBarangSingleResponse")
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=422, description="Validasi gagal")
      * )
      */
@@ -81,7 +135,10 @@ class AsetStatusController extends Controller
      *     description="Mengambil detail satu status barang.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID status barang", @OA\Schema(type="integer", example=1)),
-     *     @OA\Response(response=200, description="Detail status barang berhasil diambil"),
+     *     @OA\Response(response=200, description="Detail status barang berhasil diambil",
+     *         @OA\JsonContent(ref="#/components/schemas/StatusBarangSingleResponse")
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=404, description="Status barang tidak ditemukan")
      * )
      */
@@ -110,13 +167,14 @@ class AsetStatusController extends Controller
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID status barang", @OA\Schema(type="integer", example=1)),
      *     @OA\RequestBody(required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="nama_status", type="string", example="Dipinjam"),
-     *             @OA\Property(property="keterangan", type="string", nullable=true, example="Barang sedang dipinjam")
-     *         )
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateStatusBarangRequest")
      *     ),
-     *     @OA\Response(response=200, description="Status barang berhasil diperbarui"),
-     *     @OA\Response(response=404, description="Status barang tidak ditemukan")
+     *     @OA\Response(response=200, description="Status barang berhasil diperbarui",
+     *         @OA\JsonContent(ref="#/components/schemas/StatusBarangSingleResponse")
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=404, description="Status barang tidak ditemukan"),
+     *     @OA\Response(response=422, description="Validasi gagal")
      * )
      */
     public function update(UpdateStatusBarangRequest $request, int $id): JsonResponse
@@ -144,7 +202,11 @@ class AsetStatusController extends Controller
      *     description="Menghapus status barang.",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, description="ID status barang", @OA\Schema(type="integer", example=1)),
-     *     @OA\Response(response=200, description="Status barang berhasil dihapus")
+     *     @OA\Response(response=200, description="Status barang berhasil dihapus",
+     *         @OA\JsonContent(ref="#/components/schemas/StatusBarangDeleteResponse")
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=404, description="Status barang tidak ditemukan")
      * )
      */
     public function destroy(int $id): JsonResponse
