@@ -53,7 +53,7 @@ class AsetStatusController extends Controller
      *         @OA\JsonContent(
      *             required={"nama_status"},
      *             @OA\Property(property="nama_status", type="string", example="Tersedia"),
-     *             @OA\Property(property="keterangan", type="string", example="Barang tersedia untuk dipinjam")
+     *             @OA\Property(property="keterangan", type="string", nullable=true, example="Barang tersedia untuk dipinjam")
      *         )
      *     ),
      *     @OA\Response(response=201, description="Status barang berhasil ditambahkan"),
@@ -112,7 +112,7 @@ class AsetStatusController extends Controller
      *     @OA\RequestBody(required=true,
      *         @OA\JsonContent(
      *             @OA\Property(property="nama_status", type="string", example="Dipinjam"),
-     *             @OA\Property(property="keterangan", type="string", example="Barang sedang dipinjam")
+     *             @OA\Property(property="keterangan", type="string", nullable=true, example="Barang sedang dipinjam")
      *         )
      *     ),
      *     @OA\Response(response=200, description="Status barang berhasil diperbarui"),

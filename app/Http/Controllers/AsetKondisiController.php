@@ -53,7 +53,7 @@ class AsetKondisiController extends Controller
      *         @OA\JsonContent(
      *             required={"nama_kondisi"},
      *             @OA\Property(property="nama_kondisi", type="string", example="Baik"),
-     *             @OA\Property(property="keterangan", type="string", example="Kondisi barang baik")
+     *             @OA\Property(property="keterangan", type="string", nullable=true, example="Kondisi barang baik")
      *         )
      *     ),
      *     @OA\Response(response=201, description="Kondisi berhasil ditambahkan"),
@@ -112,7 +112,7 @@ class AsetKondisiController extends Controller
      *     @OA\RequestBody(required=true,
      *         @OA\JsonContent(
      *             @OA\Property(property="nama_kondisi", type="string", example="Rusak Ringan"),
-     *             @OA\Property(property="keterangan", type="string", example="Kondisi rusak ringan")
+     *             @OA\Property(property="keterangan", type="string", nullable=true, example="Kondisi rusak ringan")
      *         )
      *     ),
      *     @OA\Response(response=200, description="Kondisi berhasil diperbarui"),

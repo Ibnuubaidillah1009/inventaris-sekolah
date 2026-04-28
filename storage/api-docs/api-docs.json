@@ -540,7 +540,8 @@
                                     },
                                     "keterangan": {
                                         "type": "string",
-                                        "example": "Kondisi barang baik"
+                                        "example": "Kondisi barang baik",
+                                        "nullable": true
                                     }
                                 },
                                 "type": "object"
@@ -628,7 +629,8 @@
                                     },
                                     "keterangan": {
                                         "type": "string",
-                                        "example": "Kondisi rusak ringan"
+                                        "example": "Kondisi rusak ringan",
+                                        "nullable": true
                                     }
                                 },
                                 "type": "object"
@@ -745,7 +747,8 @@
                                     },
                                     "keterangan": {
                                         "type": "string",
-                                        "example": "Barang tersedia untuk dipinjam"
+                                        "example": "Barang tersedia untuk dipinjam",
+                                        "nullable": true
                                     }
                                 },
                                 "type": "object"
@@ -833,7 +836,8 @@
                                     },
                                     "keterangan": {
                                         "type": "string",
-                                        "example": "Barang sedang dipinjam"
+                                        "example": "Barang sedang dipinjam",
+                                        "nullable": true
                                     }
                                 },
                                 "type": "object"
@@ -2987,6 +2991,157 @@
                 ]
             }
         },
+        "/opname-aset": {
+            "get": {
+                "tags": [
+                    "Opname Aset"
+                ],
+                "summary": "Daftar opname aset",
+                "operationId": "indexOpnameAset",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Opname Aset"
+                ],
+                "summary": "Tambah opname aset",
+                "operationId": "storeOpnameAset",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreOpnameAsetRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/opname-aset/{id}": {
+            "get": {
+                "tags": [
+                    "Opname Aset"
+                ],
+                "summary": "Detail opname aset",
+                "operationId": "showOpnameAset",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Opname Aset"
+                ],
+                "summary": "Update opname aset",
+                "operationId": "updateOpnameAset",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateOpnameAsetRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Opname Aset"
+                ],
+                "summary": "Hapus opname aset",
+                "operationId": "destroyOpnameAset",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/peminjaman": {
             "get": {
                 "tags": [
@@ -3174,6 +3329,226 @@
                     },
                     "500": {
                         "description": "Gagal proses"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pengaturan": {
+            "get": {
+                "tags": [
+                    "Pengaturan"
+                ],
+                "summary": "Ambil data pengaturan lembaga",
+                "operationId": "indexPengaturan",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pengaturan"
+                ],
+                "summary": "Buat pengaturan lembaga",
+                "operationId": "storePengaturan",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "nama_instansi"
+                                ],
+                                "properties": {
+                                    "nama_instansi": {
+                                        "type": "string"
+                                    },
+                                    "alamat_instansi": {
+                                        "type": "string"
+                                    },
+                                    "wallpaper_aplikasi": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "telpon": {
+                                        "type": "string"
+                                    },
+                                    "website": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "kota": {
+                                        "type": "string"
+                                    },
+                                    "kepala_sekolah": {
+                                        "type": "string"
+                                    },
+                                    "NIP": {
+                                        "type": "string"
+                                    },
+                                    "bagian_inventaris": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pengaturan/{id}": {
+            "get": {
+                "tags": [
+                    "Pengaturan"
+                ],
+                "summary": "Detail pengaturan",
+                "operationId": "showPengaturan",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pengaturan"
+                ],
+                "summary": "Update pengaturan lembaga",
+                "operationId": "updatePengaturan",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "nama_instansi": {
+                                        "type": "string"
+                                    },
+                                    "alamat_instansi": {
+                                        "type": "string"
+                                    },
+                                    "wallpaper_aplikasi": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "telpon": {
+                                        "type": "string"
+                                    },
+                                    "website": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "kota": {
+                                        "type": "string"
+                                    },
+                                    "kepala_sekolah": {
+                                        "type": "string"
+                                    },
+                                    "NIP": {
+                                        "type": "string"
+                                    },
+                                    "bagian_inventaris": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Pengaturan"
+                ],
+                "summary": "Hapus pengaturan",
+                "operationId": "destroyPengaturan",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 },
                 "security": [
@@ -5596,7 +5971,8 @@
                     },
                     "keterangan": {
                         "type": "string",
-                        "example": "Barang-barang elektronik"
+                        "example": "Barang-barang elektronik",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -5614,7 +5990,8 @@
                     },
                     "keterangan": {
                         "type": "string",
-                        "example": "Barang-barang elektronik"
+                        "example": "Barang-barang elektronik",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -5629,7 +6006,8 @@
                     },
                     "keterangan": {
                         "type": "string",
-                        "example": "Perabotan kantor"
+                        "example": "Perabotan kantor",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -6585,6 +6963,100 @@
                 },
                 "type": "object"
             },
+            "OpnameAsetResource": {
+                "properties": {
+                    "id_opname_aset": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "kode_barang": {
+                        "type": "string",
+                        "example": "BRG-2026-001"
+                    },
+                    "nama_barang": {
+                        "type": "string",
+                        "example": "Laptop Lenovo ThinkPad"
+                    },
+                    "tanggal_opname": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2026-04-27"
+                    },
+                    "kondisi_ditemukan": {
+                        "type": "string",
+                        "example": "Baik"
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Kondisi sesuai data",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "StoreOpnameAsetRequest": {
+                "required": [
+                    "kode_barang",
+                    "tanggal_opname",
+                    "kondisi_ditemukan"
+                ],
+                "properties": {
+                    "kode_barang": {
+                        "type": "string",
+                        "example": "BRG-2026-001"
+                    },
+                    "tanggal_opname": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2026-04-27"
+                    },
+                    "kondisi_ditemukan": {
+                        "type": "string",
+                        "example": "Baik",
+                        "enum": [
+                            "Baik",
+                            "Rusak Ringan",
+                            "Rusak Berat",
+                            "Hilang"
+                        ]
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Kondisi sesuai data",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateOpnameAsetRequest": {
+                "properties": {
+                    "kode_barang": {
+                        "type": "string",
+                        "example": "BRG-2026-001"
+                    },
+                    "tanggal_opname": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2026-04-27"
+                    },
+                    "kondisi_ditemukan": {
+                        "type": "string",
+                        "example": "Rusak Ringan",
+                        "enum": [
+                            "Baik",
+                            "Rusak Ringan",
+                            "Rusak Berat",
+                            "Hilang"
+                        ]
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Ada kerusakan minor",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
             "DetailPeminjamanResource": {
                 "properties": {
                     "id_detail_pinjam": {
@@ -6750,6 +7222,63 @@
                     "message": {
                         "type": "string",
                         "example": "Peminjaman berhasil dihapus."
+                    }
+                },
+                "type": "object"
+            },
+            "PengaturanResource": {
+                "properties": {
+                    "id_pengaturan": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nama_instansi": {
+                        "type": "string",
+                        "example": "SMK Negeri 1 Contoh"
+                    },
+                    "alamat_instansi": {
+                        "type": "string",
+                        "example": "Jl. Pendidikan No.1"
+                    },
+                    "wallpaper_aplikasi": {
+                        "type": "string",
+                        "example": "pengaturan/logo.png",
+                        "nullable": true
+                    },
+                    "telpon": {
+                        "type": "string",
+                        "example": "021-12345678",
+                        "nullable": true
+                    },
+                    "website": {
+                        "type": "string",
+                        "example": "https://smkn1contoh.sch.id",
+                        "nullable": true
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "info@smkn1contoh.sch.id",
+                        "nullable": true
+                    },
+                    "kota": {
+                        "type": "string",
+                        "example": "Jakarta",
+                        "nullable": true
+                    },
+                    "kepala_sekolah": {
+                        "type": "string",
+                        "example": "Dr. Budi Santoso, M.Pd",
+                        "nullable": true
+                    },
+                    "NIP": {
+                        "type": "string",
+                        "example": "196801011990031001",
+                        "nullable": true
+                    },
+                    "bagian_inventaris": {
+                        "type": "string",
+                        "example": "Bagian Sarana dan Prasarana",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -8003,6 +8532,14 @@
         {
             "name": "Penghapusan Aset",
             "description": "Penghapusan aset dari inventaris"
+        },
+        {
+            "name": "Opname Aset",
+            "description": "Manajemen opname aset"
+        },
+        {
+            "name": "Pengaturan",
+            "description": "Pengaturan profil dan identitas lembaga"
         },
         {
             "name": "Database",
