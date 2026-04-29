@@ -8202,6 +8202,10 @@
                         "type": "string",
                         "example": "Kepala Sekolah",
                         "maxLength": 100
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -8212,6 +8216,10 @@
                         "type": "string",
                         "example": "Wakil Kepala Sekolah",
                         "maxLength": 100
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "nullable": true
                     }
                 },
                 "type": "object"

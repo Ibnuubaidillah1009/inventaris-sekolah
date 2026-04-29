@@ -17,10 +17,12 @@ use Illuminate\Http\Request;
  *     @OA\Property(property="akses_list", type="array", @OA\Items(ref="#/components/schemas/AksesResource"))
  * )
  * @OA\Schema(schema="StorePeranRequest", type="object", required={"nama_peran"},
- *     @OA\Property(property="nama_peran", type="string", maxLength=100, example="Kepala Sekolah")
+ *     @OA\Property(property="nama_peran", type="string", maxLength=100, example="Kepala Sekolah"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true)
  * )
  * @OA\Schema(schema="UpdatePeranRequest", type="object",
- *     @OA\Property(property="nama_peran", type="string", maxLength=100, example="Wakil Kepala Sekolah")
+ *     @OA\Property(property="nama_peran", type="string", maxLength=100, example="Wakil Kepala Sekolah"),
+ *     @OA\Property(property="keterangan", type="string", nullable=true)
  * )
  * @OA\Schema(schema="SyncAksesRequest", type="object", required={"id_akses"},
  *     @OA\Property(property="id_akses", type="array", @OA\Items(type="integer"), example={1, 2, 3})
