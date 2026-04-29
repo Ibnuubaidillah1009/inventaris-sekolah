@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Artisan;
  *     @OA\Property(property="db_host", type="string", example="127.0.0.1"),
  *     @OA\Property(property="db_name", type="string", example="inventaris_sekolah_db"),
  *     @OA\Property(property="db_user", type="string", example="root"),
- *     @OA\Property(property="db_pass", type="string", nullable=true, example="secret123")
+ *     @OA\Property(property="db_pass", type="string", nullable=true, example="secret123"),
+ *     @OA\Property(property="db_port", type="string", example="3307")  
  * )
  * @OA\Schema(schema="DatabaseChangeConnectionResponse", type="object",
  *     @OA\Property(property="message", type="string", example="Koneksi berhasil diubah.")
@@ -119,6 +120,7 @@ class DatabaseController extends Controller
             'db_name' => 'required',
             'db_user' => 'required',
             'db_pass' => 'nullable',
+            'port' => 'required',
         ]);
 
         // Logika untuk mengubah file .env
@@ -142,6 +144,11 @@ class DatabaseController extends Controller
             file_put_contents($path, str_replace(
                 'DB_PASSWORD=' . env('DB_PASSWORD'),
                 'DB_PASSWORD=' . $request->db_pass,
+                file_get_contents($path)
+            ));
+            file_put_contents($path, str_replace(
+                'DB_PORT=' . env('DB_PORT'),
+                'DB_PORT=' . $request->db_port,
                 file_get_contents($path)
             ));
         }

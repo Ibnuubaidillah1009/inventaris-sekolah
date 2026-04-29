@@ -6192,6 +6192,10 @@
                         "type": "string",
                         "example": "secret123",
                         "nullable": true
+                    },
+                    "db_port": {
+                        "type": "string",
+                        "example": "3307"
                     }
                 },
                 "type": "object"
