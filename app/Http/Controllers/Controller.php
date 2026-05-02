@@ -48,6 +48,8 @@ namespace App\Http\Controllers;
  * @OA\Tag(name="Perbaikan", description="Data perbaikan aset rusak")
  * @OA\Tag(name="Penghapusan Aset", description="Penghapusan aset dari inventaris")
  * @OA\Tag(name="Opname Aset", description="Manajemen opname aset")
+ * @OA\Tag(name="Pemasok", description="Manajemen data pemasok / supplier")
+ * @OA\Tag(name="Gudang", description="Manajemen data gudang penyimpanan")
  * @OA\Tag(name="Pengaturan", description="Pengaturan profil dan identitas lembaga")
  * @OA\Tag(name="Database", description="Manajemen database (backup, restore, reset, koneksi)")
  */

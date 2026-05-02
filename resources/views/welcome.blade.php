@@ -1537,6 +1537,68 @@ const API_DATA = [
             { method: "DELETE", path: "/api/opname-aset/{id}", summary: "Hapus opname aset", auth: true, desc: "Menghapus data opname aset.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID opname aset" }], request: null, response: { status: 200, body: { status: true, message: "Opname aset berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Opname aset tidak ditemukan." } }] }
         ]
     },
+    // ───────────────── PEMASOK (SUPPLIER) ─────────────────
+    {
+        group: "Pemasok (Supplier)",
+        icon: "🏭",
+        color: "#8b5cf6",
+        description: "Manajemen data pemasok / supplier. ID pemasok dapat di-generate otomatis jika dikosongkan.",
+        endpoints: [
+            { method: "GET", path: "/api/pemasok", summary: "Daftar pemasok", auth: true, desc: "Mengambil semua data pemasok / supplier.", request: null, response: { status: 200, body: { status: true, message: "Daftar pemasok berhasil diambil.", data: [{ id_pemasok: 1, nama_pemasok: "PT Sumber Jaya", nomor_telepon: "081234567890", alamat: "Jl. Raya No. 123", keterangan: null }] } }, errors: [] },
+            { method: "POST", path: "/api/pemasok", summary: "Tambah pemasok", auth: true, desc: "Menambahkan pemasok baru. Jika id_pemasok dikosongkan, sistem akan men-generate angka acak yang unik secara otomatis.",
+              body: [
+                  { name: "id_pemasok", type: "integer", required: false, desc: "Kode pemasok (opsional, jika kosong akan di-generate otomatis)" },
+                  { name: "nama_pemasok", type: "string", required: true, desc: "Nama supplier / pemasok (maks 150 karakter)" },
+                  { name: "nomor_telepon", type: "string", required: false, desc: "Nomor telepon kontak (maks 20 karakter)" },
+                  { name: "alamat", type: "string", required: false, desc: "Alamat pemasok" },
+                  { name: "keterangan", type: "string", required: false, desc: "Keterangan tambahan" }
+              ],
+              request: { nama_pemasok: "PT Sumber Jaya", nomor_telepon: "081234567890", alamat: "Jl. Raya No. 123", keterangan: "Pemasok alat tulis" },
+              response: { status: 201, body: { status: true, message: "Pemasok berhasil ditambahkan.", data: { id_pemasok: 4523, nama_pemasok: "PT Sumber Jaya", nomor_telepon: "081234567890", alamat: "Jl. Raya No. 123", keterangan: "Pemasok alat tulis" } } },
+              errors: [{ status: 422, body: { status: false, message: "Validasi gagal.", errors: { id_pemasok: ["ID pemasok sudah digunakan."] } } }] },
+            { method: "GET", path: "/api/pemasok/{id}", summary: "Detail pemasok", auth: true, desc: "Mengambil detail satu pemasok berdasarkan ID.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID pemasok" }], request: null, response: { status: 200, body: { status: true, message: "Detail pemasok berhasil diambil.", data: { id_pemasok: 1, nama_pemasok: "PT Sumber Jaya", nomor_telepon: "081234567890", alamat: "Jl. Raya No. 123", keterangan: null } } }, errors: [{ status: 404, body: { status: false, message: "Pemasok tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/pemasok/{id}", summary: "Update pemasok", auth: true, desc: "Memperbarui data pemasok.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID pemasok" }],
+              body: [
+                  { name: "nama_pemasok", type: "string", required: false, desc: "Nama pemasok" },
+                  { name: "nomor_telepon", type: "string", required: false, desc: "Nomor telepon" },
+                  { name: "alamat", type: "string", required: false, desc: "Alamat" },
+                  { name: "keterangan", type: "string", required: false, desc: "Keterangan" }
+              ],
+              request: { nama_pemasok: "PT Sumber Jaya Updated", nomor_telepon: "089876543210" },
+              response: { status: 200, body: { status: true, message: "Pemasok berhasil diperbarui.", data: { id_pemasok: 1, nama_pemasok: "PT Sumber Jaya Updated", nomor_telepon: "089876543210", alamat: "Jl. Raya No. 123", keterangan: null } } },
+              errors: [{ status: 404, body: { status: false, message: "Pemasok tidak ditemukan." } }] },
+            { method: "DELETE", path: "/api/pemasok/{id}", summary: "Hapus pemasok", auth: true, desc: "Menghapus data pemasok.", params: [{ name: "id", in: "path", type: "integer", required: true, desc: "ID pemasok" }], request: null, response: { status: 200, body: { status: true, message: "Pemasok berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Pemasok tidak ditemukan." } }] }
+        ]
+    },
+    // ───────────────── GUDANG ─────────────────
+    {
+        group: "Gudang",
+        icon: "🏢",
+        color: "#06b6d4",
+        description: "Manajemen data gudang penyimpanan barang.",
+        endpoints: [
+            { method: "GET", path: "/api/gudang", summary: "Daftar gudang", auth: true, desc: "Mengambil semua data gudang.", request: null, response: { status: 200, body: { status: true, message: "Daftar gudang berhasil diambil.", data: [{ kode_gudang: "GDG-001", nama_gudang: "Gudang Utama", keterangan: "Gudang penyimpanan utama" }] } }, errors: [] },
+            { method: "POST", path: "/api/gudang", summary: "Tambah gudang", auth: true, desc: "Menambahkan gudang baru.",
+              body: [
+                  { name: "kode_gudang", type: "string", required: true, desc: "Kode gudang unik (maks 20 karakter)" },
+                  { name: "nama_gudang", type: "string", required: true, desc: "Nama gudang (maks 100 karakter)" },
+                  { name: "keterangan", type: "string", required: false, desc: "Keterangan tambahan" }
+              ],
+              request: { kode_gudang: "GDG-002", nama_gudang: "Gudang Cadangan", keterangan: "Gudang penyimpanan cadangan" },
+              response: { status: 201, body: { status: true, message: "Gudang berhasil ditambahkan.", data: { kode_gudang: "GDG-002", nama_gudang: "Gudang Cadangan", keterangan: "Gudang penyimpanan cadangan" } } },
+              errors: [{ status: 422, body: { status: false, message: "Validasi gagal.", errors: { kode_gudang: ["Kode gudang sudah digunakan."] } } }] },
+            { method: "GET", path: "/api/gudang/{id}", summary: "Detail gudang", auth: true, desc: "Mengambil detail satu gudang berdasarkan kode gudang.", params: [{ name: "id", in: "path", type: "string", required: true, desc: "Kode gudang" }], request: null, response: { status: 200, body: { status: true, message: "Detail gudang berhasil diambil.", data: { kode_gudang: "GDG-001", nama_gudang: "Gudang Utama", keterangan: "Gudang penyimpanan utama" } } }, errors: [{ status: 404, body: { status: false, message: "Gudang tidak ditemukan." } }] },
+            { method: "PUT", path: "/api/gudang/{id}", summary: "Update gudang", auth: true, desc: "Memperbarui data gudang.", params: [{ name: "id", in: "path", type: "string", required: true, desc: "Kode gudang" }],
+              body: [
+                  { name: "nama_gudang", type: "string", required: false, desc: "Nama gudang" },
+                  { name: "keterangan", type: "string", required: false, desc: "Keterangan" }
+              ],
+              request: { nama_gudang: "Gudang Utama Updated" },
+              response: { status: 200, body: { status: true, message: "Gudang berhasil diperbarui.", data: { kode_gudang: "GDG-001", nama_gudang: "Gudang Utama Updated", keterangan: "Gudang penyimpanan utama" } } },
+              errors: [{ status: 404, body: { status: false, message: "Gudang tidak ditemukan." } }] },
+            { method: "DELETE", path: "/api/gudang/{id}", summary: "Hapus gudang", auth: true, desc: "Menghapus data gudang.", params: [{ name: "id", in: "path", type: "string", required: true, desc: "Kode gudang" }], request: null, response: { status: 200, body: { status: true, message: "Gudang berhasil dihapus." } }, errors: [{ status: 404, body: { status: false, message: "Gudang tidak ditemukan." } }] }
+        ]
+    },
     // ───────────────── PENGATURAN ─────────────────
     {
         group: "Pengaturan",

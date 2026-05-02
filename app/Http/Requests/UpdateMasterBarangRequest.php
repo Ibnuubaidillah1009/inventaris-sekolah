@@ -20,7 +20,7 @@ class UpdateMasterBarangRequest extends FormRequest
             'id_kategori'  => ['sometimes', 'required', 'integer', 'exists:kategori,id_kategori'],
             'id_merek'     => ['sometimes', 'required', 'integer', 'exists:merek,id_merek'],
             'id_satuan'    => ['sometimes', 'required', 'integer', 'exists:satuan,id_satuan'],
-            'jenis_barang' => ['sometimes', 'required', 'string', 'in:Inventaris,Consumable'],
+            'jenis_barang' => ['sometimes', 'required', 'string', 'in:Inventaris,Habis Pakai'],
             'stok_minimal' => ['sometimes', 'required', 'integer', 'min:0'],
             'keterangan'   => ['nullable', 'string'],
         ];

@@ -1190,6 +1190,236 @@
                 ]
             }
         },
+        "/gudang": {
+            "get": {
+                "tags": [
+                    "Gudang"
+                ],
+                "summary": "Daftar semua gudang",
+                "description": "Mengambil daftar semua gudang.",
+                "operationId": "indexGudang",
+                "responses": {
+                    "200": {
+                        "description": "Daftar gudang berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GudangListResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Gudang"
+                ],
+                "summary": "Tambah gudang baru",
+                "description": "Menyimpan data gudang baru.",
+                "operationId": "storeGudang",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreGudangRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Gudang berhasil ditambahkan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GudangSingleResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gudang/{id}": {
+            "get": {
+                "tags": [
+                    "Gudang"
+                ],
+                "summary": "Detail gudang",
+                "description": "Mengambil detail satu gudang berdasarkan kode gudang.",
+                "operationId": "showGudang",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Kode gudang",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "GDG-001"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detail gudang berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GudangSingleResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Gudang tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Gudang"
+                ],
+                "summary": "Update gudang",
+                "description": "Memperbarui data gudang berdasarkan kode gudang.",
+                "operationId": "updateGudang",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Kode gudang",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "GDG-001"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateGudangRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Gudang berhasil diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GudangSingleResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Gudang tidak ditemukan"
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Gudang"
+                ],
+                "summary": "Hapus gudang",
+                "description": "Menghapus data gudang berdasarkan kode gudang.",
+                "operationId": "destroyGudang",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Kode gudang",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "GDG-001"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Gudang berhasil dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GudangDeleteResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Gudang tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/jurusan": {
             "get": {
                 "tags": [
@@ -3189,6 +3419,236 @@
                     },
                     "404": {
                         "description": "Tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pemasok": {
+            "get": {
+                "tags": [
+                    "Pemasok"
+                ],
+                "summary": "Daftar semua pemasok",
+                "description": "Mengambil daftar semua pemasok / supplier.",
+                "operationId": "indexPemasok",
+                "responses": {
+                    "200": {
+                        "description": "Daftar pemasok berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PemasokListResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pemasok"
+                ],
+                "summary": "Tambah pemasok baru",
+                "description": "Menyimpan data pemasok baru. Jika id_pemasok dikosongkan, sistem akan men-generate ID unik secara acak.",
+                "operationId": "storePemasok",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StorePemasokRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Pemasok berhasil ditambahkan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PemasokSingleResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/pemasok/{id}": {
+            "get": {
+                "tags": [
+                    "Pemasok"
+                ],
+                "summary": "Detail pemasok",
+                "description": "Mengambil detail satu pemasok berdasarkan ID.",
+                "operationId": "showPemasok",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID pemasok",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detail pemasok berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PemasokSingleResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Pemasok tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Pemasok"
+                ],
+                "summary": "Update pemasok",
+                "description": "Memperbarui data pemasok berdasarkan ID.",
+                "operationId": "updatePemasok",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID pemasok",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdatePemasokRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Pemasok berhasil diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PemasokSingleResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Pemasok tidak ditemukan"
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Pemasok"
+                ],
+                "summary": "Hapus pemasok",
+                "description": "Menghapus data pemasok berdasarkan ID.",
+                "operationId": "destroyPemasok",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID pemasok",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Pemasok berhasil dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PemasokDeleteResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Pemasok tidak ditemukan"
                     }
                 },
                 "security": [
@@ -6218,6 +6678,118 @@
                 },
                 "type": "object"
             },
+            "GudangResource": {
+                "description": "Representasi data gudang",
+                "properties": {
+                    "kode_gudang": {
+                        "description": "============================================================\n SCHEMA DEFINITIONS – Gudang (Warehouse) Module\n============================================================",
+                        "type": "string",
+                        "example": "GDG-001"
+                    },
+                    "nama_gudang": {
+                        "type": "string",
+                        "example": "Gudang Utama"
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Gudang penyimpanan barang inventaris",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "StoreGudangRequest": {
+                "description": "Payload untuk menambah gudang baru",
+                "required": [
+                    "kode_gudang",
+                    "nama_gudang"
+                ],
+                "properties": {
+                    "kode_gudang": {
+                        "type": "string",
+                        "example": "GDG-001",
+                        "maxLength": 20
+                    },
+                    "nama_gudang": {
+                        "type": "string",
+                        "example": "Gudang Utama",
+                        "maxLength": 100
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Gudang penyimpanan barang inventaris",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateGudangRequest": {
+                "description": "Payload untuk memperbarui gudang",
+                "properties": {
+                    "nama_gudang": {
+                        "type": "string",
+                        "example": "Gudang Utama Updated",
+                        "maxLength": 100
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Keterangan baru",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "GudangListResponse": {
+                "description": "Response wrapper untuk daftar gudang",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Daftar gudang berhasil diambil."
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/GudangResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "GudangSingleResponse": {
+                "description": "Response wrapper untuk satu gudang",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Detail gudang berhasil diambil."
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/GudangResource"
+                    }
+                },
+                "type": "object"
+            },
+            "GudangDeleteResponse": {
+                "description": "Response wrapper untuk penghapusan gudang",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Gudang berhasil dihapus."
+                    }
+                },
+                "type": "object"
+            },
             "JurusanResource": {
                 "description": "Representasi data jurusan",
                 "properties": {
@@ -7554,6 +8126,150 @@
                     "message": {
                         "type": "string",
                         "example": "Opname aset berhasil dihapus."
+                    }
+                },
+                "type": "object"
+            },
+            "PemasokResource": {
+                "description": "Representasi data pemasok / supplier",
+                "properties": {
+                    "id_pemasok": {
+                        "description": "============================================================\n SCHEMA DEFINITIONS – Pemasok (Supplier) Module\n============================================================",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nama_pemasok": {
+                        "type": "string",
+                        "example": "PT Sumber Jaya"
+                    },
+                    "nomor_telepon": {
+                        "type": "string",
+                        "example": "081234567890",
+                        "nullable": true
+                    },
+                    "alamat": {
+                        "type": "string",
+                        "example": "Jl. Raya No. 123",
+                        "nullable": true
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Pemasok alat tulis",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "StorePemasokRequest": {
+                "description": "Payload untuk menambah pemasok baru",
+                "required": [
+                    "nama_pemasok"
+                ],
+                "properties": {
+                    "id_pemasok": {
+                        "description": "Opsional. Jika dikosongkan akan di-generate otomatis.",
+                        "type": "integer",
+                        "example": 100,
+                        "nullable": true
+                    },
+                    "nama_pemasok": {
+                        "type": "string",
+                        "example": "PT Sumber Jaya",
+                        "maxLength": 150
+                    },
+                    "nomor_telepon": {
+                        "type": "string",
+                        "example": "081234567890",
+                        "nullable": true,
+                        "maxLength": 20
+                    },
+                    "alamat": {
+                        "type": "string",
+                        "example": "Jl. Raya No. 123",
+                        "nullable": true
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Pemasok alat tulis",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdatePemasokRequest": {
+                "description": "Payload untuk memperbarui pemasok",
+                "properties": {
+                    "nama_pemasok": {
+                        "type": "string",
+                        "example": "PT Sumber Jaya Updated",
+                        "maxLength": 150
+                    },
+                    "nomor_telepon": {
+                        "type": "string",
+                        "example": "089876543210",
+                        "nullable": true,
+                        "maxLength": 20
+                    },
+                    "alamat": {
+                        "type": "string",
+                        "example": "Jl. Baru No. 456",
+                        "nullable": true
+                    },
+                    "keterangan": {
+                        "type": "string",
+                        "example": "Update keterangan",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PemasokListResponse": {
+                "description": "Response wrapper untuk daftar pemasok",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Daftar pemasok berhasil diambil."
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PemasokResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "PemasokSingleResponse": {
+                "description": "Response wrapper untuk satu pemasok",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Detail pemasok berhasil diambil."
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/PemasokResource"
+                    }
+                },
+                "type": "object"
+            },
+            "PemasokDeleteResponse": {
+                "description": "Response wrapper untuk penghapusan pemasok",
+                "properties": {
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Pemasok berhasil dihapus."
                     }
                 },
                 "type": "object"
@@ -9152,6 +9868,14 @@
         {
             "name": "Opname Aset",
             "description": "Manajemen opname aset"
+        },
+        {
+            "name": "Pemasok",
+            "description": "Manajemen data pemasok / supplier"
+        },
+        {
+            "name": "Gudang",
+            "description": "Manajemen data gudang penyimpanan"
         },
         {
             "name": "Pengaturan",

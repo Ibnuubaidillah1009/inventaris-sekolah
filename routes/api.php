@@ -25,6 +25,8 @@ use App\Http\Controllers\RuangController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\DatabaseController;
+use App\Http\Controllers\PemasokController;
+use App\Http\Controllers\GudangController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -243,6 +245,34 @@ Route::middleware('auth:sanctum')->group(function () {
             ->middleware('cek.hak.akses:satuan,hak_ubah');
         Route::delete('/{satuan}', [SatuanController::class, 'destroy'])
             ->middleware('cek.hak.akses:satuan,hak_hapus');
+    });
+
+    // Pemasok (Supplier)
+    Route::prefix('pemasok')->group(function () {
+        Route::get('/', [PemasokController::class, 'index'])
+            ->middleware('cek.hak.akses:pemasok,hak_baca');
+        Route::post('/', [PemasokController::class, 'store'])
+            ->middleware('cek.hak.akses:pemasok,hak_buat');
+        Route::get('/{id}', [PemasokController::class, 'show'])
+            ->middleware('cek.hak.akses:pemasok,hak_baca');
+        Route::put('/{id}', [PemasokController::class, 'update'])
+            ->middleware('cek.hak.akses:pemasok,hak_ubah');
+        Route::delete('/{id}', [PemasokController::class, 'destroy'])
+            ->middleware('cek.hak.akses:pemasok,hak_hapus');
+    });
+
+    // Gudang (Warehouse)
+    Route::prefix('gudang')->group(function () {
+        Route::get('/', [GudangController::class, 'index'])
+            ->middleware('cek.hak.akses:gudang,hak_baca');
+        Route::post('/', [GudangController::class, 'store'])
+            ->middleware('cek.hak.akses:gudang,hak_buat');
+        Route::get('/{id}', [GudangController::class, 'show'])
+            ->middleware('cek.hak.akses:gudang,hak_baca');
+        Route::put('/{id}', [GudangController::class, 'update'])
+            ->middleware('cek.hak.akses:gudang,hak_ubah');
+        Route::delete('/{id}', [GudangController::class, 'destroy'])
+            ->middleware('cek.hak.akses:gudang,hak_hapus');
     });
 
     // Master Barang

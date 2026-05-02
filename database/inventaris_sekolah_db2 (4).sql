@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 17, 2026 at 03:56 AM
+-- Generation Time: May 02, 2026 at 01:14 PM
 -- Server version: 8.4.3
 -- PHP Version: 8.4.10
 
@@ -61,7 +61,12 @@ INSERT INTO `akses` (`id_akses`, `nama_modul`, `hak_buat`, `hak_baca`, `hak_ubah
 (18, 'mutasi', 1, 1, 1, 1),
 (19, 'kerusakan', 1, 1, 1, 1),
 (20, 'perbaikan', 1, 1, 1, 1),
-(21, 'penghapusan_aset', 1, 1, 1, 1);
+(21, 'penghapusan_aset', 1, 1, 1, 1),
+(22, 'kondisi', 1, 1, 1, 1),
+(23, 'status_barang', 1, 1, 1, 1),
+(24, 'opname_aset', 1, 1, 1, 1),
+(25, 'opname_aset', 1, 1, 1, 1),
+(26, 'pengaturan', 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -74,11 +79,21 @@ CREATE TABLE `aset` (
   `id_master_barang` int NOT NULL,
   `id_ruang` int DEFAULT NULL,
   `tanggal_registrasi` date NOT NULL,
-  `kondisi_barang` enum('Baik','Rusak Ringan','Rusak Berat') DEFAULT 'Baik',
   `nilai_residu` decimal(15,2) DEFAULT '0.00',
-  `status_ketersediaan` enum('Tersedia','Dipinjam','Non-Aktif','Dihapus') DEFAULT 'Tersedia',
-  `gambar` varchar(255) DEFAULT NULL
+  `gambar` varchar(255) DEFAULT NULL,
+  `keterangan` text,
+  `id_status` int DEFAULT NULL,
+  `id_kondisi` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `aset`
+--
+
+INSERT INTO `aset` (`kode_barang`, `id_master_barang`, `id_ruang`, `tanggal_registrasi`, `nilai_residu`, `gambar`, `keterangan`, `id_status`, `id_kondisi`) VALUES
+('ASET-DUMMY-1', 1, 3, '2026-03-23', 3490819.00, NULL, NULL, 1, 1),
+('ASET-DUMMY-2', 1, 3, '2026-04-13', 1898008.00, NULL, NULL, 2, 2),
+('ASET-DUMMY-3', 2, 3, '2026-04-02', 4476376.00, NULL, NULL, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -99,6 +114,15 @@ CREATE TABLE `aset_bangunan` (
   `keterangan` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `aset_bangunan`
+--
+
+INSERT INTO `aset_bangunan` (`id_bangunan`, `nama_bangunan`, `id_tanah`, `luas_bangunan`, `tahun_bangun`, `kondisi_bangunan`, `konstruksi_bertingkat`, `konstruksi_beton`, `nilai_aset`, `keterangan`) VALUES
+(1, 'Bangunan Dummy 1', 1, 433, '2018', 'Baik', 'Tidak', 'Ya', 274246852.00, NULL),
+(2, 'Bangunan Dummy 2', 1, 128, '2019', 'Baik', 'Tidak', 'Ya', 121432671.00, NULL),
+(3, 'Bangunan Dummy 3', 1, 370, '2014', 'Baik', 'Tidak', 'Ya', 243324979.00, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -118,6 +142,15 @@ CREATE TABLE `aset_tanah` (
   `keterangan` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `aset_tanah`
+--
+
+INSERT INTO `aset_tanah` (`id_tanah`, `nama_tanah`, `id_lokasi`, `luas_tanah`, `tahun_pengadaan`, `alamat_lokasi`, `nomor_sertifikat`, `status_hak`, `nilai_aset`, `keterangan`) VALUES
+(1, 'Tanah Dummy 1', 2, 287, '2010', 'Alamat Dummy Tanah 1', 'SRT-TNH-1', 'Hak Milik', 56114308.00, NULL),
+(2, 'Tanah Dummy 2', 1, 413, '2023', 'Alamat Dummy Tanah 2', 'SRT-TNH-2', 'Hak Milik', 97701354.00, NULL),
+(3, 'Tanah Dummy 3', 1, 932, '2024', 'Alamat Dummy Tanah 3', 'SRT-TNH-3', 'Hak Milik', 54637484.00, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -129,8 +162,20 @@ CREATE TABLE `barang_keluar` (
   `tanggal_keluar` date NOT NULL,
   `id_master_barang` int NOT NULL,
   `jumlah_keluar` int NOT NULL,
-  `keterangan` text
+  `keterangan` text,
+  `kode_gudang` varchar(20) DEFAULT NULL,
+  `id_ruang` int DEFAULT NULL,
+  `nama_penerima` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `barang_keluar`
+--
+
+INSERT INTO `barang_keluar` (`id_barang_keluar`, `tanggal_keluar`, `id_master_barang`, `jumlah_keluar`, `keterangan`, `kode_gudang`, `id_ruang`, `nama_penerima`) VALUES
+(1, '2026-04-17', 4, 3, 'Barang Keluar Dummy 1', '1', 1, 'contoh'),
+(2, '2026-04-17', 2, 3, 'Barang Keluar Dummy 2', NULL, NULL, NULL),
+(3, '2026-04-17', 1, 2, 'Barang Keluar Dummy 3', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -168,6 +213,15 @@ CREATE TABLE `detail_peminjaman` (
   `kode_barang` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `detail_peminjaman`
+--
+
+INSERT INTO `detail_peminjaman` (`id_detail_pinjam`, `nomor_peminjaman`, `kode_barang`) VALUES
+(1, 'PJM-DUMMY-1', 'ASET-DUMMY-1'),
+(2, 'PJM-DUMMY-2', 'ASET-DUMMY-2'),
+(3, 'PJM-DUMMY-3', 'ASET-DUMMY-2');
+
 -- --------------------------------------------------------
 
 --
@@ -182,6 +236,15 @@ CREATE TABLE `detail_pengadaan` (
   `harga_satuan` decimal(15,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `detail_pengadaan`
+--
+
+INSERT INTO `detail_pengadaan` (`id_detail_pengadaan`, `nomor_pengadaan`, `id_master_barang`, `jumlah_masuk`, `harga_satuan`) VALUES
+(1, 'PGD-DUMMY-1', 4, 3, 19269.00),
+(2, 'PGD-DUMMY-2', 2, 5, 21211.00),
+(3, 'PGD-DUMMY-3', 1, 5, 30890.00);
+
 -- --------------------------------------------------------
 
 --
@@ -195,6 +258,15 @@ CREATE TABLE `detail_permintaan` (
   `jumlah_diminta` int NOT NULL,
   `alasan_kebutuhan` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `detail_permintaan`
+--
+
+INSERT INTO `detail_permintaan` (`id_detail_permintaan`, `nomor_permintaan`, `id_master_barang`, `jumlah_diminta`, `alasan_kebutuhan`) VALUES
+(1, 'PRM-DUMMY-1', 4, 5, 'Alasan Dummy 1'),
+(2, 'PRM-DUMMY-2', 2, 8, 'Alasan Dummy 2'),
+(3, 'PRM-DUMMY-3', 1, 10, 'Alasan Dummy 3');
 
 -- --------------------------------------------------------
 
@@ -211,6 +283,25 @@ CREATE TABLE `failed_jobs` (
   `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gudang`
+--
+
+CREATE TABLE `gudang` (
+  `kode_gudang` varchar(20) NOT NULL,
+  `nama_gudang` varchar(100) NOT NULL,
+  `keterangan` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `gudang`
+--
+
+INSERT INTO `gudang` (`kode_gudang`, `nama_gudang`, `keterangan`) VALUES
+('1', 'gudang 1', 'contoh gudang 1');
 
 -- --------------------------------------------------------
 
@@ -258,6 +349,15 @@ CREATE TABLE `jurusan` (
   `nama_jurusan` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `jurusan`
+--
+
+INSERT INTO `jurusan` (`id_jurusan`, `nama_jurusan`) VALUES
+(1, 'Jurusan Dummy 1'),
+(2, 'Jurusan Dummy 2'),
+(3, 'Jurusan Dummy 3');
+
 -- --------------------------------------------------------
 
 --
@@ -266,15 +366,22 @@ CREATE TABLE `jurusan` (
 
 CREATE TABLE `kategori` (
   `id_kategori` int NOT NULL,
-  `nama_kategori` varchar(100) NOT NULL
+  `nama_kategori` varchar(100) NOT NULL,
+  `keterangan` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `kategori`
 --
 
-INSERT INTO `kategori` (`id_kategori`, `nama_kategori`) VALUES
-(1, 'Laptop');
+INSERT INTO `kategori` (`id_kategori`, `nama_kategori`, `keterangan`) VALUES
+(1, 'Laptop', NULL),
+(2, 'Kategori Dummy 1', NULL),
+(3, 'Kategori Dummy 2', NULL),
+(4, 'Kategori Dummy 3', NULL),
+(5, 'Elektronik', NULL),
+(6, 'Furnitur', NULL),
+(8, 'contoh2', 'contoh');
 
 -- --------------------------------------------------------
 
@@ -288,6 +395,15 @@ CREATE TABLE `kelas` (
   `nama_kelas` varchar(50) NOT NULL,
   `tahun_ajaran` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `kelas`
+--
+
+INSERT INTO `kelas` (`id_kelas`, `id_rombel`, `nama_kelas`, `tahun_ajaran`) VALUES
+(1, 1, 'Kelas 1', '2025/2026'),
+(2, 2, 'Kelas 2', '2025/2026'),
+(3, 2, 'Kelas 3', '2025/2026');
 
 -- --------------------------------------------------------
 
@@ -305,6 +421,37 @@ CREATE TABLE `kerusakan` (
   `status_kerusakan` enum('Menunggu Pemeriksaan','Sedang Diperbaiki','Selesai','Tidak Bisa Diperbaiki') DEFAULT 'Menunggu Pemeriksaan'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `kerusakan`
+--
+
+INSERT INTO `kerusakan` (`id_kerusakan`, `kode_barang`, `tanggal_lapor`, `id_pelapor`, `deskripsi_kerusakan`, `tingkat_kerusakan`, `status_kerusakan`) VALUES
+(1, 'ASET-DUMMY-1', '2026-04-17', 4, 'Kerusakan Dummy 1', 'Ringan', 'Menunggu Pemeriksaan'),
+(2, 'ASET-DUMMY-2', '2026-04-17', 4, 'Kerusakan Dummy 2', 'Ringan', 'Menunggu Pemeriksaan'),
+(3, 'ASET-DUMMY-2', '2026-04-17', 3, 'Kerusakan Dummy 3', 'Ringan', 'Menunggu Pemeriksaan'),
+(4, 'ASET-DUMMY-1', '2026-04-16', 1, 'Layar monitor berkedip-kedip', 'Ringan', 'Sedang Diperbaiki');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kondisi`
+--
+
+CREATE TABLE `kondisi` (
+  `id_kondisi` int NOT NULL,
+  `nama_kondisi` varchar(50) NOT NULL,
+  `keterangan` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `kondisi`
+--
+
+INSERT INTO `kondisi` (`id_kondisi`, `nama_kondisi`, `keterangan`) VALUES
+(1, 'Rusak Berat', NULL),
+(2, 'Baik', NULL),
+(4, 'Rusak', 'Kondisi barang baik dan layak pakai');
+
 -- --------------------------------------------------------
 
 --
@@ -313,8 +460,18 @@ CREATE TABLE `kerusakan` (
 
 CREATE TABLE `lokasi` (
   `id_lokasi` int NOT NULL,
-  `nama_lokasi` varchar(100) NOT NULL
+  `nama_lokasi` varchar(100) NOT NULL,
+  `keterangan` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `lokasi`
+--
+
+INSERT INTO `lokasi` (`id_lokasi`, `nama_lokasi`, `keterangan`) VALUES
+(1, 'Lokasi Dummy 1', NULL),
+(2, 'Lokasi Dummy 2', NULL),
+(3, 'Lokasi Dummy 3', NULL);
 
 -- --------------------------------------------------------
 
@@ -326,6 +483,15 @@ CREATE TABLE `mapel` (
   `id_mapel` int NOT NULL,
   `nama_mapel` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `mapel`
+--
+
+INSERT INTO `mapel` (`id_mapel`, `nama_mapel`) VALUES
+(1, 'Mapel Dummy 1'),
+(2, 'Mapel Dummy 2'),
+(3, 'Mapel Dummy 3');
 
 -- --------------------------------------------------------
 
@@ -341,16 +507,19 @@ CREATE TABLE `master_barang` (
   `id_satuan` int DEFAULT NULL,
   `jenis_barang` enum('Inventaris','Habis Pakai') NOT NULL,
   `stok_minimal` int DEFAULT '0',
-  `stok_aktual` int DEFAULT '0'
+  `stok_aktual` int DEFAULT '0',
+  `keterangan` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `master_barang`
 --
 
-INSERT INTO `master_barang` (`id_master_barang`, `nama_barang`, `id_kategori`, `id_merek`, `id_satuan`, `jenis_barang`, `stok_minimal`, `stok_aktual`) VALUES
-(1, 'contoh', 1, 1, 1, 'Inventaris', 0, 0),
-(2, 'Proyektor Epson EB-X51', 1, 1, 1, 'Inventaris', 0, 0);
+INSERT INTO `master_barang` (`id_master_barang`, `nama_barang`, `id_kategori`, `id_merek`, `id_satuan`, `jenis_barang`, `stok_minimal`, `stok_aktual`, `keterangan`) VALUES
+(1, 'contoh', 1, 1, 1, 'Inventaris', 0, 0, NULL),
+(2, 'Proyektor Epson EB-X51', 1, 1, 1, 'Inventaris', 0, 0, NULL),
+(3, 'Barang Dummy 2', 1, 1, 4, 'Inventaris', 5, 10, NULL),
+(4, 'Barang Dummy 3', 4, 4, 2, 'Inventaris', 5, 10, NULL);
 
 -- --------------------------------------------------------
 
@@ -360,15 +529,19 @@ INSERT INTO `master_barang` (`id_master_barang`, `nama_barang`, `id_kategori`, `
 
 CREATE TABLE `merek` (
   `id_merek` int NOT NULL,
-  `nama_merek` varchar(100) NOT NULL
+  `nama_merek` varchar(100) NOT NULL,
+  `keterangan` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `merek`
 --
 
-INSERT INTO `merek` (`id_merek`, `nama_merek`) VALUES
-(1, 'Asus');
+INSERT INTO `merek` (`id_merek`, `nama_merek`, `keterangan`) VALUES
+(1, 'Asus', NULL),
+(2, 'Merek Dummy 1', NULL),
+(3, 'Merek Dummy 2', NULL),
+(4, 'Merek Dummy 3', NULL);
 
 -- --------------------------------------------------------
 
@@ -408,6 +581,15 @@ CREATE TABLE `mutasi` (
   `id_penanggung_jawab` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `mutasi`
+--
+
+INSERT INTO `mutasi` (`id_mutasi`, `kode_barang`, `tanggal_mutasi`, `id_ruang_asal`, `id_ruang_tujuan`, `alasan_mutasi`, `id_penanggung_jawab`) VALUES
+(1, 'ASET-DUMMY-1', '2026-04-17', 1, 1, 'Alasan Mutasi Dummy 1', 4),
+(2, 'ASET-DUMMY-2', '2026-04-17', 2, 2, 'Alasan Mutasi Dummy 2', 4),
+(3, 'ASET-DUMMY-2', '2026-04-17', 2, 2, 'Alasan Mutasi Dummy 3', 3);
+
 -- --------------------------------------------------------
 
 --
@@ -422,6 +604,16 @@ CREATE TABLE `opname_aset` (
   `keterangan` text,
   `id_pemeriksa` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `opname_aset`
+--
+
+INSERT INTO `opname_aset` (`id_opname_aset`, `kode_barang`, `tanggal_opname`, `kondisi_ditemukan`, `keterangan`, `id_pemeriksa`) VALUES
+(1, 'ASET-DUMMY-1', '2026-04-17', 'Baik', 'Opname Aset Dummy 1', 4),
+(2, 'ASET-DUMMY-2', '2026-04-17', 'Baik', 'Opname Aset Dummy 2', 4),
+(3, 'ASET-DUMMY-2', '2026-04-17', 'Baik', 'Opname Aset Dummy 3', 3),
+(4, 'ASET-DUMMY-1', '2026-04-27', 'Baik', 'Sesuai data', 1);
 
 -- --------------------------------------------------------
 
@@ -440,6 +632,15 @@ CREATE TABLE `opname_stok` (
   `id_pemeriksa` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `opname_stok`
+--
+
+INSERT INTO `opname_stok` (`id_opname_stok`, `id_master_barang`, `tanggal_opname`, `stok_sistem`, `stok_fisik`, `selisih`, `keterangan`, `id_pemeriksa`) VALUES
+(1, 4, '2026-04-17', 10, 10, 0, 'Opname Stok Dummy 1', 4),
+(2, 2, '2026-04-17', 10, 10, 0, 'Opname Stok Dummy 2', 1),
+(3, 1, '2026-04-17', 10, 10, 0, 'Opname Stok Dummy 3', 3);
+
 -- --------------------------------------------------------
 
 --
@@ -450,8 +651,18 @@ CREATE TABLE `pemasok` (
   `id_pemasok` int NOT NULL,
   `nama_pemasok` varchar(150) NOT NULL,
   `nomor_telepon` varchar(20) DEFAULT NULL,
-  `alamat` text
+  `alamat` text,
+  `keterangan` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `pemasok`
+--
+
+INSERT INTO `pemasok` (`id_pemasok`, `nama_pemasok`, `nomor_telepon`, `alamat`, `keterangan`) VALUES
+(1, 'Pemasok Dummy 1', '08123456781', 'Alamat Pemasok 1', NULL),
+(2, 'Pemasok Dummy 2', '08123456782', 'Alamat Pemasok 2', NULL),
+(3, 'Pemasok Dummy 3', '08123456783', 'Alamat Pemasok 3', NULL);
 
 -- --------------------------------------------------------
 
@@ -474,7 +685,10 @@ CREATE TABLE `peminjaman` (
 --
 
 INSERT INTO `peminjaman` (`nomor_peminjaman`, `tanggal_pinjam`, `id_peminjam`, `nomor_telepon`, `lama_pinjam_hari`, `keterangan`, `status_peminjaman`) VALUES
-('', '2026-04-17', 1, '089509242323', 10, 'contoh', 'Sedang Dipinjam');
+('', '2026-04-17', 1, '089509242323', 10, 'contoh', 'Sedang Dipinjam'),
+('PJM-DUMMY-1', '2026-04-07', 4, '08988771', 14, 'Peminjaman Dummy 1', 'Dikembalikan'),
+('PJM-DUMMY-2', '2026-04-07', 4, '08988772', 14, 'Peminjaman Dummy 2', 'Dikembalikan'),
+('PJM-DUMMY-3', '2026-04-07', 3, '08988773', 14, 'Peminjaman Dummy 3', 'Dikembalikan');
 
 -- --------------------------------------------------------
 
@@ -488,8 +702,21 @@ CREATE TABLE `pengadaan` (
   `nomor_permintaan` varchar(50) DEFAULT NULL,
   `id_pemasok` int DEFAULT NULL,
   `total_harga` decimal(15,2) DEFAULT '0.00',
-  `keterangan` text
+  `keterangan` text,
+  `kode_gudang` varchar(20) DEFAULT NULL,
+  `jumlah_pengadaan` int DEFAULT NULL,
+  `id_satuan` int DEFAULT NULL,
+  `id_master_barang` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `pengadaan`
+--
+
+INSERT INTO `pengadaan` (`nomor_pengadaan`, `tanggal_pengadaan`, `nomor_permintaan`, `id_pemasok`, `total_harga`, `keterangan`, `kode_gudang`, `jumlah_pengadaan`, `id_satuan`, `id_master_barang`) VALUES
+('PGD-DUMMY-1', '2026-04-17', 'PRM-DUMMY-1', 2, 355478.00, 'Keterangan Dummy Pengadaan 1', '1', 10, 2, 3),
+('PGD-DUMMY-2', '2026-04-17', 'PRM-DUMMY-2', 1, 498442.00, 'Keterangan Dummy Pengadaan 2', NULL, NULL, NULL, NULL),
+('PGD-DUMMY-3', '2026-04-17', 'PRM-DUMMY-3', 1, 427970.00, 'Keterangan Dummy Pengadaan 3', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -517,7 +744,11 @@ CREATE TABLE `pengaturan` (
 --
 
 INSERT INTO `pengaturan` (`id_pengaturan`, `nama_instansi`, `alamat_instansi`, `logo_instansi`, `wallpaper_aplikasi`, `telpon`, `website`, `email`, `kota`, `kepala_sekolah`, `NIP`, `bagian_inventaris`) VALUES
-(1, 'SMKN 1 Bangil', NULL, NULL, 'default_wallpaper.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(1, 'SMKN 1 Bangil', NULL, NULL, 'default_wallpaper.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'Instansi Dummy 1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 'Instansi Dummy 2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(4, 'Instansi Dummy 3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(5, 'SMK Negeri 1 Contoh Updated', NULL, NULL, NULL, NULL, NULL, NULL, 'Jakarta', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -530,6 +761,15 @@ CREATE TABLE `pengembalian` (
   `nomor_peminjaman` varchar(50) NOT NULL,
   `tanggal_kembali` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `pengembalian`
+--
+
+INSERT INTO `pengembalian` (`id_pengembalian`, `nomor_peminjaman`, `tanggal_kembali`) VALUES
+(1, 'PJM-DUMMY-1', '2026-04-17'),
+(2, 'PJM-DUMMY-2', '2026-04-17'),
+(3, 'PJM-DUMMY-3', '2026-04-17');
 
 -- --------------------------------------------------------
 
@@ -552,7 +792,12 @@ CREATE TABLE `pengguna` (
 --
 
 INSERT INTO `pengguna` (`id_pengguna`, `username`, `password`, `id_peran`, `id_kelas`, `id_mapel`, `id_unit`) VALUES
-(1, 'admin', 'admin', 1, NULL, NULL, NULL);
+(1, 'admin', '$2a$12$aUxVp8g3vj/kwS2co.98VOSkTxuzLUS1ziJT4jWQiKUK8CqzgdEle', 1, NULL, NULL, NULL),
+(2, 'user_dummy_1', '$2y$12$N3LZo/PIpXST1oPooKAkzeKjQdC1v1.gr4FCcIeLHSxfA3LomC5E6', 3, 1, 3, 1),
+(3, 'user_dummy_2', '$2y$12$utCBKmEvHtDuDm3fT6aYiuXwRWmrlwIgNQXV4jVQAsilgWjOlhL2G', 4, 1, 2, 3),
+(4, 'admin2', '$2y$12$9nCKqOXUH1aZHiNgO/2juegf5G.yOOr9u3Aot/mMzBVDJiPGB9Y7K', 1, 1, 3, 1),
+(5, 'guru', '$2y$12$iYz61SEOcIst3GpI/c6n3eP9nPbUsB5xm8nNJmx2f45J8qA7mNY6G', 2, NULL, 3, NULL),
+(6, 'contoh', '$2y$12$b0jZY1pRmMfQhrvt8f0tx.GkOoSndu9OZY4ZlxRum9dFw4bwidiUy', 5, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -568,6 +813,15 @@ CREATE TABLE `penghapusan_aset` (
   `id_penyetuju` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `penghapusan_aset`
+--
+
+INSERT INTO `penghapusan_aset` (`id_penghapusan`, `kode_barang`, `tanggal_hapus`, `alasan_hapus`, `id_penyetuju`) VALUES
+(1, 'ASET-DUMMY-1', '2026-04-17', 'Penghapusan Dummy 1', 1),
+(2, 'ASET-DUMMY-2', '2026-04-17', 'Penghapusan Dummy 2', 1),
+(3, 'ASET-DUMMY-2', '2026-04-17', 'Penghapusan Dummy 3', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -576,15 +830,20 @@ CREATE TABLE `penghapusan_aset` (
 
 CREATE TABLE `peran` (
   `id_peran` int NOT NULL,
-  `nama_peran` varchar(50) NOT NULL
+  `nama_peran` varchar(50) NOT NULL,
+  `keterangan` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `peran`
 --
 
-INSERT INTO `peran` (`id_peran`, `nama_peran`) VALUES
-(1, 'Admin');
+INSERT INTO `peran` (`id_peran`, `nama_peran`, `keterangan`) VALUES
+(1, 'Admin', NULL),
+(2, 'Peran Dummy 1', NULL),
+(3, 'Peran Dummy 2', NULL),
+(4, 'Peran Dummy 3', NULL),
+(5, 'Toolman', 'contoh');
 
 -- --------------------------------------------------------
 
@@ -623,7 +882,13 @@ INSERT INTO `peran_akses` (`id_peran_akses`, `id_peran`, `id_akses`) VALUES
 (19, 1, 18),
 (20, 1, 19),
 (21, 1, 20),
-(22, 1, 21);
+(22, 1, 21),
+(23, 4, 22),
+(24, 1, 22),
+(25, 1, 23),
+(26, 1, 24),
+(27, 1, 24),
+(28, 1, 26);
 
 -- --------------------------------------------------------
 
@@ -640,6 +905,16 @@ CREATE TABLE `perbaikan` (
   `tindakan_perbaikan` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `perbaikan`
+--
+
+INSERT INTO `perbaikan` (`id_perbaikan`, `id_kerusakan`, `tanggal_perbaikan`, `teknisi`, `biaya_perbaikan`, `tindakan_perbaikan`) VALUES
+(1, 1, '2026-04-17', 'Teknisi Dummy 1', 79863.00, 'Tindakan Dummy 1'),
+(2, 2, '2026-04-17', 'Teknisi Dummy 2', 147573.00, 'Tindakan Dummy 2'),
+(3, 3, '2026-04-17', 'Teknisi Dummy 3', 147241.00, 'Tindakan Dummy 3'),
+(4, 4, '2026-04-17', 'CV Teknik Jaya', 500000.00, 'Ganti layar LCD');
+
 -- --------------------------------------------------------
 
 --
@@ -655,6 +930,15 @@ CREATE TABLE `permintaan` (
   `tanggal_persetujuan` date DEFAULT NULL,
   `id_penyetuju` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `permintaan`
+--
+
+INSERT INTO `permintaan` (`nomor_permintaan`, `tanggal_permintaan`, `id_pemohon`, `keterangan_keperluan`, `status_persetujuan`, `tanggal_persetujuan`, `id_penyetuju`) VALUES
+('PRM-DUMMY-1', '2026-04-16', 4, 'Keperluan Dummy 1', 'Disetujui', NULL, 1),
+('PRM-DUMMY-2', '2026-04-11', 1, 'Keperluan Dummy 2', 'Disetujui', NULL, 1),
+('PRM-DUMMY-3', '2026-04-13', 3, 'Keperluan Dummy 3', 'Disetujui', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -689,7 +973,45 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 (7, 'App\\Models\\Pengguna', 1, 'auth_token', 'ca7d9a38474742900005a22f2efc236de1515a8cfb5a36b97f7be247dad8f47b', '[\"*\"]', NULL, NULL, '2026-04-16 00:31:59', '2026-04-16 00:31:59'),
 (8, 'App\\Models\\Pengguna', 1, 'auth_token', '42325189a2cbe761df497d5688ee216512cd0bc366d7b9ee5f9ff44f4c5b782e', '[\"*\"]', '2026-04-16 00:42:40', NULL, '2026-04-16 00:34:38', '2026-04-16 00:42:40'),
 (9, 'App\\Models\\Pengguna', 1, 'auth_token', 'c192c464a12cf0f721f1ca324d0d2719ab23c1e7f5f507d341fa64cbc6554ff0', '[\"*\"]', '2026-04-16 09:13:00', NULL, '2026-04-16 09:11:00', '2026-04-16 09:13:00'),
-(10, 'App\\Models\\Pengguna', 1, 'auth_token', '554abb5696ccf4ecf248a5810b89390bffb723643e5f436569e9a8d53cb44efd', '[\"*\"]', '2026-04-16 20:55:02', NULL, '2026-04-16 20:48:56', '2026-04-16 20:55:02');
+(10, 'App\\Models\\Pengguna', 1, 'auth_token', '554abb5696ccf4ecf248a5810b89390bffb723643e5f436569e9a8d53cb44efd', '[\"*\"]', '2026-04-16 20:55:02', NULL, '2026-04-16 20:48:56', '2026-04-16 20:55:02'),
+(11, 'App\\Models\\Pengguna', 1, 'auth_token', '24db8714ed3a5d17586243cb0b6084e112585b880bb69caf591bb7eae97f0541', '[\"*\"]', '2026-04-16 22:36:15', NULL, '2026-04-16 21:09:22', '2026-04-16 22:36:15'),
+(12, 'App\\Models\\Pengguna', 1, 'auth_token', '1c30045f29ae0b99f0a4c869766655cfab47d76892b2f36851c393d6973ad6fd', '[\"*\"]', '2026-04-17 07:35:37', NULL, '2026-04-17 07:22:44', '2026-04-17 07:35:37'),
+(13, 'App\\Models\\Pengguna', 1, 'auth_token', '4046f65d617ccadfbb65a66ab8af4cf814d2b0c053b33e94c162a0f60035bfe5', '[\"*\"]', '2026-04-19 07:19:19', NULL, '2026-04-19 06:58:28', '2026-04-19 07:19:19'),
+(14, 'App\\Models\\Pengguna', 1, 'auth_token', 'ea1e9ae0696e13c7771e3e9947b4b52a3f667d2d8d6aa9ad4a3bfe3545ad8b19', '[\"*\"]', '2026-04-19 08:01:30', NULL, '2026-04-19 08:01:21', '2026-04-19 08:01:30'),
+(15, 'App\\Models\\Pengguna', 1, 'auth_token', '5365011b1ff44f9cc5f90d80710edaa6397ce3136ed03757d004cd6281f86a21', '[\"*\"]', NULL, NULL, '2026-04-19 08:19:42', '2026-04-19 08:19:42'),
+(16, 'App\\Models\\Pengguna', 1, 'auth_token', 'c5f72d551df4c04c723835e9f028883b5efe9b5c15950643d0377e738da02004', '[\"*\"]', NULL, NULL, '2026-04-19 19:07:03', '2026-04-19 19:07:03'),
+(17, 'App\\Models\\Pengguna', 1, 'auth_token', 'f4bc1df587423afd6add51eb12214d786732f4d46f056932487bff86a50fa256', '[\"*\"]', NULL, NULL, '2026-04-19 19:07:56', '2026-04-19 19:07:56'),
+(18, 'App\\Models\\Pengguna', 1, 'auth_token', '911ceb54cc159c807c89e536d620eebdca9494c839465030f58f444c8baa824f', '[\"*\"]', NULL, NULL, '2026-04-19 19:08:05', '2026-04-19 19:08:05'),
+(19, 'App\\Models\\Pengguna', 1, 'auth_token', '95fadd18ae066c53265255c5df8f6f5602b8d2e7ba4b23faa0d993c4d8d50783', '[\"*\"]', NULL, NULL, '2026-04-19 19:09:55', '2026-04-19 19:09:55'),
+(20, 'App\\Models\\Pengguna', 1, 'auth_token', '21105da6cb72d20da4f18189b71f1754aa4fcecb9614a37f8366c1418f3aa540', '[\"*\"]', NULL, NULL, '2026-04-19 19:10:02', '2026-04-19 19:10:02'),
+(21, 'App\\Models\\Pengguna', 1, 'auth_token', '4166f2380fe04a665e6c63298278c8c67621576b42e3ef927b394035d1db0de2', '[\"*\"]', NULL, NULL, '2026-04-19 19:10:10', '2026-04-19 19:10:10'),
+(22, 'App\\Models\\Pengguna', 1, 'auth_token', '6c059445cc53adc112810d093316b845974de6ae00336d0c1bf8bbef4bebfdee', '[\"*\"]', '2026-04-19 19:16:34', NULL, '2026-04-19 19:13:15', '2026-04-19 19:16:34'),
+(23, 'App\\Models\\Pengguna', 1, 'auth_token', 'e287ff33edde49ff118eae069d41e798b44e9241f94d54a561bac8748046666c', '[\"*\"]', NULL, NULL, '2026-04-19 19:17:05', '2026-04-19 19:17:05'),
+(24, 'App\\Models\\Pengguna', 1, 'auth_token', '3831029fa144ad3902aa50e9633900c33c75c99d39d5fcf2e349c16599db1733', '[\"*\"]', NULL, NULL, '2026-04-19 19:17:53', '2026-04-19 19:17:53'),
+(25, 'App\\Models\\Pengguna', 1, 'auth_token', '8181c25d6fc617bc664584280ed3227dfcdce061991b513f8b183deb34405189', '[\"*\"]', NULL, NULL, '2026-04-19 19:25:45', '2026-04-19 19:25:45'),
+(27, 'App\\Models\\Pengguna', 1, 'auth_token', 'b831510aeaa68b6b03a3e80763accd53e38d7d483dacc7fed4593c588a3523fd', '[\"*\"]', '2026-04-19 19:27:41', NULL, '2026-04-19 19:27:30', '2026-04-19 19:27:41'),
+(28, 'App\\Models\\Pengguna', 1, 'auth_token', '8e461a865576ccdeb56b973b33df4f5dc16683bd36cd31e111fb3435993fb2e5', '[\"*\"]', NULL, NULL, '2026-04-19 19:28:11', '2026-04-19 19:28:11'),
+(31, 'App\\Models\\Pengguna', 1, 'auth_token', 'cedeeb2ce67f8483121fb584c693652e229615ee40e3501723ad5ebcd5d7a4d7', '[\"*\"]', '2026-04-19 20:53:32', NULL, '2026-04-19 19:44:39', '2026-04-19 20:53:32'),
+(33, 'App\\Models\\Pengguna', 1, 'auth_token', '717aa706636e1bb8133ebec016c967a21e0d327fc4f0bdceb3ea98910ab9c7dd', '[\"*\"]', NULL, NULL, '2026-04-19 20:11:35', '2026-04-19 20:11:35'),
+(34, 'App\\Models\\Pengguna', 1, 'auth_token', 'e7763ef3cc1eb1a76574cd4518d875789bfb12568e23506fcebf10917f25ca4c', '[\"*\"]', NULL, NULL, '2026-04-19 20:23:55', '2026-04-19 20:23:55'),
+(36, 'App\\Models\\Pengguna', 1, 'auth_token', '00e0e8e182fff487b5c77b2b135454028a09dbc263aa4db47af7a0004423dccd', '[\"*\"]', NULL, NULL, '2026-04-19 20:27:12', '2026-04-19 20:27:12'),
+(37, 'App\\Models\\Pengguna', 1, 'auth_token', '190100ca52b1cb130458a3a9ba96de3537a8bb3c49188d7e629f9f27ecf0bba1', '[\"*\"]', '2026-04-19 20:33:36', NULL, '2026-04-19 20:31:10', '2026-04-19 20:33:36'),
+(38, 'App\\Models\\Pengguna', 2, 'auth_token', '61b81fb1025569917a17c12cabb4d720730d42d02a9e7fc5c2a7fab359dea57a', '[\"*\"]', NULL, NULL, '2026-04-19 20:45:09', '2026-04-19 20:45:09'),
+(39, 'App\\Models\\Pengguna', 4, 'auth_token', '55b94db5eb15cfac02a9b5e03ada944493715f4caa79447398dc77dbba6369fc', '[\"*\"]', '2026-04-19 20:56:02', NULL, '2026-04-19 20:55:46', '2026-04-19 20:56:02'),
+(40, 'App\\Models\\Pengguna', 4, 'auth_token', '69c9be3b677fdd8889bf224b196fbcaebe663a5f8eddcba22c2f8387a9251e46', '[\"*\"]', NULL, NULL, '2026-04-19 20:56:32', '2026-04-19 20:56:32'),
+(43, 'App\\Models\\Pengguna', 4, 'auth_token', '1be262e13fd8dd438a2542923fbed8dcfc95e6f4b950a08f61426216bf9f033c', '[\"*\"]', '2026-04-20 08:46:30', NULL, '2026-04-20 08:46:15', '2026-04-20 08:46:30'),
+(44, 'App\\Models\\Pengguna', 4, 'auth_token', '0374676596733970ad34e3004a3bc1c3e23c55b508f2e3838808b3ac5c2717f2', '[\"*\"]', '2026-04-21 09:41:53', NULL, '2026-04-21 08:24:41', '2026-04-21 09:41:53'),
+(45, 'App\\Models\\Pengguna', 4, 'auth_token', 'e34251da385037387cf55a04ac92a08d91937133a4c591f7baf1e4d20cfdfae7', '[\"*\"]', '2026-04-21 18:58:37', NULL, '2026-04-21 17:22:23', '2026-04-21 18:58:37'),
+(46, 'App\\Models\\Pengguna', 4, 'auth_token', '6a29eaf27f2cd530e7ce1f56fbd6f64db606dc9e961902e4d403fd46973afb66', '[\"*\"]', '2026-04-21 20:56:30', NULL, '2026-04-21 20:54:25', '2026-04-21 20:56:30'),
+(47, 'App\\Models\\Pengguna', 4, 'auth_token', 'cf693ff46ed65b7678fe69d1a7ce99d99fecda8eddf36e5f6542ae92b49bdc5c', '[\"*\"]', '2026-04-22 08:08:47', NULL, '2026-04-22 07:59:26', '2026-04-22 08:08:47'),
+(48, 'App\\Models\\Pengguna', 4, 'auth_token', '1faf26e04cf33f8f06fc7bc2c96c1dc560a6044e3ce1d9868b1e1bab5d97de4b', '[\"*\"]', '2026-04-25 18:16:19', NULL, '2026-04-22 08:09:58', '2026-04-25 18:16:19'),
+(49, 'App\\Models\\Pengguna', 4, 'auth_token', '0080b2c7b072e58950866cb7fe5f4c30c52e731b6d93949a345e73e8b98ec7b1', '[\"*\"]', '2026-04-22 18:28:49', NULL, '2026-04-22 18:01:37', '2026-04-22 18:28:49'),
+(50, 'App\\Models\\Pengguna', 4, 'auth_token', '46743be10579a4fd5fb883083ed14478cbd0a30b1948202224a6918eae404c21', '[\"*\"]', '2026-04-25 18:33:48', NULL, '2026-04-25 18:16:23', '2026-04-25 18:33:48'),
+(51, 'App\\Models\\Pengguna', 4, 'auth_token', 'dcab1788603a0b309a86d55fad53cdfec16e2c6fd8cafbb7b2a8a97065eea60e', '[\"*\"]', '2026-04-26 09:30:42', NULL, '2026-04-26 09:05:30', '2026-04-26 09:30:42'),
+(52, 'App\\Models\\Pengguna', 4, 'auth_token', '3974e2fa2e5eab2f1337d1366fb693122aaf65f15274b3a29f3938fd7e5e27b9', '[\"*\"]', '2026-04-27 08:54:12', NULL, '2026-04-27 07:44:45', '2026-04-27 08:54:12'),
+(53, 'App\\Models\\Pengguna', 4, 'auth_token', '5b70717873d35825304d0f2e409ba92b3470395095af21c9fdb18adf340ec93d', '[\"*\"]', '2026-04-27 08:21:57', NULL, '2026-04-27 08:17:56', '2026-04-27 08:21:57'),
+(54, 'App\\Models\\Pengguna', 4, 'auth_token', '618c270bb3c54358e8b48cd75abac759e85a3f58d209be9cd637ac4503f7c4fd', '[\"*\"]', NULL, NULL, '2026-04-27 09:28:55', '2026-04-27 09:28:55'),
+(55, 'App\\Models\\Pengguna', 4, 'auth_token', '966b1e76375b28d9ee8d69c6b2663fd6934622f73d8e8a2eb05206b912ae77a7', '[\"*\"]', '2026-05-02 03:08:55', NULL, '2026-05-02 03:07:01', '2026-05-02 03:08:55');
 
 -- --------------------------------------------------------
 
@@ -703,6 +1025,15 @@ CREATE TABLE `rombel` (
   `nama_rombel` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `rombel`
+--
+
+INSERT INTO `rombel` (`id_rombel`, `id_jurusan`, `nama_rombel`) VALUES
+(1, 2, 'Rombel Dummy 1'),
+(2, 3, 'Rombel Dummy 2'),
+(3, 3, 'Rombel Dummy 3');
+
 -- --------------------------------------------------------
 
 --
@@ -712,8 +1043,18 @@ CREATE TABLE `rombel` (
 CREATE TABLE `ruang` (
   `id_ruang` int NOT NULL,
   `id_lokasi` int NOT NULL,
-  `nama_ruang` varchar(100) NOT NULL
+  `nama_ruang` varchar(100) NOT NULL,
+  `keterangan` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `ruang`
+--
+
+INSERT INTO `ruang` (`id_ruang`, `id_lokasi`, `nama_ruang`, `keterangan`) VALUES
+(1, 3, 'Ruang Dummy 1', NULL),
+(2, 1, 'Ruang Dummy 2', NULL),
+(3, 1, 'Ruang Dummy 3', NULL);
 
 -- --------------------------------------------------------
 
@@ -723,15 +1064,19 @@ CREATE TABLE `ruang` (
 
 CREATE TABLE `satuan` (
   `id_satuan` int NOT NULL,
-  `nama_satuan` varchar(50) NOT NULL
+  `nama_satuan` varchar(50) NOT NULL,
+  `keterangan` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `satuan`
 --
 
-INSERT INTO `satuan` (`id_satuan`, `nama_satuan`) VALUES
-(1, 'contoh');
+INSERT INTO `satuan` (`id_satuan`, `nama_satuan`, `keterangan`) VALUES
+(1, 'contoh', NULL),
+(2, 'Satuan 1', NULL),
+(3, 'Satuan 2', NULL),
+(4, 'Satuan 3', NULL);
 
 -- --------------------------------------------------------
 
@@ -754,11 +1099,42 @@ CREATE TABLE `sessions` (
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
 ('6W90p37ku8ECbcVfYP3VCiJUJYIqZUXtaM9jODBE', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJmeUt6RXRabEdMVlgxTVREU1YzMllqa1A4N2UwbEd4SjBpVm1OTktKIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1776321844),
+('aqXvy0PHGxPnfkh6FxdNGxI42wV9u2P5RxBtCfKc', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJmTXRXcmZPUjJLY3B2Y0w2VTN6akJoT25Oa1ZMUTRaZnlZZm5qSWhFIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1776435743),
+('AwqdCfH616JzmU1e7zKru7C6uybAxST1eL3dQpiU', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJLZHQ5Z3VBWVdRZ3lSbzRKd2hqd0hFNURjU2k0Z1ZFNzVyb09uVlUxIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1777256618),
+('CVIAv6syMI7pPU6Shok9CRTy4MSdTwZqMnWtGxCK', NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJXQTI2eGxucnhvTlZBTm1mOXJlWjNqYXo1ZzVkZGV6NTl0U3pZZ20xIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdFwvSW52ZW50b3J5X3Nla29sYWhcL0FQSVwvcHVibGljIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1776905170),
 ('CXqoXtRDBu8ZFlKacdijXTMqgoMBa7nC7ddTfHe6', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJod0RXalIzWUd1WWNpSGxueXZwVjlxNFpFMmN6d3FZb2padHBMRk1pIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1776308179),
+('DRd6v1fqnxlQiitu33vTo9eHpFzP55ooS7zF5spE', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiIzU0pWZE1RYWo1ZWZlRDNnNVJqTzg2bUpUNTZycU5IVmM0V1kzZEVaIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1776905254),
 ('HUtLNzqAFdUEa0k5KfkmboW3NYUUM2bBmQ8BBkOg', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJOemlzMERGNnZWVXV4RmZxQTdVWVhicWRYdVVlY2c0bjJWdlp3elVkIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1776355782),
-('l87XAVYgEJAJXJ6jr4EINLNfeazIXm50NFkR71RH', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiIzUGk1MXN4RFJxejZRV2hpcFAzZ2FMNVR5aVFxcGp3YUdtZkNwUnZiIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1776397722),
+('l87XAVYgEJAJXJ6jr4EINLNfeazIXm50NFkR71RH', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiIzUGk1MXN4RFJxejZRV2hpcFAzZ2FMNVR5aVFxcGp3YUdtZkNwUnZiIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1776403152),
+('pc4xjIVbD7YQlgdI9s0wNSoHpaG1Oc0dYHuy2L0G', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJzSms0UGNJUjBCWHhySDFqUHV4MFMwbThBWVZJcWtGQUtrU1BTYTZxIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1777298309),
+('Qe1B9RC2idhRqiUL7S8rZFa1CJ97qWUyDlnHYpfQ', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJFemoxcUlTTW1jZGlwdWNCazFCZUpYT2pPWGt4VDlDcHJMRFQ2cFZ4IiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1777716606),
 ('QMmgL5SzLKS5L74gnhgqzKGSzofoJKPSPu8sohGD', NULL, '127.0.0.1', '', 'eyJfdG9rZW4iOiJxdWFPRjVBSWNxcktOZjZDcnV2ZUlHQWY4Y01rbVNmNExVWWdGNGlUIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1776323165),
-('shtYmS02LbqCaubQ8z6gwJOi9RGATF6YsZkq0iU1', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJqSmVIc0hIY2ZwdlM0UnFVQmtIUENzSU1MRGx5MHB0a0x1UlpqZFdWIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1776309127);
+('qwYTarSPH1klOeAfIamvKLobJocx1IbRcDW9s4MI', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiIyQndnaTJuaHJSSU03cjh4S2ZTRW1oTWlTOTdiWlFVZEJyNHR3QjloIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1777221143),
+('RfDKGtvFFyhJhMQJ9Gigpslun9UXa1aFwM71qVNJ', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJ0VE84aDl4cm83RXNRQnRqdE93RTVaQ3B6Sm0zSHlJdHJxY0pBTEdIIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1776652077),
+('shtYmS02LbqCaubQ8z6gwJOi9RGATF6YsZkq0iU1', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJqSmVIc0hIY2ZwdlM0UnFVQmtIUENzSU1MRGx5MHB0a0x1UlpqZFdWIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1776309127),
+('TdZjvg25aVZgW9NGrBEAqD9G5DUKBcccT3avq8op', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJoT0FVRHF5OXFHTHM5OWJXWWE2amJtSFJzdmVwWm5JcENHTlBXeXZ3IiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1776608227),
+('ToUGpXFHD7PGGlAvJwfAA6SrQiRirxO3QlknhfHw', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJpVnhab0ZSWHpTcTBMOVJSeXYzUk1EaXB5STUxWHNZdGtpVkVKaWNNIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1776830049);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `status_barang`
+--
+
+CREATE TABLE `status_barang` (
+  `id_status` int NOT NULL,
+  `nama_status` varchar(50) NOT NULL,
+  `keterangan` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `status_barang`
+--
+
+INSERT INTO `status_barang` (`id_status`, `nama_status`, `keterangan`) VALUES
+(1, 'Non-Aktif', NULL),
+(2, 'Tersedia', NULL),
+(4, 'Dihapus', 'Barang yang sudah di hapus dari aset');
 
 -- --------------------------------------------------------
 
@@ -770,6 +1146,15 @@ CREATE TABLE `unit` (
   `id_unit` int NOT NULL,
   `nama_unit` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `unit`
+--
+
+INSERT INTO `unit` (`id_unit`, `nama_unit`) VALUES
+(1, 'Unit Dummy 1'),
+(2, 'Unit Dummy 2'),
+(3, 'Unit Dummy 3');
 
 --
 -- Indexes for dumped tables
@@ -787,7 +1172,9 @@ ALTER TABLE `akses`
 ALTER TABLE `aset`
   ADD PRIMARY KEY (`kode_barang`),
   ADD KEY `id_master_barang` (`id_master_barang`),
-  ADD KEY `id_ruang` (`id_ruang`);
+  ADD KEY `id_ruang` (`id_ruang`),
+  ADD KEY `fk_status` (`id_status`),
+  ADD KEY `fk_kondisi` (`id_kondisi`);
 
 --
 -- Indexes for table `aset_bangunan`
@@ -808,7 +1195,9 @@ ALTER TABLE `aset_tanah`
 --
 ALTER TABLE `barang_keluar`
   ADD PRIMARY KEY (`id_barang_keluar`),
-  ADD KEY `id_master_barang` (`id_master_barang`);
+  ADD KEY `id_master_barang` (`id_master_barang`),
+  ADD KEY `fk_barang_keluar_gudang` (`kode_gudang`),
+  ADD KEY `fk_barang_keluar_ruang` (`id_ruang`);
 
 --
 -- Indexes for table `cache`
@@ -856,6 +1245,12 @@ ALTER TABLE `failed_jobs`
   ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
 
 --
+-- Indexes for table `gudang`
+--
+ALTER TABLE `gudang`
+  ADD PRIMARY KEY (`kode_gudang`);
+
+--
 -- Indexes for table `jobs`
 --
 ALTER TABLE `jobs`
@@ -894,6 +1289,12 @@ ALTER TABLE `kerusakan`
   ADD PRIMARY KEY (`id_kerusakan`),
   ADD KEY `kode_barang` (`kode_barang`),
   ADD KEY `id_pelapor` (`id_pelapor`);
+
+--
+-- Indexes for table `kondisi`
+--
+ALTER TABLE `kondisi`
+  ADD PRIMARY KEY (`id_kondisi`);
 
 --
 -- Indexes for table `lokasi`
@@ -973,7 +1374,10 @@ ALTER TABLE `peminjaman`
 ALTER TABLE `pengadaan`
   ADD PRIMARY KEY (`nomor_pengadaan`),
   ADD KEY `nomor_permintaan` (`nomor_permintaan`),
-  ADD KEY `id_pemasok` (`id_pemasok`);
+  ADD KEY `id_pemasok` (`id_pemasok`),
+  ADD KEY `fk_pengadaan_gudang` (`kode_gudang`),
+  ADD KEY `fk_pengadaan_satuan` (`id_satuan`),
+  ADD KEY `fk_pengadaan_master_barang` (`id_master_barang`);
 
 --
 -- Indexes for table `pengaturan`
@@ -1073,6 +1477,12 @@ ALTER TABLE `sessions`
   ADD KEY `sessions_last_activity_index` (`last_activity`);
 
 --
+-- Indexes for table `status_barang`
+--
+ALTER TABLE `status_barang`
+  ADD PRIMARY KEY (`id_status`);
+
+--
 -- Indexes for table `unit`
 --
 ALTER TABLE `unit`
@@ -1086,43 +1496,43 @@ ALTER TABLE `unit`
 -- AUTO_INCREMENT for table `akses`
 --
 ALTER TABLE `akses`
-  MODIFY `id_akses` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_akses` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `aset_bangunan`
 --
 ALTER TABLE `aset_bangunan`
-  MODIFY `id_bangunan` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_bangunan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `aset_tanah`
 --
 ALTER TABLE `aset_tanah`
-  MODIFY `id_tanah` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tanah` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `barang_keluar`
 --
 ALTER TABLE `barang_keluar`
-  MODIFY `id_barang_keluar` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_barang_keluar` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `detail_peminjaman`
 --
 ALTER TABLE `detail_peminjaman`
-  MODIFY `id_detail_pinjam` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_detail_pinjam` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `detail_pengadaan`
 --
 ALTER TABLE `detail_pengadaan`
-  MODIFY `id_detail_pengadaan` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_detail_pengadaan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `detail_permintaan`
 --
 ALTER TABLE `detail_permintaan`
-  MODIFY `id_detail_permintaan` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_detail_permintaan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -1140,49 +1550,55 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `jurusan`
 --
 ALTER TABLE `jurusan`
-  MODIFY `id_jurusan` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_jurusan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `kategori`
 --
 ALTER TABLE `kategori`
-  MODIFY `id_kategori` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_kategori` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id_kelas` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_kelas` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `kerusakan`
 --
 ALTER TABLE `kerusakan`
-  MODIFY `id_kerusakan` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_kerusakan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `kondisi`
+--
+ALTER TABLE `kondisi`
+  MODIFY `id_kondisi` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `lokasi`
 --
 ALTER TABLE `lokasi`
-  MODIFY `id_lokasi` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_lokasi` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `mapel`
 --
 ALTER TABLE `mapel`
-  MODIFY `id_mapel` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_mapel` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `master_barang`
 --
 ALTER TABLE `master_barang`
-  MODIFY `id_master_barang` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_master_barang` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `merek`
 --
 ALTER TABLE `merek`
-  MODIFY `id_merek` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_merek` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -1194,97 +1610,103 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `mutasi`
 --
 ALTER TABLE `mutasi`
-  MODIFY `id_mutasi` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_mutasi` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `opname_aset`
 --
 ALTER TABLE `opname_aset`
-  MODIFY `id_opname_aset` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_opname_aset` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `opname_stok`
 --
 ALTER TABLE `opname_stok`
-  MODIFY `id_opname_stok` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_opname_stok` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `pemasok`
 --
 ALTER TABLE `pemasok`
-  MODIFY `id_pemasok` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pemasok` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `pengaturan`
 --
 ALTER TABLE `pengaturan`
-  MODIFY `id_pengaturan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_pengaturan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `pengembalian`
 --
 ALTER TABLE `pengembalian`
-  MODIFY `id_pengembalian` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pengembalian` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `pengguna`
 --
 ALTER TABLE `pengguna`
-  MODIFY `id_pengguna` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_pengguna` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `penghapusan_aset`
 --
 ALTER TABLE `penghapusan_aset`
-  MODIFY `id_penghapusan` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_penghapusan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `peran`
 --
 ALTER TABLE `peran`
-  MODIFY `id_peran` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_peran` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `peran_akses`
 --
 ALTER TABLE `peran_akses`
-  MODIFY `id_peran_akses` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_peran_akses` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `perbaikan`
 --
 ALTER TABLE `perbaikan`
-  MODIFY `id_perbaikan` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_perbaikan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `rombel`
 --
 ALTER TABLE `rombel`
-  MODIFY `id_rombel` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_rombel` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `ruang`
 --
 ALTER TABLE `ruang`
-  MODIFY `id_ruang` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_ruang` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `satuan`
 --
 ALTER TABLE `satuan`
-  MODIFY `id_satuan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_satuan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `status_barang`
+--
+ALTER TABLE `status_barang`
+  MODIFY `id_status` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `unit`
 --
 ALTER TABLE `unit`
-  MODIFY `id_unit` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_unit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -1295,7 +1717,9 @@ ALTER TABLE `unit`
 --
 ALTER TABLE `aset`
   ADD CONSTRAINT `aset_ibfk_1` FOREIGN KEY (`id_master_barang`) REFERENCES `master_barang` (`id_master_barang`) ON DELETE CASCADE,
-  ADD CONSTRAINT `aset_ibfk_2` FOREIGN KEY (`id_ruang`) REFERENCES `ruang` (`id_ruang`) ON DELETE SET NULL;
+  ADD CONSTRAINT `aset_ibfk_2` FOREIGN KEY (`id_ruang`) REFERENCES `ruang` (`id_ruang`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_kondisi` FOREIGN KEY (`id_kondisi`) REFERENCES `kondisi` (`id_kondisi`),
+  ADD CONSTRAINT `fk_status` FOREIGN KEY (`id_status`) REFERENCES `status_barang` (`id_status`);
 
 --
 -- Constraints for table `aset_bangunan`
@@ -1313,7 +1737,9 @@ ALTER TABLE `aset_tanah`
 -- Constraints for table `barang_keluar`
 --
 ALTER TABLE `barang_keluar`
-  ADD CONSTRAINT `barang_keluar_ibfk_1` FOREIGN KEY (`id_master_barang`) REFERENCES `master_barang` (`id_master_barang`) ON DELETE CASCADE;
+  ADD CONSTRAINT `barang_keluar_ibfk_1` FOREIGN KEY (`id_master_barang`) REFERENCES `master_barang` (`id_master_barang`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_barang_keluar_gudang` FOREIGN KEY (`kode_gudang`) REFERENCES `gudang` (`kode_gudang`),
+  ADD CONSTRAINT `fk_barang_keluar_ruang` FOREIGN KEY (`id_ruang`) REFERENCES `ruang` (`id_ruang`);
 
 --
 -- Constraints for table `detail_peminjaman`
@@ -1390,6 +1816,9 @@ ALTER TABLE `peminjaman`
 -- Constraints for table `pengadaan`
 --
 ALTER TABLE `pengadaan`
+  ADD CONSTRAINT `fk_pengadaan_gudang` FOREIGN KEY (`kode_gudang`) REFERENCES `gudang` (`kode_gudang`),
+  ADD CONSTRAINT `fk_pengadaan_master_barang` FOREIGN KEY (`id_master_barang`) REFERENCES `master_barang` (`id_master_barang`),
+  ADD CONSTRAINT `fk_pengadaan_satuan` FOREIGN KEY (`id_satuan`) REFERENCES `satuan` (`id_satuan`),
   ADD CONSTRAINT `pengadaan_ibfk_1` FOREIGN KEY (`nomor_permintaan`) REFERENCES `permintaan` (`nomor_permintaan`) ON DELETE SET NULL,
   ADD CONSTRAINT `pengadaan_ibfk_2` FOREIGN KEY (`id_pemasok`) REFERENCES `pemasok` (`id_pemasok`) ON DELETE SET NULL;
 

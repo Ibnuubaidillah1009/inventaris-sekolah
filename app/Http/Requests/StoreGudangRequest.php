@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreMasterBarangRequest extends FormRequest
+class StoreGudangRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -16,12 +16,8 @@ class StoreMasterBarangRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_barang'  => ['required', 'string', 'max:255'],
-            'id_kategori'  => ['required', 'integer', 'exists:kategori,id_kategori'],
-            'id_merek'     => ['required', 'integer', 'exists:merek,id_merek'],
-            'id_satuan'    => ['required', 'integer', 'exists:satuan,id_satuan'],
-            'jenis_barang' => ['required', 'string', 'in:Inventaris,Habis Pakai'],
-            'stok_minimal' => ['required', 'integer', 'min:0'],
+            'kode_gudang'  => ['required', 'string', 'max:20', 'unique:gudang,kode_gudang'],
+            'nama_gudang'  => ['required', 'string', 'max:100'],
             'keterangan'   => ['nullable', 'string'],
         ];
     }
@@ -29,9 +25,9 @@ class StoreMasterBarangRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'id_kategori.exists' => 'Kategori tidak ditemukan.',
-            'id_merek.exists'    => 'Merek tidak ditemukan.',
-            'id_satuan.exists'   => 'Satuan tidak ditemukan.',
+            'kode_gudang.required' => 'Kode gudang wajib diisi.',
+            'kode_gudang.unique'   => 'Kode gudang sudah digunakan.',
+            'nama_gudang.required' => 'Nama gudang wajib diisi.',
         ];
     }
 
